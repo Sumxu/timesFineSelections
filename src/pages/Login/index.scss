@@ -1,0 +1,17 @@
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  background-image: url("@/assets/login/zhBg.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  .btn-bg {
+    height: 100px;
+    position: fixed;
+    bottom: 15vh;
+    left: 10px;
+    right: 10px;
+    background-image: url("@/assets/login/btnZh.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+}
