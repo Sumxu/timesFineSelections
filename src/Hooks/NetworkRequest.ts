@@ -1,0 +1,60 @@
+// NetworkRequest.ts
+import { message } from "antd";
+import EnvManager from "@/config/EnvManager";
+const RequestUrl = EnvManager.apiBase;
+import { Totast } from "@/Hooks/Utils.ts";
+import { t } from "i18next";
+
+interface NetWorkProps {
+  Url: string;
+  Method?: "get" | "post" | "put" | "delete";
+  Data?: Record<string, any>;
+  showLoading?: boolean;
+}
+
+async function NetworkRequest(params: NetWorkProps): Promise<any> {
+  const { Url, Method = "get", Data = {} } = params;
+
+  let url = Url;
+  const method = Method.toLowerCase();
+  const key = "globalLoading";
+
+  try {
+    if (method === "get" && Object.keys(Data).length > 0) {
+      const queryString = new URLSearchParams(Data).toString();
+      url += "?" + queryString;
+    }
+    const response = await fetch(RequestUrl + url, {
+      method: method.toUpperCase(),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token") || "",
+      },
+      body: method === "get" ? null : JSON.stringify(Data),
+    });
+
+    const result = await response.json();
+    if (result.code === 401) {
+      localStorage.removeItem("token");
+      window.location.reload();
+    } else if (!response.ok || result.code !== 200) {
+      throw new Error(result.msg || "Request Error");
+    }
+    return { success: true, data: result };
+  } catch (error: any) {
+    if (error.message == "quota error") {
+      Totast(t("复投后才能领取"), "warning");
+      return;
+    } else if (error.message == "claim frequency limit") {
+      Totast(t("请明天再领取"), "warning");
+      return;
+    }
+    message.error({
+      content: "Request Error：" + (error.message || error),
+      key,
+    });
+    return { success: false, error: error.message || error };
+  }
+}
+
+export default NetworkRequest;
