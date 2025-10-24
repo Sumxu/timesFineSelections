@@ -8,7 +8,8 @@ const Header: React.FC<{
   title: string;
   rightText?: string;
   rightUrl?: string;
-}> = ({ title, rightText, rightUrl }) => {
+  rightIcon?: string;
+}> = ({ title, rightText, rightIcon,rightUrl }) => {
   const navigate = useNavigate();
 
   return (
@@ -27,7 +28,9 @@ const Header: React.FC<{
           onClick={() => rightUrl && navigate(rightUrl)}
           className="right-text"
         >
-          {rightText}
+          {
+            rightIcon&&<img src={rightIcon} className="right-header-icon"></img>
+          }
         </span>
       </div>
     </>

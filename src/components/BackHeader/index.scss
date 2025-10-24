@@ -4,6 +4,11 @@
     align-items: center;
     height: 44px;
     padding: 0 16px;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    right: 0;
+    top: 0;
     .back-left{
         width: 80px;
     }
@@ -23,6 +28,9 @@
         font-size: 14px;
         color: #67BAFF;
         width: 80px;
-
+        .right-header-icon{
+            width: 24px;
+            height: 24px;
+        }
     }
 }

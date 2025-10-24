@@ -3,12 +3,23 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { t } from "i18next";
 import logoIcon from "@/assets/home/logoIcon.png";
+import listIcon from "@/assets/home/listIcon.png";
+import { Drawer, Spin } from "antd";
+import BuyNftPopup from "./component/BuyNftPopup";
+import BackHeader from '@/components/BackHeader'
 const Home: React.FC = () => {
+  const [showBuyNftPopup, setShowBuyNftPopup] = useState(false);
   // 当前钱包地址
-
+  const openPopupClick = () => {
+    setShowBuyNftPopup(true);
+  };
+  const BuyNftPopupCloseChange = () => {
+    setShowBuyNftPopup(false);
+  };
   return (
     <>
       <div className="home-page">
+        <BackHeader  title='NFT股东' rightIcon={listIcon} rightUrl='/outputList'/>
         <div className="header-box">
           <div className="center-number-option">
             <div className="number-option">
@@ -63,7 +74,8 @@ const Home: React.FC = () => {
 
             <div className="buy-option">
               <div className="buy-header-option">
-                <div className="logo"></div>
+                <img className="logo" src={logoIcon} />
+
                 <div className="name">#00893288</div>
                 <div className="tag">释放中…</div>
               </div>
@@ -75,14 +87,14 @@ const Home: React.FC = () => {
                 <div className="info-txt-1">已产出</div>
               </div>
               <div className="info-txt-option">
-                <div className="info-txt">1000.00 TAX</div>
-                <div className="info-txt">537.89 TAX</div>
+                <div className="info-txt-2">1000.00 TAX</div>
+                <div className="info-txt-2">537.89 TAX</div>
               </div>
             </div>
 
             <div className="buy-option">
               <div className="buy-header-option">
-                <div className="logo"></div>
+                <img className="logo" src={logoIcon} />
                 <div className="name">#00893288</div>
                 <div className="tag-success">已释放完</div>
               </div>
@@ -98,11 +110,24 @@ const Home: React.FC = () => {
                 <div className="info-txt-2">537.89 TAX</div>
               </div>
             </div>
-            
           </div>
-          <div className="btn-option">立即购买NFT</div>
+          <div className="btn-option" onClick={openPopupClick}>
+            立即购买NFT
+          </div>
         </div>
       </div>
+      <Drawer
+        rootClassName="buyNodeDrawer"
+        maskClosable={true}
+        destroyOnHidden={true}
+        height={"auto"}
+        closeIcon={false}
+        open={showBuyNftPopup}
+        title=""
+        placement="bottom"
+      >
+        <BuyNftPopup onClose={() => BuyNftPopupCloseChange()} />
+      </Drawer>
     </>
   );
 };
