@@ -42,7 +42,19 @@ export async function ensureWalletConnected(): Promise<boolean> {
       return false;
     }
   }
+  window.ethereum.on("accountsChanged", (accounts) => {
+    if (accounts.length === 0) {
+      console.log("🔌 用户断开连接了钱包");
+      // 这里执行登出逻辑
+    } else {
+      console.log("✅ 切换账号：", accounts[0]);
+    }
+  });
 
+  // 监听是否切换了链
+  window.ethereum.on("chainChanged", () => {
+    window.location.reload();
+  });
   // 监听是否切换了链
   window.ethereum.on("chainChanged", () => {
     window.location.reload();
@@ -50,6 +62,7 @@ export async function ensureWalletConnected(): Promise<boolean> {
 
   if (accounts.length > 0) {
     setAddress(accounts[0]);
+    localStorage.setItem("address", accounts[0]);
     try {
       const normalizedChainId = String(currentChainId).toLowerCase();
       if (normalizedChainId === BNB_PARAMS.chainId) {

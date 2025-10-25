@@ -1,6 +1,6 @@
 // src/config/EnvManager.ts
 import EnvConfigProvider from "./EnvConfigProvider";
-import type  EnvConfig  from "./EnvConfigProvider" ;
+import type EnvConfig from "./EnvConfigProvider";
 /**
  * EnvManager: 环境配置访问类（纯静态版）
  *
@@ -11,11 +11,16 @@ import type  EnvConfig  from "./EnvConfigProvider" ;
 class EnvManager {
   /** 自动判定当前模式 */
   private static readonly mode: "development" | "production" = (() => {
-    const meta = (typeof import.meta !== "undefined" ? (import.meta as any).env : undefined) || {};
+    const meta =
+      (typeof import.meta !== "undefined"
+        ? (import.meta as any).env
+        : undefined) || {};
     const envMode =
       meta.MODE ||
       meta.VITE_MODE ||
-      (typeof process !== "undefined" ? process.env?.VITE_MODE || process.env?.NODE_ENV : undefined) ||
+      (typeof process !== "undefined"
+        ? process.env?.VITE_MODE || process.env?.NODE_ENV
+        : undefined) ||
       "development";
     return String(envMode).includes("prod") ? "production" : "development";
   })();
@@ -37,42 +42,25 @@ class EnvManager {
   static get isProd(): boolean {
     return EnvManager.mode === "production";
   }
-
-  static get configAll(): Readonly<EnvConfig> {
-    return EnvManager.config;
-  }
-
-  static get poolContract(): string {
-    return EnvManager.config.poolContract;
-  }
-    static get swapRouter(): string {
-    return EnvManager.config.swapRouter;
-  }
-  static get contractIdoPool(): string {
-
-    return EnvManager.config.contractIdoPool;
-  }
-
-  static get apiBase(): string {
-    return EnvManager.config.apiBase;
-  }
-
-  static get contractPool(): string {
-    return EnvManager.config.contractPool;
-  }
-
-  static get contractUsdt(): string {
-    return EnvManager.config.contractUsdt;
-  }
-
-  static get contractCa(): string {
-    return EnvManager.config.contractCa;
-  }
-
   static get chainId(): string {
     return EnvManager.config.chainId;
   }
-
+  static get configAll(): Readonly<EnvConfig> {
+    return EnvManager.config;
+  }
+  static get contractSpaceNFT(): string {
+    return EnvManager.config.contractSpaceNFT;
+  }
+  static get multiCallToken(): string {
+    return EnvManager.config.multiCallToken;
+  }
+  
+  static get contractUsdt(): string {
+    return EnvManager.config.contractUsdt;
+  }
+  static get contractTAXToken(): string {
+    return EnvManager.config.contractTAXToken;
+  }
   static get rpcUrl(): string {
     return EnvManager.config.rpcUrl;
   }
