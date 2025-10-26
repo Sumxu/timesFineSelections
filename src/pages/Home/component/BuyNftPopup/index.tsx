@@ -17,11 +17,9 @@ interface buyNftPopupClass {
   onClose: () => void;
 }
 function BuyNftPopup(Props: buyNftPopupClass) {
+  const walletAddress = userAddress((state) => state.address);
   //得到usdt 余额 和 需要支付的price
-  const walletAddress = localStorage.getItem("address");
-
   const { callMethod, sendTransaction } = useNFTQuery();
-
   //发售USDT价格
   const [price, setPrice] = useState<BigNumber>(BigNumber.from(0));
   //usdt 余额
@@ -52,6 +50,7 @@ function BuyNftPopup(Props: buyNftPopupClass) {
       methodsName: "balanceOf",
       params: [walletAddress],
     });
+    console.log("usdtRes==", usdtRes);
     if (usdtRes.value) {
       setUsdtBalanceOf(usdtRes.value);
     }
@@ -94,7 +93,7 @@ function BuyNftPopup(Props: buyNftPopupClass) {
         if (res.value) {
           isApply = true;
         } else {
-          Totast("授权失败,请检查网络连接", "error"); // 授权失败，请检查网络连接
+          Totast(t("授权失败,请检查网络连接"), "error"); // 授权失败，请检查网络连接
           return;
         }
       });
@@ -102,7 +101,7 @@ function BuyNftPopup(Props: buyNftPopupClass) {
       isApply = true;
     }
     if (!isApply) {
-      Totast("检查授权或者授权时发生了错误，请检查网络后重新尝试", "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
+      Totast(t("检查授权或者授权时发生了错误，请检查网络后重新尝试"), "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       return;
     }
     try {
@@ -110,8 +109,8 @@ function BuyNftPopup(Props: buyNftPopupClass) {
       if (mintRes.success) {
         fetchPrice();
         fetchUsdt();
-        Props.onClose()
-        Totast("购买成功", "success"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
+        Props.onClose();
+        Totast(t("购买成功"), "success"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       }
     } finally {
       // 无论成功或失败，都需要关闭加载状态
@@ -126,48 +125,48 @@ function BuyNftPopup(Props: buyNftPopupClass) {
   return (
     <div className="BuyNftPopup">
       <div className="header-top-box">
-        <div className="txt">购买NFT</div>
+        <div className="txt">{t("购买")}NFT</div>
         <div className="icon-close" onClick={() => Props.onClose()}>
           <CloseOutline fontSize={14} color="#969696" />
         </div>
       </div>
       <div className="price-option">{fromWei(price, 18, true, 2)} USDT</div>
-      <div className="get-txt-option">即可获得NFT股东</div>
-      <div className="hint-txt">获得权益</div>
+      <div className="get-txt-option">{t("即可获得NFT股东")}</div>
+      <div className="hint-txt">{t('获得权益')}</div>
       <div className="buy-hint-option">
         <img className="left-icon" src={nftIcon} />
         <div className="right-option">
-          <div className="txt-1-item">股东NFT*1张</div>
-          <div className="txt-2-item">NFT总产值1000TAX，每日产0.55TAX</div>
+          <div className="txt-1-item">{t('股东NFT*1张')}</div>
+          <div className="txt-2-item">{t('NFT总产值1000TAX,每日产0.55TAX')}</div>
         </div>
       </div>
       <div className="buy-hint-option">
         <img className="left-icon" src={jifenIcon} />
 
         <div className="right-option">
-          <div className="txt-1-item">3000积分</div>
+          <div className="txt-1-item">3000{t('积分')}</div>
           <div className="txt-2-item">600USD+2400TUSD</div>
         </div>
       </div>
       <div className="buy-hint-option">
         <img className="left-icon" src={lpIcon} />
         <div className="right-option">
-          <div className="txt-1-item">初始LP占比权</div>
+          <div className="txt-1-item">{t('初始LP占比权')}</div>
           <div className="txt-2-item">
-            获得初始LP底池的占比权（底池LP锁仓三年）
+            {t('获得初始LP底池的占比权(底池LP锁仓三年)')}
           </div>
         </div>
       </div>
       <div className="need-pay-option">
         <div className="need-txt-1">
-          需支付：{fromWei(price, 18, true, 2)} USDT
+          {t("需支付")}：{fromWei(price, 18, true, 2)} USDT
         </div>
         <div className="need-txt-2">
-          余额：{fromWei(usdtBalanceOf, 18, true, 2)} USDT
+          {t("余额")}：{fromWei(usdtBalanceOf, 18, true, 2)} USDT
         </div>
       </div>
       <div className="btn-option" onClick={() => btnClick()}>
-        {buyLoding ? <Spin /> : "确认购买"}
+        {buyLoding ? <Spin /> : t("确认购买")}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import "./index.scss";
+import { userAddress } from "@/Store/Store.ts";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { t } from "i18next";
@@ -18,8 +19,8 @@ interface MinerInfo {
   lastClaimTime: BigNumber;
 }
 const Home: React.FC = () => {
-  const walletAddress = localStorage.getItem("address");
-  // console.log("walletAddress==", walletAddress);
+  const walletAddress = userAddress((state) => state.address);
+
   const [showBuyNftPopup, setShowBuyNftPopup] = useState(false);
   // 当前钱包地址
   const openPopupClick = () => {
@@ -33,7 +34,7 @@ const Home: React.FC = () => {
   const { fetch } = useNFTMulticall();
   const { callMethod, sendTransaction } = useNFTQuery();
   //总数量
-  const totalNumer: number = 999.0;
+  const totalNumer: number = 990.0;
 
   //发售USDT价格
   const [price, setPrice] = useState<BigNumber>(BigNumber.from(0));
@@ -94,8 +95,9 @@ const Home: React.FC = () => {
   };
   //得到当前进度百分比
   const nftPercentage = (index) => {
-    const claimed =  Number(fromWei(minerList[index].claimed,18,true,2));
-    const percentage = (claimed / Number(fromWei(maxAmount, 18, true, 2))) * 100;
+    const claimed = Number(fromWei(minerList[index].claimed, 18, true, 2));
+    const percentage =
+      (claimed / Number(fromWei(maxAmount, 18, true, 2))) * 100;
     return percentage;
   };
   //获取tokenId 数组
@@ -146,12 +148,12 @@ const Home: React.FC = () => {
   const getPendIng = async (index) => {
     //如果领取奖励为0则提示不能领取
     if (pendingList[index].eq(BigNumber.from(0))) {
-      Totast("暂无奖励", "warning");
+      Totast(t("暂无奖励"), "warning");
       return;
     }
     const claimRes = await sendTransaction("claim", [tokenIds[index]], {});
     if (claimRes.success) {
-      Totast("领取成功", "success");
+      Totast(t("领取成功"), "success");
       fetchPrice();
     }
   };
@@ -167,32 +169,34 @@ const Home: React.FC = () => {
   }, []);
   return (
     <>
-          {/* rightIcon={listIcon} */}
-
       <div className="home-page">
         <BackHeader
-          title="NFT股东"
+          title={t("NFT股东")}
+          rightIcon={listIcon}
           rightUrl="/outputList"
         />
         <div className="header-box">
           <div className="header-box-image">
             <div className="center-number-option">
               <div className="number-option">
-                <span className="spn-1">限量</span>
-                <span className="spn-2">{totalNumer}枚</span>
+                <span className="spn-1">{t("限量")}</span>
+                <span className="spn-2">
+                  {totalNumer}
+                  {t("枚")}
+                </span>
               </div>
             </div>
             <div className="number-info-option">
               <div className="number-item">
                 <div className="number-item-top">{maxMint.toString()}</div>
-                <div className="number-item-end">首期发售量(枚)</div>
+                <div className="number-item-end">{t("首期发售量(枚)")}</div>
               </div>
               <div className="line-item"></div>
               <div className="number-item">
                 <div className="number-item-top">
                   {fromWei(price, 18, true, 2)}
                 </div>
-                <div className="number-item-end">发售价(USDT)</div>
+                <div className="number-item-end">{t("发售价")}(USDT)</div>
               </div>
             </div>
             <div className="progressBar-option">
@@ -204,10 +208,10 @@ const Home: React.FC = () => {
               </div>
               <div className="progress-bar-number">
                 <div className="number-item">
-                  已售：{soldOutNumbers.toString()}
+                  {t("已售")}：{soldOutNumbers.toString()}
                 </div>
                 <div className="number-item">
-                  剩余: <span className="spn-1">{surplus}</span>
+                  {t("剩余")}: <span className="spn-1">{surplus}</span>
                 </div>
               </div>
             </div>
@@ -215,14 +219,14 @@ const Home: React.FC = () => {
         </div>
         <div className="me-tools-box">
           <div className="me-header-option">
-            <div className="item-txt">我的NFT</div>
+            <div className="item-txt">{t("我的")}NFT</div>
             <div className="item-txt">{balanceOf.toString()}</div>
           </div>
           {balanceOf.eq(0) ? (
             <div className="no-buy-box">
               <img className="logo-option" src={logoIcon} />
-              <div className="hint-txt-1">您还没有购买NFT</div>
-              <div className="hint-txt-2">成为NFT股东，享受更多权益</div>
+              <div className="hint-txt-1">{t("您还没有购买")}NFT</div>
+              <div className="hint-txt-2">{t("成为NFT股东,享受更多权益")}</div>
             </div>
           ) : (
             <div className="buy-box">
@@ -252,8 +256,8 @@ const Home: React.FC = () => {
                           }
                         >
                           {nftPercentage(index) !== 100
-                            ? "释放中…"
-                            : "已释放完"}
+                            ? t("释放中…")
+                            : t("已释放完")}
                         </div>
                       </div>
                       {nftPercentage(index) !== 100 && (
@@ -261,7 +265,7 @@ const Home: React.FC = () => {
                           className="tag-right"
                           onClick={() => getPendIng(index)}
                         >
-                          领取
+                          {t("领取")}
                         </div>
                       )}
                     </div>
@@ -272,9 +276,9 @@ const Home: React.FC = () => {
                       ></div>
                     </div>
                     <div className="info-txt-option">
-                      <div className="info-txt-1">总产值</div>
-                      <div className="info-txt-1">待领取</div>
-                      <div className="info-txt-1">已领取</div>
+                      <div className="info-txt-1">{t("总产值")}</div>
+                      <div className="info-txt-1">{t("待领取")}</div>
+                      <div className="info-txt-1">{t("已领取")}</div>
                     </div>
                     <div className="info-txt-option">
                       <div className="info-txt-2">
@@ -311,11 +315,11 @@ const Home: React.FC = () => {
               </div> */}
             </div>
           )}
-         {
-          balanceOf.toNumber()!==5 && <div className="btn-option" onClick={openPopupClick}>
-            立即购买NFT
-          </div>
-         }
+          {balanceOf.toNumber() !== 5 && (
+            <div className="btn-option" onClick={openPopupClick}>
+              {t("立即购买")}NFT
+            </div>
+          )}
         </div>
       </div>
       <Drawer
