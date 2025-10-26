@@ -32,5 +32,8 @@
   "您已购买次数到达上限": "Purchase Limit Reached",
   "余额不足": "Insufficient Balance",
   "暂无奖励": "No Rewards",
-  "领取成功": "Claimed"
+  "领取成功": "Claimed",
+  "产出记录": "Yield",
+  "时间": "Time",
+  "数量": "Amount"
 }

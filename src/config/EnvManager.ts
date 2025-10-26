@@ -73,6 +73,10 @@ class EnvManager {
     return EnvManager.config.chainName;
   }
 
+  static get apiBase(): string {
+    return EnvManager.config.apiBase;
+  }
+
   /** 调试打印（仅开发环境） */
   static print(): void {
     if (EnvManager.isProd) return;

@@ -1,7 +1,11 @@
 .home-page {
   position: relative;
   background: #f3f3f3 !important;
-
+  .loading-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .black-box {
     height: 40px;
     background: skyblue;
@@ -210,13 +214,18 @@
           }
         }
       }
+      .buy-option-success-bg {
+        background-image: url("@/assets/home/homeSuccessBg.png");
+      }
+     .buy-option-no-success-bg {
+        background-image: url("@/assets/home/ingBg.png");
+      }
       .buy-option {
         margin-top: 16px;
         background-repeat: no-repeat;
         background-size: 100%;
         box-sizing: border-box;
         padding: 16px 12px;
-        background-image: url("@/assets/home/homeSuccessBg.png");
         .buy-header-option {
           display: flex;
           align-items: center;

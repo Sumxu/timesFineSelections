@@ -59,6 +59,12 @@ const Home: React.FC = () => {
   //得到pendingList数组
   const [pendingList, setPendingList] = useState<BigNumber[]>([]);
 
+  //nft列表加载状态
+  const [nftListLoading, setNftListLoading] = useState<boolean>(false);
+
+  //领取状态
+  const [pendIngBtnLoading, setPendIngBtnLoading] = useState<boolean>(false);
+
   //剩余
   const [surplus, setSurplus] = useState<number>(0);
   //进度条百分比
@@ -133,12 +139,14 @@ const Home: React.FC = () => {
   };
   //通过tokenId 拿到对应的信息 minerInfo
   const minerInfoFn = (data: BigNumber[]) => {
+    setNftListLoading(true);
     const contractAddress = ContractList["SpaceNFT"].address;
     const calls = data.map((bn) => ({
       contractAddress,
       params: [bn],
     }));
     fetch("minerInfo", calls).then((result) => {
+      setNftListLoading(false);
       if (result.success) {
         setMinerList(result.data);
       }
@@ -151,11 +159,13 @@ const Home: React.FC = () => {
       Totast(t("暂无奖励"), "warning");
       return;
     }
+    setPendIngBtnLoading(true);
     const claimRes = await sendTransaction("claim", [tokenIds[index]], {});
     if (claimRes.success) {
       Totast(t("领取成功"), "success");
       fetchPrice();
     }
+    setPendIngBtnLoading(false);
   };
   useEffect(() => {
     if (Number(balanceOf) > 0) {
@@ -241,15 +251,27 @@ const Home: React.FC = () => {
                   <div className="item-txt-2">累计产出(TAX)</div>
                 </div>
               </div> */}
-              {minerList.map((item, index) => {
-                return (
-                  <div className="buy-option" key={index}>
+              {nftListLoading ? (
+                <div className="loading-box">
+                  <Spin />
+                </div>
+              ) : (
+                minerList.map((item, index) => (
+                  <div
+                    className={`buy-option ${
+                      nftPercentage(index) !== 100
+                        ? "buy-option-no-success-bg"
+                        : "buy-option-success-bg"
+                    }`}
+                    key={index}
+                  >
                     <div className="buy-header-option">
                       <div className="left-option">
                         <img className="logo" src={logoIcon} />
                         <div className="name">
-                          #{tokenIds[index].toString()}
+                          #{tokenIds[index]?.toString()}
                         </div>
+
                         <div
                           className={
                             nftPercentage(index) !== 100 ? "tag" : "tag-success"
@@ -260,26 +282,38 @@ const Home: React.FC = () => {
                             : t("已释放完")}
                         </div>
                       </div>
+
                       {nftPercentage(index) !== 100 && (
                         <div
-                          className="tag-right"
-                          onClick={() => getPendIng(index)}
+                          className={`tag-right ${
+                            pendIngBtnLoading === index ? "disabled" : ""
+                          }`}
+                          onClick={() =>
+                            pendIngBtnLoading !== index && getPendIng(index)
+                          }
                         >
-                          {t("领取")}
+                          {pendIngBtnLoading === index ? (
+                            <Spin />
+                          ) : (
+                            <span>{t("领取")}</span>
+                          )}
                         </div>
                       )}
                     </div>
+
                     <div className="progress-bar">
                       <div
                         className="progress-bar-check"
                         style={{ width: `${nftPercentage(index)}%` }}
                       ></div>
                     </div>
+
                     <div className="info-txt-option">
                       <div className="info-txt-1">{t("总产值")}</div>
                       <div className="info-txt-1">{t("待领取")}</div>
                       <div className="info-txt-1">{t("已领取")}</div>
                     </div>
+
                     <div className="info-txt-option">
                       <div className="info-txt-2">
                         {fromWei(maxAmount, 18, true, 2)} TAX
@@ -292,8 +326,8 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                ))
+              )}
 
               {/* <div className="buy-option">
                 <div className="buy-header-option">

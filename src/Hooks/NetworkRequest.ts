@@ -2,8 +2,6 @@
 import { message } from "antd";
 import EnvManager from "@/config/EnvManager";
 const RequestUrl = EnvManager.apiBase;
-import { Totast } from "@/Hooks/Utils.ts";
-import { t } from "i18next";
 
 interface NetWorkProps {
   Url: string;
@@ -18,7 +16,6 @@ async function NetworkRequest(params: NetWorkProps): Promise<any> {
   let url = Url;
   const method = Method.toLowerCase();
   const key = "globalLoading";
-
   try {
     if (method === "get" && Object.keys(Data).length > 0) {
       const queryString = new URLSearchParams(Data).toString();
@@ -42,13 +39,6 @@ async function NetworkRequest(params: NetWorkProps): Promise<any> {
     }
     return { success: true, data: result };
   } catch (error: any) {
-    if (error.message == "quota error") {
-      Totast(t("复投后才能领取"), "warning");
-      return;
-    } else if (error.message == "claim frequency limit") {
-      Totast(t("请明天再领取"), "warning");
-      return;
-    }
     message.error({
       content: "Request Error：" + (error.message || error),
       key,

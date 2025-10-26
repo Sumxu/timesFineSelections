@@ -5,6 +5,7 @@
   .item-box {
     background: #373737;
     border-radius: 8px;
+    overflow: hidden;
     .item-header-option {
       display: flex;
       align-items: center;
@@ -51,6 +52,7 @@
       }
     }
     .list-item-header {
+      overflow-y: scroll;
       padding-top: 16px;
       padding-right: 16px;
       padding-left: 16px;
@@ -62,6 +64,20 @@
         font-size: 12px;
         color: rgba(255, 255, 255, 0.65);
       }
+      .header-txt-1 {
+        width: 40%;
+      }
+      .header-txt-2 {
+        width: 20%;
+      }
+      .header-txt-3 {
+        width: 40%;
+        text-align: right;
+      }
+    }
+    .list-item-option {
+      height: calc(100vh - 130px);
+      overflow-y: scroll;
     }
     .list-item {
       padding: 16px;
@@ -73,13 +89,21 @@
       .item-txt {
         font-size: 12px;
         color: #ffffff;
+        width: 40%;
+      }
+      .item-txt-no {
+        width: 20%;
+        font-size: 12px;
+        text-align: left;
+        color: #fff;
       }
       .item-txt-right {
+        width: 40%;
+        text-align: right;
         font-weight: bold;
         font-size: 12px;
         color: #0be72f;
       }
-
     }
   }
 }

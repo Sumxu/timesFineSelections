@@ -6,7 +6,6 @@ import removeConsole from "vite-plugin-remove-console";
 
 export default defineConfig(({ mode }) => {
   const isProd = mode === "production";
-
   return {
     plugins: [
       react(),
@@ -25,10 +24,7 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve("./src"),
       },
     },
-
     optimizeDeps: { include: ["buffer"] },
-    server: { host: true, port: 3333 },
-
     build: {
       minify: "esbuild",
       esbuild: { drop: isProd ? ["console", "debugger"] : [] },
