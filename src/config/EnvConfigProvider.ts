@@ -32,7 +32,7 @@ export default class EnvConfigProvider {
   /** 生产环境配置（主网） */
   static getProdConfig(): EnvConfig {
     return {
-      apiBase: "https://api.taxshop.plus/dapp",
+      apiBase: "https://api.taxshop.plus/dapp/",
       contractSpaceNFT: "0x764eEaB717b68056C02a75677C784b98e54Fc042",
       multiCallToken: "0xcA11bde05977b3631167028862bE2a173976CA11",
       contractUsdt: "0x55d398326f99059fF775485246999027B3197955",
