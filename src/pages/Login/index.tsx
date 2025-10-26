@@ -16,7 +16,7 @@ const Login: React.FC = () => {
       { label: "繁体中文", value: "3" },
     ],
   ];
-  const [langTxt,setLangTxt]=useState<string>('')
+  const [langTxt, setLangTxt] = useState<string>("");
   const [visible, setVisible] = useState(false);
   const [value, setValue] = useState("1");
   // 当前钱包地址
@@ -35,13 +35,13 @@ const Login: React.FC = () => {
     const val = v[0];
     let name = "";
     setValue(val);
-    if (val == '1') {
+    if (val == "1") {
       name = "zh";
     }
-    if (val == '2') {
+    if (val == "2") {
       name = "en";
     }
-    if (val == '3') {
+    if (val == "3") {
       name = "zhHant";
     }
     i18n.changeLanguage(name);
@@ -55,44 +55,44 @@ const Login: React.FC = () => {
   // 获取当前语言
   const getCurrLang = () => {
     const localLang: string = window.localStorage.getItem("lang") ?? "en";
-   
-   
     i18n.changeLanguage(localLang);
     if (localLang == "zh") {
       setValue("1");
-      setLangTxt('简体中文')
+      setLangTxt("简体中文");
     }
     if (localLang == "en") {
       setValue("2");
-      setLangTxt('English')
-
+      setLangTxt("English");
     }
     if (localLang == "zhHant") {
       setValue("3");
-      setLangTxt('繁体中文')
+      setLangTxt("繁体中文");
     }
-
   };
-  useEffect(()=>{
-    getCurrLang()
-  },[])
+  useEffect(() => {
+    getCurrLang();
+  }, []);
   return (
     <>
-      <div className="login-page">
+      <div
+        className={`login-page ${
+          value == 2 ? "login-page-en" : "login-page-zh"
+        }`}
+      >
         <div className="login-header-box">
           <div className="logo-left-option">
             <img src={logo} className="logo-icon"></img>
             <img src={logoName} className="logo-name"></img>
           </div>
-          {
-          langTxt&&<div className="lan-option">
-            <img src={lan} className="lan-icon"></img>
-            <div className="lan-txt" onClick={langClick}>
-              {langTxt}
+          {langTxt && (
+            <div className="lan-option">
+              <img src={lan} className="lan-icon"></img>
+              <div className="lan-txt" onClick={langClick}>
+                {langTxt}
+              </div>
+              <DownOutline color="#fff" />
             </div>
-            <DownOutline color="#fff" />
-          </div>
-          }
+          )}
         </div>
         <div className="btn-bg" onClick={loginClick}></div>
       </div>

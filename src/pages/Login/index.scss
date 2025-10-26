@@ -1,7 +1,13 @@
+.login-page-zh{
+  background-image: url("@/assets/login/zhBg.png");
+}
+.login-page-en{
+  background-image: url("@/assets/login/enBg.png");
+
+}
 .login-page {
   position: relative;
   min-height: 100vh;
-  background-image: url("@/assets/login/zhBg.png");
   background-size: 100%;
   background-repeat: no-repeat;
   .login-header-box {
