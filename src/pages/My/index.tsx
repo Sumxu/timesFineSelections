@@ -1,11 +1,11 @@
 import "./index.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-const Home: React.FC = () => {
+const My: React.FC = () => {
   return (
     <>
-     <button>首页页面</button>
+     <button>我的页面</button>
     </>
   );
 };
-export default Home;
+export default My;
