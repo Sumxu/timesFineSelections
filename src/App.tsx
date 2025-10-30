@@ -13,48 +13,37 @@ const Classify = lazy(() => import("@/pages/Classify"));
 const Home = lazy(() => import("@/pages/Home"));
 import useWalletListener from "@/Hooks/useWalletListener";
 import EnvManager from "@/config/EnvManager";
-import styles from './App.css'
 EnvManager.print();
 import {
   AppOutline,
   MessageOutline,
   UnorderedListOutline,
-  UserOutline,
-} from 'antd-mobile-icons'
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-  MemoryRouter as Router,
-} from "react-router-dom";
+} from "antd-mobile-icons";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 const Bottom: FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
-
   const setRouteActive = (value: string) => {
-    history.push(value);
+    navigate(value);
   };
-
   const tabs = [
     {
       key: "/home",
       title: "首页",
-     icon: <AppOutline />,
+      icon: <AppOutline />,
     },
     {
       key: "/classify",
       title: "分类",
-       icon: <UnorderedListOutline />,
+      icon: <UnorderedListOutline />,
     },
     {
       key: "/my",
       title: "我的",
-       icon: <MessageOutline />,
+      icon: <MessageOutline />,
     },
   ];
-
   return (
     <TabBar activeKey={pathname} onChange={(value) => setRouteActive(value)}>
       {tabs.map((item) => (
@@ -88,26 +77,18 @@ function App() {
   return (
     <>
       {walletAddress ? (
-        <Router initialEntries={["/home"]}>
-          <div className={styles.app}>
-            <div className={styles.body}>
-              <Switch>
-                <Route exact path="/home">
-                  <Home />
-                </Route>
-                <Route exact path="/classify">
-                  <Classify />
-                </Route>
-                <Route exact path="/my">
-                  <My />
-                </Route>
-              </Switch>
-            </div>
-            <div className={styles.bottom}>
-              <Bottom />
-            </div>
+        <div className="app">
+          <div className="body">
+            <Routes initialEntries={["/home"]}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/classify" element={<Classify />} />
+              <Route path="/my" element={<My />} />
+            </Routes>
           </div>
-        </Router>
+          <div className="bottom">
+            <Bottom />
+          </div>
+        </div>
       ) : (
         <div className="loding">
           <div>请先连接钱包</div>

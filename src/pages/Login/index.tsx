@@ -29,7 +29,6 @@ const Login: React.FC = () => {
       }
     });
   };
-
   // 获取当前语言
   const changeLanguage = (v: string) => {
     const val = v[0];
@@ -51,7 +50,6 @@ const Login: React.FC = () => {
   const langClick = () => {
     setVisible(true);
   };
-
   // 获取当前语言
   const getCurrLang = () => {
     const localLang: string = window.localStorage.getItem("lang") ?? "en";

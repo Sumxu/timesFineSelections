@@ -52,12 +52,13 @@
 
 .body {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  
 }
 
 .bottom {
-  flex: 0;
-  border-top: solid 1px var(--adm-color-border);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
 }
