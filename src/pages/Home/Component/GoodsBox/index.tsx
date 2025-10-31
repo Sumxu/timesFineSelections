@@ -28,8 +28,7 @@ const GoodsBox: React.FC = () => {
             );
           })}
         </div>
-          <div className="loading-more-option">查看更多商品</div>
-
+        <div className="loading-more-option">查看更多商品</div>
       </div>
     </>
   );

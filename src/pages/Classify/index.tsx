@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 const Classify: React.FC = () => {
   return (
     <>
-     <button>分类页面</button>
+      <div className="classify-page-box">
+
+      </div>
     </>
   );
 };

@@ -15,6 +15,7 @@ const Home: React.FC = () => {
           <Tools></Tools>
         </div>
         <div className="goods-list-box">
+          <div className="goods-list-bg-box"></div>
           <GoodsBox></GoodsBox>
         </div>
       </div>

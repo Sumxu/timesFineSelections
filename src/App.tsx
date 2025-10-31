@@ -13,46 +13,9 @@ const Classify = lazy(() => import("@/pages/Classify"));
 const Home = lazy(() => import("@/pages/Home"));
 import useWalletListener from "@/Hooks/useWalletListener";
 import EnvManager from "@/config/EnvManager";
+import TaBbarBottom from "@/components/TaBbarBottom";
 EnvManager.print();
-import {
-  AppOutline,
-  MessageOutline,
-  UnorderedListOutline,
-} from "antd-mobile-icons";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-const Bottom: FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { pathname } = location;
-  const setRouteActive = (value: string) => {
-    navigate(value);
-  };
-  const tabs = [
-    {
-      key: "/home",
-      title: "首页",
-      icon: <AppOutline />,
-    },
-    {
-      key: "/classify",
-      title: "分类",
-      icon: <UnorderedListOutline />,
-    },
-    {
-      key: "/my",
-      title: "我的",
-      icon: <MessageOutline />,
-    },
-  ];
-  return (
-    <TabBar activeKey={pathname} onChange={(value) => setRouteActive(value)}>
-      {tabs.map((item) => (
-        <TabBar.Item key={item.key} icon={item.icon} title={item.title} />
-      ))}
-    </TabBar>
-  );
-};
-
+import { Routes, Route  } from "react-router-dom";
 function App() {
   useWalletListener(); // ✅ 全局持续监听钱包变化
   const walletAddress = userAddress((state) => state.address);
@@ -86,7 +49,7 @@ function App() {
             </Routes>
           </div>
           <div className="bottom">
-            <Bottom />
+            <TaBbarBottom />
           </div>
         </div>
       ) : (
