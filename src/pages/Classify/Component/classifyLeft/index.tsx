@@ -30,7 +30,7 @@ const ClassifyLeft: React.FC = () => {
   };
   return (
     <>
-      <div className="classify-option">
+      <div className="classify-left-option">
         {leftList.map((item, index) => {
           const isCheck = tabCheckIndex == index ? true : false;
           return (

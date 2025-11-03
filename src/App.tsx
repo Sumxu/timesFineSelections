@@ -11,6 +11,7 @@ const OutputList = lazy(() => import("@/pages/OutputList"));
 const My = lazy(() => import("@/pages/My"));
 const Classify = lazy(() => import("@/pages/Classify"));
 const Home = lazy(() => import("@/pages/Home"));
+const Order = lazy(() => import("@/pages/My/MyTools/Order"));
 import useWalletListener from "@/Hooks/useWalletListener";
 import EnvManager from "@/config/EnvManager";
 import TaBbarBottom from "@/components/TaBbarBottom";
@@ -46,6 +47,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/classify" element={<Classify />} />
               <Route path="/my" element={<My />} />
+              <Route path="/order" element={<Order />} />
             </Routes>
           </div>
           <div className="bottom">
