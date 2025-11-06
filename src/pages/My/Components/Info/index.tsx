@@ -7,6 +7,8 @@ import WithdrawPopup from '@/components/Popup/WithdrawPopup'
 import ConversionPopup from '@/components/Popup/ConversionPopup' 
 import RedemptionPopup from '@/components/Popup/RedemptionPopup' 
 const Info: React.FC = () => {
+  const navigate=useNavigate()
+  
   return (
     <>
       <div className="my-info-box">
@@ -45,11 +47,11 @@ const Info: React.FC = () => {
                 <div className="txt-option">TAX余额</div>
               </div>
             </div>
-            <div className="right-option">资产明细</div>
+            <div className="right-option" onClick={()=>navigate('/assetDetails')}>资产明细</div>
           </div>
         </div>
       </div>
-      <RedemptionPopup></RedemptionPopup>
+      {/* <RedemptionPopup></RedemptionPopup> */}
     </>
   );
 };

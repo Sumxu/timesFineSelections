@@ -12,15 +12,24 @@ const My = lazy(() => import("@/pages/My"));
 const Classify = lazy(() => import("@/pages/Classify"));
 const Home = lazy(() => import("@/pages/Home"));
 const Order = lazy(() => import("@/pages/My/MyTools/Order"));
+const OrderDetail = lazy(() => import("@/pages/My/MyTools/OrderDetail"));
+const AssetDetails = lazy(() => import("@/pages/My/MyTools/AssetDetails"));
+const TaxPledge = lazy(() => import("@/pages/My/MyTools/TaxPledge"));
+const TaxList = lazy(() => import("@/pages/My/MyTools/TaxList"));
 import useWalletListener from "@/Hooks/useWalletListener";
 import EnvManager from "@/config/EnvManager";
 import TaBbarBottom from "@/components/TaBbarBottom";
 EnvManager.print();
-import { Routes, Route  } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 function App() {
   useWalletListener(); // ✅ 全局持续监听钱包变化
   const walletAddress = userAddress((state) => state.address);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const { pathname } = location;
+
+  const showSomething = ["/home", "/classify", "/my"].includes(pathname);
+
   useEffect(() => {
     const checkWallet = async () => {
       if (!walletAddress) {
@@ -37,7 +46,6 @@ function App() {
       </div>
     );
   }
-
   return (
     <>
       {walletAddress ? (
@@ -48,11 +56,13 @@ function App() {
               <Route path="/classify" element={<Classify />} />
               <Route path="/my" element={<My />} />
               <Route path="/order" element={<Order />} />
+              <Route path="/orderDetail" element={<OrderDetail />}></Route>
+              <Route path="/assetDetails" element={<AssetDetails />}></Route>
+              <Route path="/taxPledge" element={<TaxPledge />}></Route>
+              <Route path="/taxList" element={<TaxList />}></Route>
             </Routes>
           </div>
-          <div className="bottom">
-            <TaBbarBottom />
-          </div>
+          <div className="bottom">{showSomething && <TaBbarBottom />}</div>
         </div>
       ) : (
         <div className="loding">

@@ -1,14 +1,14 @@
 .order-page {
   background: #191919;
-  height: 100vh;
   .order-content-box {
     padding: 16px;
     box-sizing: border-box;
     .tab-box {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       .tab-item {
-        width: 25%;
+        width: 23%;
         height: 36px;
         line-height: 36px;
         text-align: center;
@@ -24,5 +24,10 @@
         color: rgba(0, 0, 0, 0.85);
       }
     }
+  }
+  .order-list-box{
+    margin-top: 16px;
+    height: calc(100vh - 42px - 86px);
+    overflow-y: scroll;
   }
 }

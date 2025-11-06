@@ -30,7 +30,7 @@ const Tools: React.FC = () => {
       name: "TAX质押",
       icon: tools3,
       type: "1",
-      path: "",
+      path: "/taxPledge",
     },
     {
       name: "商家入驻",
@@ -69,6 +69,7 @@ const Tools: React.FC = () => {
           const itemType = item.type;
           return (
             <div
+            key={index}
               onClick={() => toolsClick(item)}
               className={`tools-item-option ${
                 toolArray.length - 1 != index && "tools-item-border-bottom"
