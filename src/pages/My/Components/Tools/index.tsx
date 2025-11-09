@@ -24,7 +24,7 @@ const Tools: React.FC = () => {
       name: "收货地址",
       icon: tools2,
       type: "1",
-      path: "",
+      path: "/address",
     },
     {
       name: "TAX质押",
@@ -36,7 +36,7 @@ const Tools: React.FC = () => {
       name: "商家入驻",
       icon: tools4,
       type: "1",
-      path: "",
+      path: "/shopApplication",
     },
     {
       name: "NFT股东",
@@ -55,7 +55,7 @@ const Tools: React.FC = () => {
       icon: tools7,
       type: "2",
       typeTxt: "简体中文",
-      path: "",
+      path: "/langPage",
     },
   ];
 

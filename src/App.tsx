@@ -16,6 +16,10 @@ const OrderDetail = lazy(() => import("@/pages/My/MyTools/OrderDetail"));
 const AssetDetails = lazy(() => import("@/pages/My/MyTools/AssetDetails"));
 const TaxPledge = lazy(() => import("@/pages/My/MyTools/TaxPledge"));
 const TaxList = lazy(() => import("@/pages/My/MyTools/TaxList"));
+const Address = lazy(() => import("@/pages/My/MyTools/Address"));
+const EditAddress = lazy(() => import("@/pages/My/MyTools/EditAddress"));
+const LangPage = lazy(() => import("@/pages/My/MyTools/lang"));
+const ShopApplication = lazy(() => import("@/pages/My/MyTools/ShopApplication"));
 import useWalletListener from "@/Hooks/useWalletListener";
 import EnvManager from "@/config/EnvManager";
 import TaBbarBottom from "@/components/TaBbarBottom";
@@ -60,6 +64,10 @@ function App() {
               <Route path="/assetDetails" element={<AssetDetails />}></Route>
               <Route path="/taxPledge" element={<TaxPledge />}></Route>
               <Route path="/taxList" element={<TaxList />}></Route>
+              <Route path="/address" element={<Address />}></Route>
+              <Route path="/editAddress" element={<EditAddress />}></Route>
+              <Route path="/langPage" element={<LangPage />}></Route>
+              <Route path="/shopApplication" element={<ShopApplication />}></Route>
             </Routes>
           </div>
           <div className="bottom">{showSomething && <TaBbarBottom />}</div>

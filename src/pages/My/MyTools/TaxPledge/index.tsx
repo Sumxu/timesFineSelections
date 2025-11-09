@@ -29,7 +29,6 @@ const TaxPledge: React.FC = () => {
             <div className="btn white-bg" onClick={()=>navigate('/taxList')}>记录</div>
           </div>
         </div>
-
         <div className="contentBox">
           <div className="topOption">
             <span className="leftSpn">质押TAX</span>
