@@ -4,6 +4,10 @@ import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import shopIcon from "@/assets/component/shopIcon.png";
 const ShopApplication: React.FC = () => {
+  const navigate=useNavigate()
+  const detailClick=()=>{
+    navigate('/merchantCenter')
+  }
   return (
     <div className="shopApplicationPage">
       <LeftBackHeader title="商家入驻" />
@@ -19,11 +23,9 @@ const ShopApplication: React.FC = () => {
               <span className="spn1">入驻费用</span>
               <span className="spn2">10.00 TAX</span>
             </div>
-            <div className="btnTxt">申请入驻</div>
+            <div className="btnTxt" onClick={()=>detailClick()}>申请入驻</div>
           </div>
         </div>
-
-
         <div className="item">
           <div className="itemHeaderOption">
             <img src={shopIcon} className="iconImg" />
@@ -38,8 +40,6 @@ const ShopApplication: React.FC = () => {
             <div className="btnTxt">申请入驻</div>
           </div>
         </div>
-
-
         <div className="item">
           <div className="itemHeaderOption">
             <img src={shopIcon} className="iconImg" />

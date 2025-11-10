@@ -48,7 +48,7 @@ const Tools: React.FC = () => {
       name: "我的团队",
       icon: tools6,
       type: "1",
-      path: "",
+      path: "/myTeam",
     },
     {
       name: "语言设置",

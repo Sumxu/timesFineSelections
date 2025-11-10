@@ -2,6 +2,8 @@ import { lazy, useEffect, useState } from "react";
 import type { FC } from "react";
 import "./App.css";
 import { TabBar } from "antd-mobile";
+import "react-quill/dist/quill.snow.css";
+
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { Spin } from "antd";
@@ -19,7 +21,14 @@ const TaxList = lazy(() => import("@/pages/My/MyTools/TaxList"));
 const Address = lazy(() => import("@/pages/My/MyTools/Address"));
 const EditAddress = lazy(() => import("@/pages/My/MyTools/EditAddress"));
 const LangPage = lazy(() => import("@/pages/My/MyTools/lang"));
-const ShopApplication = lazy(() => import("@/pages/My/MyTools/ShopApplication"));
+const MyTeam = lazy(() => import("@/pages/My/MyTools/MyTeam"));
+const MerchantCenter = lazy(() => import("@/pages/My/MyTools/MerchantCenter"));
+const GoodsDetail = lazy(() => import("@/pages/GoodsDetail"));
+const CreatOrder = lazy(() => import("@/pages/CreatOrder"));
+const PayResult = lazy(() => import("@/pages/PayResult"));
+const ShopApplication = lazy(
+  () => import("@/pages/My/MyTools/ShopApplication")
+);
 import useWalletListener from "@/Hooks/useWalletListener";
 import EnvManager from "@/config/EnvManager";
 import TaBbarBottom from "@/components/TaBbarBottom";
@@ -67,7 +76,18 @@ function App() {
               <Route path="/address" element={<Address />}></Route>
               <Route path="/editAddress" element={<EditAddress />}></Route>
               <Route path="/langPage" element={<LangPage />}></Route>
-              <Route path="/shopApplication" element={<ShopApplication />}></Route>
+              <Route
+                path="/shopApplication"
+                element={<ShopApplication />}
+              ></Route>
+              <Route path="/myTeam" element={<MyTeam />}></Route>
+              <Route
+                path="/merchantCenter"
+                element={<MerchantCenter />}
+              ></Route>
+              <Route path="/goodsDetail" element={<GoodsDetail />}></Route>
+              <Route path="/creatOrder" element={<CreatOrder />}></Route>
+              <Route path="/payResult" element={<PayResult />}></Route>
             </Routes>
           </div>
           <div className="bottom">{showSomething && <TaBbarBottom />}</div>
