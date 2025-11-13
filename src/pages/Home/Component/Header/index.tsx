@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./index.scss";
 import logo from "@/assets/login/logo.png";
 import { SearchOutline } from "antd-mobile-icons";
+import { t } from "i18next";
 interface HeaderProps {
   isIconShow?: boolean;
 }
@@ -25,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({isIconShow=true}) => {
       }
       <div className="input-option">
         <SearchOutline fontSize={16} color="#A8AAA9" />
-        <span className="spn-1">搜索您想要的商品</span>
+        <span className="spn-1">{t('搜索您想要的商品')}</span>
       </div>
     </div>
   );

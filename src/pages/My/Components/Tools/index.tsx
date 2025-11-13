@@ -42,7 +42,7 @@ const Tools: React.FC = () => {
       name: "NFT股东",
       icon: tools5,
       type: "1",
-      path: "",
+      path: "/nft",
     },
     {
       name: "我的团队",

@@ -11,15 +11,15 @@ const MerchantDataInfo: React.FC = () => {
         </div>
          <div className="boxItem">
           <div className="price">¥3,200.56</div>
-          <div className="txt">今日销量</div>
+          <div className="txt">本月销量</div>
         </div>
          <div className="boxItem">
           <div className="price">¥3,200.56</div>
-          <div className="txt">今日销量</div>
+          <div className="txt">本年销量</div>
         </div>
          <div className="boxItem">
           <div className="price">¥3,200.56</div>
-          <div className="txt">今日销量</div>
+          <div className="txt">累计销量</div>
         </div>
       </div>
     </div>

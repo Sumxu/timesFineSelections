@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Input } from "antd-mobile";
 import { SearchOutline } from "antd-mobile-icons";
 import usdtIcon from '@/assets/home/USDT.png' 
+import { t } from "i18next";
 const MerchantGoods: React.FC = () => {
   const tabArray = [
     {
@@ -31,7 +32,7 @@ const MerchantGoods: React.FC = () => {
           <SearchOutline fontSize={14} color="rgba(255,255,255,0.35)" />
         </div>
         <Input
-          placeholder="输入商品名称/编号搜索"
+          placeholder={t("输入商品名称/编号搜索")}
           className="inputClass"
           style={{
             "--color": "#fff",
@@ -69,8 +70,8 @@ const MerchantGoods: React.FC = () => {
             </div>
           </div>
           <div className="endOption">
-            <span className="spn">上架日期：2025-09-23 18:56:32</span>
-            <span className="spn">销量：128</span>
+            <span className="spn">{t("上架日期")}：2025-09-23 18:56:32</span>
+            <span className="spn">{t("销量")}：128</span>
           </div>
         </div>
       </div>

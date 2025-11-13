@@ -76,6 +76,8 @@ function App() {
               <Route path="/address" element={<Address />}></Route>
               <Route path="/editAddress" element={<EditAddress />}></Route>
               <Route path="/langPage" element={<LangPage />}></Route>
+              <Route path="/login" element={<Login />}></Route>
+              <Route path="/nft" element={<Nft />}></Route>
               <Route
                 path="/shopApplication"
                 element={<ShopApplication />}
@@ -86,6 +88,7 @@ function App() {
                 element={<MerchantCenter />}
               ></Route>
               <Route path="/goodsDetail" element={<GoodsDetail />}></Route>
+              <Route path="/outputList" element={<OutputList />}></Route>
               <Route path="/creatOrder" element={<CreatOrder />}></Route>
               <Route path="/payResult" element={<PayResult />}></Route>
             </Routes>

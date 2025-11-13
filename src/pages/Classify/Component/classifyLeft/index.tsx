@@ -1,11 +1,13 @@
 import "./index.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { t } from "i18next";
+
 const ClassifyLeft: React.FC = () => {
   const [tabCheckIndex, setTabCheckIndex] = useState<string>("");
   const leftList = [
     {
-      label: "全部",
+      label: t("全部"),
       value: "0",
     },
     {

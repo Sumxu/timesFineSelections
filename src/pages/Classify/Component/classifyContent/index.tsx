@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import USDTIcon from "@/assets/home/USDT.png";
 import moenyIcon from "@/assets/home/moenyIcon.png";
+import { t } from "i18next";
+
 const ContentItem = () => {
   return (
     <div className="content-scroll-item">
@@ -15,7 +17,7 @@ const ContentItem = () => {
             <img src={moenyIcon} className="usdt-icon"></img>
             <div className="price-number">193.56</div>
           </div>
-          <div className="right-btn">补贴100%</div>
+          <div className="right-btn">{t('补贴')}100%</div>
         </div>
       </div>
     </div>
@@ -25,7 +27,7 @@ const ClassifyContent: React.FC = () => {
   return (
     <>
       <div className="classify-option">
-        <div className="classify-title">全部商品</div>
+        <div className="classify-title">{t('全部商品')}</div>
         <div className="classify-content-scroll">
           {[1, 2, 3, 4, 5, 6, 7, 8, 9, 9].map((item) => {
             return <ContentItem />;

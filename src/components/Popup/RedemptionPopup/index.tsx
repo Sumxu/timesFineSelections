@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Popup, Input } from "antd-mobile";
 import { CloseOutline } from "antd-mobile-icons";
 import popupHintIcon from "@/assets/popup/popupHintIcon.png";
+import { t } from "i18next";
 const RedemptionPopup: React.FC = () => {
   const [isShow, setIsShow] = useState<boolean>(true);
   const [inputNumber, setInputNumber] = useState<string>("");
@@ -23,23 +24,25 @@ const RedemptionPopup: React.FC = () => {
       >
         <div className="my-popup-page">
           <div className="header-option">
-            <div className="title">赎回</div>
+            <div className="title">{t("赎回")}</div>
             <div className="close-icon" onClick={() => onCloseChange()}>
               <CloseOutline fontSize={12} color="#969797" />
             </div>
           </div>
           <div className="tag-box">
             <img src={popupHintIcon} className="icon"></img>
-            <div className="txt-option">赎回将立即失去收益</div>
+            <div className="txt-option">{t("赎回将立即失去收益")}</div>
           </div>
           <div className="input-box">
             <div className="input-hint-txt-option">
-              <div className="txt-option">赎回数量:</div>
-              <div className="txt-option right-txt">质押数量：328.56</div>
+              <div className="txt-option">{t("赎回数量")}:</div>
+              <div className="txt-option right-txt">
+                {t("质押数量")}：328.56
+              </div>
             </div>
             <div className={`input-option ${isFocus ? "input-focus" : ""}`}>
               <Input
-                placeholder="请输入内容"
+                placeholder={t("请输入内容")}
                 value={inputNumber}
                 onChange={(val) => {
                   setInputNumber(val);
@@ -54,14 +57,14 @@ const RedemptionPopup: React.FC = () => {
           </div>
 
           <div className="hint-txt-box">
-            <div className="hint-txt-option">手续费(3.0%):</div>
+            <div className="hint-txt-option">{t("手续费")}(3.0%):</div>
             <div className="hint-txt-option right-bold">-0.00TAX</div>
           </div>
           <div className="hint-txt-box">
-            <div className="hint-txt-option">实际到账:</div>
+            <div className="hint-txt-option">{t("实际到账")}:</div>
             <div className="hint-txt-option right-option">0.00 TAX</div>
           </div>
-          <div className="btn-submit">确认赎回</div>
+          <div className="btn-submit">{t("确认赎回")}</div>
         </div>
       </Popup>
     </>
