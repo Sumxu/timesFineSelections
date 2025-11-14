@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import MerchantDataInfo from "@/pages/My/Components/MerchantDataInfo";
 import MerchantGoods from "@/pages/My/Components/MerchantGoods";
+import shopPng from '@/assets/Component/shopPng.png'
 import { t } from "i18next";
 const MerchantCenter: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ const MerchantCenter: React.FC = () => {
       <div className="MerchantCenterContent">
         <div className="headerTopBox">
           <div className="shopLogo">
-            <div className="logo"></div>
+            <img src={shopPng} className="logo"></img>
           </div>
 
           <div className="topInfo">

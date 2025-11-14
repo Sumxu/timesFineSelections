@@ -6,6 +6,7 @@ import copyIcon from "@/assets/my/copy.png";
 import address from "@/assets/component/address.png";
 import usdt from "@/assets/home/USDT.png";
 import { RightOutline } from "antd-mobile-icons";
+import car from '@/assets/component/car.png'
 import { t } from "i18next";
 const Order: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ const Order: React.FC = () => {
         <div className="content-box">
           <div className="wuLiuBox">
             <div className="leftIconOption">
-              <div className="icon"></div>
+              <img src={car} className="icon"></img>
             </div>
             <div className="contentOption">
               <div className="topContent">中通快递 78950999230400</div>

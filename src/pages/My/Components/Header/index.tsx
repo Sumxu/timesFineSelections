@@ -3,13 +3,12 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import deafultUserImg from "@/assets/my/deafultUserImg.png";
 import copy from "@/assets/my/copy.png";
+import logoOut from "@/assets/component/logoOut.png";
 const Header: React.FC = () => {
   return (
     <>
       <div className="my-header-box">
-        <div className="logOut-icon">
-          
-        </div>
+        <img src={logoOut} className="logOut-icon"></img>
         <div className="deafult-user-box">
           <div className="user-img-box">
             <img className="userImg-icon" src={deafultUserImg} />

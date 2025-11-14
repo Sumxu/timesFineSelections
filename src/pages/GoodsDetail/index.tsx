@@ -9,11 +9,12 @@ import lineLeft from "@/assets/img/lineLeft.png";
 import lineRight from "@/assets/img/lineRight.png";
 import { RightOutline } from "antd-mobile-icons";
 import GoodsBuyPopup from "@/components/Popup/GoodsBuyPopup";
+import message from '@/assets/component/message.png'
+import shopPng from '@/assets/component/shopPng.png'
 import { t } from "i18next";
 const GoodsDetail: React.FC = () => {
   const navigate = useNavigate();
   const buyClick = () => {
-    return;
     navigate("/creatOrder");
   };
   const content = `
@@ -87,7 +88,7 @@ const GoodsDetail: React.FC = () => {
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
             <div className="label">
-              <div className="leftIcon"></div>
+              <img src={shopPng} className="leftIcon"></img>
             </div>
             <div className="value">徕芬时空优品旗舰店</div>
             <div className="rightTxt">#10008095</div>
@@ -109,7 +110,7 @@ const GoodsDetail: React.FC = () => {
       </div>
       <div className="endFixedBox">
         <div className="leftOption">
-          <div className="spn1"></div>
+          <img src={message} className="spn1"></img>
           <div className="spn2">{t('客服')}</div>
         </div>
         <div className="rightOption">

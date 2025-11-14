@@ -6,12 +6,11 @@ import { CloseOutline } from "antd-mobile-icons";
 import popupHintIcon from "@/assets/popup/popupHintIcon.png";
 import usdt from '@/assets/home/USDT.png'
 import { t } from "i18next";
-
 const ConversionPopup: React.FC = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const [inputNumber, setInputNumber] = useState<string>("");
   const [balaceInputNumber, setBalaceInputNumber] = useState<string>("");
-  const [isFocus, setIsFocus] = useState(false); // ✅ 是否获得焦点
+  const [isFocus, setIsFocus] = useState(false); // ✅ 是否获得焦点 
   const [isBalanceFocus, setIsBalanceFocus] = useState(false); // ✅ 是否获得焦点
   const onCloseChange = () => {
     setIsShow(false);
