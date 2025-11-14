@@ -3,23 +3,24 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import OrderItem from "../../Components/OrderItem";
 import OrderHeaderSearch from "../../Components/OrderHeaderSearch";
+import { t } from "i18next";
 const Order: React.FC = () => {
   const navigate =useNavigate()
   const tabArray = [
     {
-      label: "全部",
+      label: t("全部"),
       value: "1",
     },
     {
-      label: "已购买",
+      label: t("已购买"),
       value: "2",
     },
     {
-      label: "已发货",
+      label: t("已发货"),
       value: "3",
     },
     {
-      label: "已完成",
+      label: t("已完成"),
       value: "4",
     },
   ];

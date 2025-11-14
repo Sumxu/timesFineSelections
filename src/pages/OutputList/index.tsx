@@ -28,7 +28,6 @@ const OutputList: React.FC = () => {
   const [current, setCurrent] = useState<number>(1);
   // 获取更多团队列表
   const loadMoreAction = async () => {
-    console.log("更多团队列表下拉刷新进来了");
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({

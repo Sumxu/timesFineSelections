@@ -57,8 +57,8 @@ const GoodsDetail: React.FC = () => {
           </div>
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
-            <div className="label">补贴</div>
-            <div className="value">193.56 积分</div>
+            <div className="label">{t('补贴')}</div>
+            <div className="value">193.56 {t('积分')}</div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>

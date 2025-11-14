@@ -24,6 +24,7 @@ const Login: React.FC = () => {
   const loginClick = () => {
     //链接钱包 成功后进行跳转
     ensureWalletConnected().then((res) => {
+      console.log('res---',res)
       if (res) {
         navigate("/home");
       }
@@ -92,7 +93,7 @@ const Login: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="btn-bg" onClick={loginClick}></div>
+        <div className="btn-bg" onClick={()=>loginClick()}></div>
       </div>
       <Picker
         columns={basicColumns}

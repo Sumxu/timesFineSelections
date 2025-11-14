@@ -1,7 +1,8 @@
 import "./index.scss";
 import React, { useEffect, useState } from "react";
 import usdt from "@/assets/home/USDT.png";
-import shopIcon from "@/assets/home/shopIcon.png";
+import shopIcon from "@/assets/component/shopIcon.png";
+import { t } from "i18next";
 interface OrderItemClass {
   onClickDetail: () => void;
 }
@@ -32,18 +33,18 @@ function OrderItem(Props: OrderItemClass) {
             <img src={usdt} className="icon"></img>
             <div className="price-number">193.56</div>
           </div>
-          <div className="info-spc">已选规格：LE30橙色 礼盒款</div>
+          <div className="info-spc">{t('已选规格')}：LE30橙色 礼盒款</div>
         </div>
       </div>
       <div className="logistics-information">
-        <span className="spn-label">实付款:</span>
+        <span className="spn-label">{t('实付款')}:</span>
         <span className="spn-value">193.56 USDT</span>
       </div>
       <div className="tools-btn-option">
         <div className="btn" onClick={() => itemClick()}>
-          订单详情
+          {t('订单详情')}
         </div>
-        <div className="btn">查看物流</div>
+        <div className="btn">{t('查看物流')}</div>
       </div>
     </div>
   );

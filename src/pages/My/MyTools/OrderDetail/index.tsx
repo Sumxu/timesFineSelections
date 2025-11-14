@@ -6,6 +6,7 @@ import copyIcon from "@/assets/my/copy.png";
 import address from "@/assets/component/address.png";
 import usdt from "@/assets/home/USDT.png";
 import { RightOutline } from "antd-mobile-icons";
+import { t } from "i18next";
 const Order: React.FC = () => {
   return (
     <>
@@ -18,7 +19,7 @@ const Order: React.FC = () => {
             </div>
             <div className="contentOption">
               <div className="topContent">中通快递 78950999230400</div>
-              <div className="bottomOption">物流状态请自行查询</div>
+              <div className="bottomOption">{t('物流状态请自行查询')}</div>
             </div>
             <div className="rightOption">
               <img className="copyIcon" src={copyIcon}></img>
@@ -56,32 +57,32 @@ const Order: React.FC = () => {
                   <img src={usdt} className="priceIcon"></img>
                   <div className="goodsPrice">193.56</div>
                 </div>
-                <div className="goodsItemSpec">已选规格：LE30橙色 礼盒款</div>
+                <div className="goodsItemSpec">{t('已选规格')}：LE30橙色 礼盒款</div>
               </div>
             </div>
             <div className="goodsItemLineOption">
-              <div className="leftOption">配送方式：</div>
+              <div className="leftOption">{t('配送方式')}：</div>
               <div className="rightOption">
-                <div className="rightTxt">快递包邮</div>
+                <div className="rightTxt">{t('快递包邮')}</div>
                 <RightOutline color="#888888" fontSize={14} />
               </div>
             </div>
             <div className="goodsItemLineOption">
-              <div className="leftOption">商品金额：</div>
+              <div className="leftOption">{t('商品金额')}：</div>
               <div className="rightOption">
                 <div className="rightTxt">193.56</div>
               </div>
             </div>
 
             <div className="goodsItemLineOption">
-              <div className="leftOption">运费：</div>
+              <div className="leftOption">{t('运费')}：</div>
               <div className="rightOption">
                 <div className="rightTxt">+0.00</div>
               </div>
             </div>
 
             <div className="goodsItemLineOption">
-              <div className="leftOption">补贴积分：</div>
+              <div className="leftOption">{t('补贴积分')}：</div>
               <div className="rightOption">
                 <div className="rightTxt rightTxtOrige">193.56</div>
               </div>
@@ -90,7 +91,7 @@ const Order: React.FC = () => {
 
           <div className="order-info-box">
             <div className="item-option">
-              <div className="left-item-option">订单编号：</div>
+              <div className="left-item-option">{t("订单编号")}：</div>
               <div className="right-item-option">
                 <span className="spn-1">202509231603830023</span>
                 <img src={copyIcon} className="copyIcon"></img>
@@ -98,14 +99,14 @@ const Order: React.FC = () => {
             </div>
 
             <div className="item-option">
-              <div className="left-item-option">支付方式：</div>
+              <div className="left-item-option">{t("支付方式")}：</div>
               <div className="right-item-option">
                 <span className="spn-1">USDT</span>
               </div>
             </div>
 
             <div className="item-option">
-              <div className="left-item-option">订单编号：</div>
+              <div className="left-item-option">{t("下单时间")}：</div>
               <div className="right-item-option">
                 <span className="spn-1">2025-09-23 18:56:32</span>
               </div>

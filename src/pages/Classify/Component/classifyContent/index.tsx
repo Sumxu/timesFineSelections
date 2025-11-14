@@ -29,8 +29,8 @@ const ClassifyContent: React.FC = () => {
       <div className="classify-option">
         <div className="classify-title">{t('全部商品')}</div>
         <div className="classify-content-scroll">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 9].map((item) => {
-            return <ContentItem />;
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 9].map((item,index) => {
+            return <ContentItem  key={index}/>;
           })}
         </div>
       </div>

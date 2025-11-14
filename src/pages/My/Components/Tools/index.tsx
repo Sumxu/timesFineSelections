@@ -9,56 +9,56 @@ import tools6 from "@/assets/my/tools6.png";
 import tools7 from "@/assets/my/tools7.png";
 import { RightOutline } from "antd-mobile-icons";
 import { useNavigate } from "react-router-dom";
-
+import {getLangObj} from '@/Hooks/Utils'
+import { t } from "i18next";
 const Tools: React.FC = () => {
   const navigate = useNavigate();
 
   const toolArray = [
     {
-      name: "订单中心",
+      name: t("订单中心"),
       icon: tools1,
       type: "1",
       path: "/order",
     },
     {
-      name: "收货地址",
+      name: t("收货地址"),
       icon: tools2,
       type: "1",
       path: "/address",
     },
     {
-      name: "TAX质押",
+      name: t("TAX质押"),
       icon: tools3,
       type: "1",
       path: "/taxPledge",
     },
     {
-      name: "商家入驻",
+      name: t("商家入驻"),
       icon: tools4,
       type: "1",
       path: "/shopApplication",
     },
     {
-      name: "NFT股东",
+      name: t("NFT股东"),
       icon: tools5,
       type: "1",
       path: "/nft",
     },
     {
-      name: "我的团队",
+      name: t("我的团队"),
       icon: tools6,
       type: "1",
       path: "/myTeam",
     },
     {
-      name: "语言设置",
+      name: t("语言设置"),
       icon: tools7,
       type: "2",
-      typeTxt: "简体中文",
+      typeTxt:getLangObj().label,
       path: "/langPage",
     },
   ];
-
   const toolsClick = (item) => {
     navigate(item.path);
   };
@@ -69,7 +69,7 @@ const Tools: React.FC = () => {
           const itemType = item.type;
           return (
             <div
-            key={index}
+              key={index}
               onClick={() => toolsClick(item)}
               className={`tools-item-option ${
                 toolArray.length - 1 != index && "tools-item-border-bottom"

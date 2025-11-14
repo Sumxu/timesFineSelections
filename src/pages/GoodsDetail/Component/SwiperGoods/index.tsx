@@ -10,7 +10,6 @@ const items = colors.map((color, index) => (
     </div>
   </Swiper.Item>
 ));
-
 const SwiperGoods: React.FC = () => {
   return (
         <div className="swiperBox">

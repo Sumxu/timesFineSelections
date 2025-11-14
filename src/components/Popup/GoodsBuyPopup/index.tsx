@@ -8,7 +8,7 @@ import usdt from '@/assets/home/USDT.png'
 import { t } from "i18next";
 
 const ConversionPopup: React.FC = () => {
-  const [isShow, setIsShow] = useState<boolean>(true);
+  const [isShow, setIsShow] = useState<boolean>(false);
   const [inputNumber, setInputNumber] = useState<string>("");
   const [balaceInputNumber, setBalaceInputNumber] = useState<string>("");
   const [isFocus, setIsFocus] = useState(false); // ✅ 是否获得焦点
@@ -32,7 +32,7 @@ const ConversionPopup: React.FC = () => {
             <div className="rightOption">
               <div className="goodsTxt">
                 <div className="txt">徕芬LE30国庆限定礼盒款护发套</div>
-                <CloseOutline fontSize={14} color="rgba(255,255,255,0.35"></CloseOutline>
+                <CloseOutline fontSize={14} color="rgba(255,255,255,0.35" onClick={()=>setIsShow(false)}></CloseOutline>
               </div>
               <div className="priceOption">
                 <img src={usdt} className="usdtIcon"></img>

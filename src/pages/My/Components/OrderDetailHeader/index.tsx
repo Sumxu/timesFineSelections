@@ -6,25 +6,25 @@ import orderDetailNone from "@/assets/component/orderDetailNone.png";
 import orderDetailSuccess from "@/assets/component/orderDetailSuccess.png";
 import logoOrderDetailBg from "@/assets/component/logoOrderDetailBg.png";
 import { icons } from "antd/es/image/PreviewGroup";
-
+import { t } from "i18next";
 const OrderDetailHeader: React.FC = () => {
   const statusArray = [
     {
       status: "1",
-      name: "等待卖家发货",
-      desc: "商家将在48小时内发货,请耐心等待！",
+      name: t("等待卖家发货"),
+      desc: t("商家将在48小时内发货,请耐心等待！"),
       icons: orderDetailNone,
     },
     {
       status: "2",
-      name: "商品已发货",
-      desc: "您可以复制物流单号查询物流动态",
+      name: t("商品已发货"),
+      desc: t("您可以复制物流单号查询物流动态"),
       icons: orderDetailIng,
     },
     {
       status: "3",
-      name: "商品已送达",
-      desc: "您的订单已完成，欢迎下次光临",
+      name: t("商品已送达"),
+      desc: t("您的订单已完成，欢迎下次光临"),
       icons: orderDetailSuccess,
     },
   ];
@@ -49,7 +49,7 @@ const OrderDetailHeader: React.FC = () => {
        <div className="left-option">
           <img className="left-icon" src={leftBackIcon}></img>
         </div>
-        {getOrderStatusDom(1)}
+        {getOrderStatusDom(3)}
       <img src={logoOrderDetailBg} className="logo-order-detail"></img>
     </div>
   );
