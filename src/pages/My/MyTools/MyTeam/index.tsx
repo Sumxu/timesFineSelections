@@ -37,15 +37,6 @@ const MyTeam: React.FC = () => {
         </div>
 
         <div className="box inviteBox">
-          {/* <div className="inviteTop">
-            <div className="leftOption">
-              <div className="txt">{t('邀请奖励')}</div>
-              <div className="price">3,508.56</div>
-            </div>
-            <div className="rightOption">
-              <div className="btn">{t('奖励明细')}</div>
-            </div>
-          </div> */}
           <div className="inviteEnd">
             <span className="spn1">{t('邀请链接')}：</span>
             <span className="spn2">www.timetax.io/home/</span>
