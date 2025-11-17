@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { ethers, BigNumber } from "ethers";
+
 /**
  * 格式化钱包地址
  * @param addr 钱包地址
@@ -326,4 +327,7 @@ export const getLangObj = () => {
   }
 
   return langInfo;
+};
+export const logOut = () => {
+  console.log('23431')
 };

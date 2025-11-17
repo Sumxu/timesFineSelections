@@ -5,6 +5,7 @@ import edit from "@/assets/address/edit.png";
 import del from "@/assets/address/del.png";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import { t } from "i18next";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 const Address: React.FC = () => {
   const navigate = useNavigate();
   const editClick = () => {

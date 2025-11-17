@@ -5,10 +5,18 @@ import deafultUserImg from "@/assets/my/deafultUserImg.png";
 import copy from "@/assets/my/copy.png";
 import logoOut from "@/assets/component/logoOut.png";
 const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const logOutClick = () => {
+    navigate("/login");
+  };
   return (
     <>
       <div className="my-header-box">
-        <img src={logoOut} className="logOut-icon"></img>
+        <img
+          src={logoOut}
+          className="logOut-icon"
+          onClick={() => logOutClick()}
+        ></img>
         <div className="deafult-user-box">
           <div className="user-img-box">
             <img className="userImg-icon" src={deafultUserImg} />

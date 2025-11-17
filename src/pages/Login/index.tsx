@@ -4,8 +4,11 @@ import React, { useEffect, useState } from "react";
 import lan from "@/assets/login/lan.png";
 import logoName from "@/assets/login/logoName.png";
 import logo from "@/assets/login/logo.png";
+import { userAddress } from "@/Store/Store";
 import { ensureWalletConnected } from "@/Hooks/WalletHooks.ts";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { Picker } from "antd-mobile";
+import InviteModal from "@/components/InviteModal"
 import i18n, { t } from "i18next";
 import { DownOutline } from "antd-mobile-icons";
 const Login: React.FC = () => {
@@ -19,17 +22,36 @@ const Login: React.FC = () => {
   const [langTxt, setLangTxt] = useState<string>("");
   const [visible, setVisible] = useState(false);
   const [value, setValue] = useState("1");
+
   // 当前钱包地址
   const navigate = useNavigate();
   const loginClick = () => {
     //链接钱包 成功后进行跳转
     ensureWalletConnected().then((res) => {
-      console.log('res---',res)
       if (res) {
-        navigate("/home");
+        //判断用户是否可以进行登录
+        isLogin()
+        // navigate("/home");
       }
     });
   };
+  const isLogin=()=>{
+    //获取
+    const currentAddress = userAddress.getState().address;
+    NetworkRequest({
+      Url: "auth/verify",
+      Method: "get",
+      Data: {
+        address: currentAddress,
+      },
+    }).then(res=>{
+      if(res.data.code==200){
+        console.log('res==',res)
+        
+      }
+    })
+
+  }
   // 获取当前语言
   const changeLanguage = (v: string) => {
     const val = v[0];
@@ -93,7 +115,7 @@ const Login: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="btn-bg" onClick={()=>loginClick()}></div>
+        <div className="btn-bg" onClick={() => loginClick()}></div>
       </div>
       <Picker
         columns={basicColumns}
@@ -106,6 +128,7 @@ const Login: React.FC = () => {
           changeLanguage(v);
         }}
       />
+      <InviteModal></InviteModal>
     </>
   );
 };

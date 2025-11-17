@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stoplight/elements": "^9.0.12",
     "@types/node": "^24.2.0",
     "antd": "^5.27.0",
     "antd-mobile": "^5.39.0",
