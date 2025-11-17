@@ -9,14 +9,19 @@ import lineLeft from "@/assets/img/lineLeft.png";
 import lineRight from "@/assets/img/lineRight.png";
 import { RightOutline } from "antd-mobile-icons";
 import GoodsBuyPopup from "@/components/Popup/GoodsBuyPopup";
-import message from '@/assets/component/message.png'
-import shopPng from '@/assets/component/shopPng.png'
+import message from "@/assets/component/message.png";
+import shopPng from "@/assets/component/shopPng.png";
 import { t } from "i18next";
 const GoodsDetail: React.FC = () => {
   const navigate = useNavigate();
+  const [showPopup, setShowPopup] = useState(false);
   const buyClick = () => {
-    navigate("/creatOrder");
+    setShowPopup(true);
   };
+  const submitOrderClick=()=>{
+    setShowPopup(false);
+    navigate("/creatOrder");
+  }
   const content = `
     <h2>文章标题</h2>
     <p>这是一段<strong>富文本内容</strong>，支持 HTML 标签。</p>
@@ -39,18 +44,18 @@ const GoodsDetail: React.FC = () => {
           <div className="hintOption">
             <div className="item item1bg">
               <div className="txt1 item1Color">100%</div>
-              <div className="txt2 item1Color">{t('补贴倍数')}</div>
+              <div className="txt2 item1Color">{t("补贴倍数")}</div>
             </div>
             <div className="item item2bg">
               <div className="txt1 item2TopColor">0.1%</div>
-              <div className="txt2 item2EndColor">{t('每日释放')}</div>
+              <div className="txt2 item2EndColor">{t("每日释放")}</div>
             </div>
           </div>
         </div>
 
         <div className="goodsOptions">
           <div className="goodsInfoItem">
-            <div className="label">{t('规格')}</div>
+            <div className="label">{t("规格")}</div>
             <div className="value">LE30橙色 礼盒款</div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
@@ -58,27 +63,27 @@ const GoodsDetail: React.FC = () => {
           </div>
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
-            <div className="label">{t('补贴')}</div>
-            <div className="value">193.56 {t('积分')}</div>
+            <div className="label">{t("补贴")}</div>
+            <div className="value">193.56 {t("积分")}</div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>
           </div>
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
-            <div className="label">{t('服务')}</div>
+            <div className="label">{t("服务")}</div>
             <div className="value">
               <div className="tagOption">
                 <img src={goodsCheck} className="icon"></img>
-                <div className="name">{t('品质保障')}</div>
+                <div className="name">{t("品质保障")}</div>
               </div>
               <div className="tagOption">
                 <img src={goodsCheck} className="icon"></img>
-                <div className="name">{t('包邮')}</div>
+                <div className="name">{t("包邮")}</div>
               </div>
               <div className="tagOption">
                 <img src={goodsCheck} className="icon"></img>
-                <div className="name">{t('七天无理由')}</div>
+                <div className="name">{t("七天无理由")}</div>
               </div>
             </div>
             <div className="icon">
@@ -98,7 +103,7 @@ const GoodsDetail: React.FC = () => {
         <div className="goodsDetailContent">
           <div className="goodsTopBox">
             <img src={lineLeft} className="leftLine"></img>
-            <div className="centerTxt">{t('商品描述')}</div>
+            <div className="centerTxt">{t("商品描述")}</div>
             <img src={lineRight} className="leftLine"></img>
           </div>
 
@@ -111,15 +116,19 @@ const GoodsDetail: React.FC = () => {
       <div className="endFixedBox">
         <div className="leftOption">
           <img src={message} className="spn1"></img>
-          <div className="spn2">{t('客服')}</div>
+          <div className="spn2">{t("客服")}</div>
         </div>
         <div className="rightOption">
           <div className="btn" onClick={() => buyClick()}>
-            {t('立即购买')}
+            {t("立即购买")}
           </div>
         </div>
       </div>
-      <GoodsBuyPopup></GoodsBuyPopup>
+      <GoodsBuyPopup
+        visible={showPopup}
+        onClose={() => setShowPopup(false)}
+        onSubmit={()=>submitOrderClick()}
+      ></GoodsBuyPopup>
     </div>
   );
 };

@@ -1,27 +1,19 @@
 import "./index.scss";
-import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Popup, Input, Stepper } from "antd-mobile";
+import { Popup, Stepper } from "antd-mobile";
 import { CloseOutline } from "antd-mobile-icons";
-import popupHintIcon from "@/assets/popup/popupHintIcon.png";
 import usdt from '@/assets/home/USDT.png'
 import { t } from "i18next";
-const ConversionPopup: React.FC = () => {
-  const [isShow, setIsShow] = useState<boolean>(false);
-  const [inputNumber, setInputNumber] = useState<string>("");
-  const [balaceInputNumber, setBalaceInputNumber] = useState<string>("");
-  const [isFocus, setIsFocus] = useState(false); // ✅ 是否获得焦点 
-  const [isBalanceFocus, setIsBalanceFocus] = useState(false); // ✅ 是否获得焦点
-  const onCloseChange = () => {
-    setIsShow(false);
-  };
+interface Props {
+  visible: boolean;
+  onClose: () => void;
+  onSubmit: () => void;
+}
+const ConversionPopup: React.FC<Props> = ({ visible, onClose,onSubmit }) => {
   return (
     <>
       <Popup
-        visible={isShow}
-        onClose={() => {
-          onCloseChange();
-        }}
+        visible={visible}
       >
         <div className="buyGoods-popup-page">
         <div className="goodsOption">
@@ -31,7 +23,7 @@ const ConversionPopup: React.FC = () => {
             <div className="rightOption">
               <div className="goodsTxt">
                 <div className="txt">徕芬LE30国庆限定礼盒款护发套</div>
-                <CloseOutline fontSize={14} color="rgba(255,255,255,0.35" onClick={()=>setIsShow(false)}></CloseOutline>
+                <CloseOutline fontSize={14} color="rgba(255,255,255,0.35" onClick={()=>onClose()}></CloseOutline>
               </div>
               <div className="priceOption">
                 <img src={usdt} className="usdtIcon"></img>
@@ -90,7 +82,7 @@ const ConversionPopup: React.FC = () => {
               {t('余额')}：8690.32 USDT
             </div>
           </div>
-          <div className="btn-submit">{t('确认')}</div>
+          <div className="btn-submit" onClick={()=>onSubmit()}>{t('确认')}</div>
         </div>
       </Popup>
     </>
