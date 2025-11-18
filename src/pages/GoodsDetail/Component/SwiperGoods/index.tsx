@@ -1,28 +1,37 @@
 import "./index.scss";
-import { useNavigate, useLocation } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Swiper } from "antd-mobile";
-const colors = ["#ace0ff", "#bcffbd", "#e4fabd", "#ffcfac"];
-const items = colors.map((color, index) => (
-  <Swiper.Item key={index}>
-    <div className="content" style={{ background: color }}>
-      {index + 1}
-    </div>
-  </Swiper.Item>
-));
-const SwiperGoods: React.FC = () => {
+
+interface SwiperGoodsProps {
+  pic: string[]; // 轮播图数组
+}
+
+const SwiperGoods: React.FC<SwiperGoodsProps> = ({ pic }) => {
   return (
-        <div className="swiperBox">
-          <Swiper
-            indicator={(total, current) => (
-              <div className="customIndicator">
-                {`${current + 1} / ${total}`}
+    <div className="swiperBox">
+      <Swiper
+        indicator={(total, current) => (
+          <div className="customIndicator">
+            {`${current + 1} / ${total}`}
+          </div>
+        )}
+      >
+        {pic && pic.length > 0 ? (
+          pic.map((src, index) => (
+            <Swiper.Item key={index}>
+              <div className="imgWrap">
+                <img src={src} alt="" className="swiperImg" />
               </div>
-            )}
-          >
-            {items}
-          </Swiper>
-        </div>
+            </Swiper.Item>
+          ))
+        ) : (
+          <Swiper.Item>
+            <div className="imgWrap noImg">暂无图片</div>
+          </Swiper.Item>
+        )}
+      </Swiper>
+    </div>
   );
 };
+
 export default SwiperGoods;

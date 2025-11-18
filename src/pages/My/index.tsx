@@ -6,7 +6,6 @@ import Info from "./Components/Info";
 import Tools from "./Components/Tools";
 const My: React.FC = () => {
   return (
-    <>
       <div className="my-page">
         <Header></Header>
         <div className="tools-my-box">
@@ -14,7 +13,6 @@ const My: React.FC = () => {
           <Tools></Tools>
         </div>
       </div>
-    </>
   );
 };
 export default My;

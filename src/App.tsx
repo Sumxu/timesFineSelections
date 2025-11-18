@@ -14,6 +14,8 @@ import { useRouteRecorder } from "@/hooks/useRouteRecorder";
 function App() {
   const { getLastPath } = useRouteRecorder(); //记录跳转的路径
   let path = getLastPath();
+  const walletAddress = userAddress((state) => state.address);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const showSomething = ["/home", "/classify", "/my"].includes(
@@ -40,7 +42,7 @@ function App() {
       window.location.reload();
     },
   });
-  
+
   useEffect(() => {
     const check = async () => {
       const token = storage.get("token", "");
@@ -52,7 +54,17 @@ function App() {
       }
       if (account) {
         //如果页面是login就跳转到/home
+        //登录状态
         console.log("account", account);
+        console.log("walletAddress==app", walletAddress);
+        const checkWallet = async () => {
+          if (!walletAddress) {
+            await ensureWalletConnected();
+          }
+          setLoading(false);
+        };
+        checkWallet();
+        //store存下token才进行展示
         if (path == "/login") {
           path = "/home";
         }
@@ -63,15 +75,22 @@ function App() {
     };
     check();
   }, []);
+  if (loading) {
+    return (
+      <div className="loading">
+        <Spin />
+      </div>
+    );
+  }
   return (
-    <>
       <div className="app">
-        <div className="body">
-          <AppRouter />
-        </div>
+        {walletAddress && (
+          <div className="body">
+            <AppRouter />
+          </div>
+        )}
         <div className="bottom">{showSomething && <TaBbarBottom />}</div>
       </div>
-    </>
   );
 }
 

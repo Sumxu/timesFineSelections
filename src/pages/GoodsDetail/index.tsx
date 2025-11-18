@@ -12,38 +12,101 @@ import GoodsBuyPopup from "@/components/Popup/GoodsBuyPopup";
 import message from "@/assets/component/message.png";
 import shopPng from "@/assets/component/shopPng.png";
 import { t } from "i18next";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
+import { useZoneConfig } from "@/config/classifyData";
+import { SubAddress ,Totast} from "@/Hooks/Utils";
+import { storage } from "@/Hooks/useLocalStorage";
+
+export interface GoodsItemSpec {
+  id: number;
+  name: string;
+  pic: string;
+  price: number;
+}
+
+export interface GoodsInfo {
+  id: number;
+  name: string;
+  pic: string;
+  price: number;
+  classify: number;
+  details: string; // 富文本 html
+  merchantName: string;
+  merchantAddress: string;
+  publishTime: string;
+  sellCount: number;
+  items: GoodsItemSpec[];
+}
+
 const GoodsDetail: React.FC = () => {
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
   const navigate = useNavigate();
+  const [goodsInfo, setGoodsInfo] = useState<GoodsInfo | null>(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [pic, setPic] = useState<string[]>([]); //商品轮播图
+  const [specIndex, setSpecIndex] = useState<string>(""); //规格下标
+  const [specNum, setSpecNum] = useState<string>(""); //规格数量
+  const { zoneList, getZoneInfo } = useZoneConfig();
   const buyClick = () => {
-    setShowPopup(true);
-  };
-  const submitOrderClick=()=>{
-    setShowPopup(false);
+    //判断是否选择了规格
+    if(specIndex==''){
+      return Totast('请选择规格','info')
+    }
+    let orderParam=JSON.parse(JSON.stringify(goodsInfo))
+    orderParam.specIndex=specIndex
+    orderParam.specNum=specNum
+    storage.set('orderParam',orderParam)
     navigate("/creatOrder");
+  };
+  const submitOrderClick = (specIndex,specNum) => {
+    setShowPopup(false);
+    console.log("specIndex==",specIndex)
+    setSpecIndex(specIndex)
+    setSpecNum(specNum)
+  };
+  const specOpen=()=>{
+    setShowPopup(true);
   }
-  const content = `
-    <h2>文章标题</h2>
-    <p>这是一段<strong>富文本内容</strong>，支持 HTML 标签。</p>
-    <img src="https://via.placeholder.com/200" alt="示例图片" />
-    <p>可以用来展示从后端返回的富文本字段。</p>
-  `;
+  const getGoodsInfo = async () => {
+    const result = await NetworkRequest({
+      Url: "product/info",
+      Data: {
+        id: id,
+      },
+    });
+    if (result.success) {
+      const data = result.data.data as GoodsInfo;
+      setGoodsInfo(data as GoodsInfo);
+      // 2. 从 pic 字符串拆分成数组
+      const arr = data.pic ? data.pic.split(",") : [];
+      // 3. 更新状态
+      setGoodsInfo(data);
+      setPic(arr);
+    }
+  };
+
+  useEffect(() => {
+    getGoodsInfo();
+  }, []);
   return (
     <div className="goodsDetailPage">
       <div className="leftBackBox">
         <LeftBackHeader title={t("商品详情")}></LeftBackHeader>
       </div>
       <div className="goodsDetailContent">
-        <SwiperGoods></SwiperGoods>
+        {pic.length > 0 && <SwiperGoods pic={pic}></SwiperGoods>}
         <div className="goodsInfoBox">
           <div className="goodsPrice">
             <img src={usdt} className="icon"></img>
-            <div className="price">193.56</div>
+            <div className="price">{goodsInfo?.items?.[specIndex]?.price}</div>
           </div>
-          <div className="txt">徕芬LE30国庆限定礼盒款护发套装</div>
+          <div className="txt">{goodsInfo?.name}</div>
           <div className="hintOption">
             <div className="item item1bg">
-              <div className="txt1 item1Color">100%</div>
+              <div className="txt1 item1Color">
+                {getZoneInfo(goodsInfo?.classify)?.subsidy}%
+              </div>
               <div className="txt2 item1Color">{t("补贴倍数")}</div>
             </div>
             <div className="item item2bg">
@@ -54,9 +117,9 @@ const GoodsDetail: React.FC = () => {
         </div>
 
         <div className="goodsOptions">
-          <div className="goodsInfoItem">
-            <div className="label">{t("规格")}</div>
-            <div className="value">LE30橙色 礼盒款</div>
+          <div className="goodsInfoItem" onClick={()=>specOpen()}>
+            <div className="label">{t("规格")}{specIndex}</div>
+            <div className="value"> { specIndex==''?'请选择' : goodsInfo?.items?.[specIndex]?.name} </div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>
@@ -95,8 +158,10 @@ const GoodsDetail: React.FC = () => {
             <div className="label">
               <img src={shopPng} className="leftIcon"></img>
             </div>
-            <div className="value">徕芬时空优品旗舰店</div>
-            <div className="rightTxt">#10008095</div>
+            <div className="value">{goodsInfo?.merchantName}</div>
+            <div className="rightTxt">
+              {SubAddress(goodsInfo?.merchantAddress)}
+            </div>
           </div>
         </div>
 
@@ -109,7 +174,7 @@ const GoodsDetail: React.FC = () => {
 
           <div
             className="richTextContent"
-            dangerouslySetInnerHTML={{ __html: content }}
+            dangerouslySetInnerHTML={{ __html: goodsInfo?.details }}
           />
         </div>
       </div>
@@ -126,8 +191,10 @@ const GoodsDetail: React.FC = () => {
       </div>
       <GoodsBuyPopup
         visible={showPopup}
+        goodsData={goodsInfo}
+        specIndex={specIndex}
         onClose={() => setShowPopup(false)}
-        onSubmit={()=>submitOrderClick()}
+        onSubmit={(index,goodsNum) => submitOrderClick(index,goodsNum)}
       ></GoodsBuyPopup>
     </div>
   );
