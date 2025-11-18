@@ -1,5 +1,5 @@
 import "./index.scss";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import address from "@/assets/component/address.png";
@@ -11,22 +11,79 @@ import { Input } from "antd-mobile";
 import { RightOutline } from "antd-mobile-icons";
 import { t } from "i18next";
 import { storage } from "@/Hooks/useLocalStorage";
+import shopPng from "@/assets/component/shopPng.png";
+import { Totast } from "@/Hooks/Utils";
+interface OrderInfo {
+  id: string;
+  amount: number;
+  specIndex: number;
+  // 根据你的实际字段补充
+}
 
+interface AddressInfo {
+  id: number | string;
+  name: string;
+  phone: string;
+  province: string;
+  details: string;
+  isDefault: boolean;
+}
 const CreatOrder: React.FC = () => {
-  let orderParam = {};
+  const [orderInfo, setOrderInfo] = useState<OrderInfo | null>(null);
+
+  const [payMethod, setPayMethods] = useState<number>(1); //1usdt 2tusd
+
+  const [addressInfo, setAddressInfo] = useState<AddressInfo>({}); //选中的地址信息
+
+  const navigate = useNavigate();
+  //切换购买方式
+  const payMethodClick = (payType) => {
+    if (payMethod != payType) {
+      setPayMethods(payType);
+    }
+  };
+  //提交订单
+  const submitOrder = () => {
+    //判断地址是否选择了
+    if (!addressInfo.id) {
+      return Totast("请选择地址", "info");
+    }
+    navigate('/payResult')
+  };
+  const checkAddress = () => {
+    navigate("/address?type=check");
+  };
   useEffect(() => {
-    orderParam = storage.get("orderParam", {});
-    console.log("orderParam",orderParam)
+    const orderParam = storage.get("orderParam", {});
+    const checkAddress = storage.get("checkAddress", {});
+    if (orderParam) {
+      setOrderInfo(orderParam);
+    }
+    if (checkAddress) {
+      setAddressInfo(checkAddress);
+    }
   }, []);
   return (
     <div className="CreatOrderPage">
       <LeftBackHeader title={t("确认订单")}></LeftBackHeader>
       <div className="CreatOrderContent">
-        <div className="checkAddressBox">
+        <div className="checkAddressBox" onClick={() => checkAddress()}>
           <div className="iconOption">
             <img src={address} className="icon"></img>
           </div>
-          <div className="content">{t("选择或添加收货地址")}</div>
+          {addressInfo.id ? (
+            <div className="addressContent">
+              <div className="topOption">
+                {addressInfo.name} {addressInfo.phone}
+              </div>
+              <div className="endOption">
+                {addressInfo.province} {addressInfo.city} {addressInfo.area}{" "}
+                {addressInfo.details}
+              </div>
+            </div>
+          ) : (
+            <div className="content">{t("选择或添加收货地址")}</div>
+          )}
           <div className="icon">
             <RightOutline color="#888888" fontSize={14} />
           </div>
@@ -34,22 +91,27 @@ const CreatOrder: React.FC = () => {
 
         <div className="box goodsBox">
           <div className="headerTop">
-            <div className="icon"></div>
-            <div className="txt">{orderParam?.merchantName}</div>
+            <img src={shopPng} className="icon"></img>
+            <div className="txt">{orderInfo?.merchantName}</div>
           </div>
           <div className="goodsInfo">
-            <img src={orderParam?.items?.[orderParam.specIndex]?.pic} className="goodsImg"></img>
+            <img
+              src={orderInfo?.items?.[orderInfo.specIndex]?.pic}
+              className="goodsImg"
+            ></img>
             <div className="rightOption">
               <div className="topOption">
-                <div className="txt">{orderParam?.name}</div>
-                <div className="count">x{orderParam?.specNum}</div>
+                <div className="txt">{orderInfo?.name}</div>
+                <div className="count">x{orderInfo?.specNum}</div>
               </div>
 
               <div className="price">
                 <img src={usdt} className="icon"></img>
-                <div className="txt">{orderParam?.price}</div>
+                <div className="txt">{orderInfo?.price}</div>
               </div>
-              <div className="hintTxt">{t("已选规格")}：{orderParam?.items?.[orderParam.specIndex]?.name}</div>
+              <div className="hintTxt">
+                {t("已选规格")}：{orderInfo?.items?.[orderInfo.specIndex]?.name}
+              </div>
             </div>
           </div>
           <div className="goodsList">
@@ -64,21 +126,20 @@ const CreatOrder: React.FC = () => {
             <div className="goodsItem">
               <div className="leftOption">{t("商品金额")}：</div>
               <div className="rightOption">
-                <div className="txt">{orderParam?.items?.[orderParam.specIndex]?.price}</div>
-              </div>
-            </div>
-
-            <div className="goodsItem">
-              <div className="leftOption">{t("运费")}：</div>
-              <div className="rightOption">
-                <div className="txt">+0.00</div>
+                <div className="txt">
+                  {orderInfo?.items?.[orderInfo.specIndex]?.price *
+                    orderInfo?.specNum}
+                </div>
               </div>
             </div>
 
             <div className="goodsItem">
               <div className="leftOption">{t("补贴积分")}：</div>
               <div className="rightOption">
-                <div className="txt txtColor">{orderParam?.items?.[orderParam.specIndex]?.integral}</div>
+                <div className="txt txtColor">
+                  {orderInfo?.items?.[orderInfo.specIndex]?.integral *
+                    orderInfo?.specNum}
+                </div>
               </div>
             </div>
           </div>
@@ -93,20 +154,34 @@ const CreatOrder: React.FC = () => {
             </div>
             <div className="rightOption">
               <span className="spn1">{t("余额")}：1,280.56</span>
-              <img src={langCheck} className="check"></img>
-              <img src={langNoCheck} className="check"></img>
+              {payMethod == 1 ? (
+                <img src={langCheck} className="check"></img>
+              ) : (
+                <img
+                  src={langNoCheck}
+                  className="check"
+                  onClick={() => payMethodClick(1)}
+                ></img>
+              )}
             </div>
           </div>
 
           <div className="payItem payItemTop">
             <div className="leftOption">
-              <img src={usdt} className="icon"></img>
-              <span className="price">USDT</span>
+              <img src={tusd} className="icon"></img>
+              <span className="price">TUSD</span>
             </div>
             <div className="rightOption">
               <span className="spn1">{t("余额")}：1,280.56</span>
-              <img src={langCheck} className="check"></img>
-              <img src={langNoCheck} className="check"></img>
+              {payMethod == 2 ? (
+                <img src={langCheck} className="check"></img>
+              ) : (
+                <img
+                  src={langNoCheck}
+                  className="check"
+                  onClick={() => payMethodClick(2)}
+                ></img>
+              )}
             </div>
           </div>
         </div>
@@ -130,10 +205,16 @@ const CreatOrder: React.FC = () => {
       <div className="endFixedBox">
         <div className="leftOption">
           <span className="spn1">{t("需支付")}：</span>
-          <span className="spn2">193.56 USDT</span>
+          <span className="spn2">
+            {orderInfo?.items?.[orderInfo.specIndex]?.integral *
+              orderInfo?.specNum}{" "}
+            USDT
+          </span>
         </div>
         <div className="rightOption">
-          <div className="btn">{t("提交订单")}</div>
+          <div className="btn" onClick={() => submitOrder()}>
+            {t("提交订单")}
+          </div>
         </div>
       </div>
     </div>

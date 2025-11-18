@@ -38,7 +38,6 @@ const Address: React.FC = () => {
       Url: "address/list",
       Method: "get",
     });
-    console.log("result==", result);
     if (result.success) {
       setList(result.data.data); //赋值
     }
@@ -74,6 +73,16 @@ const Address: React.FC = () => {
       },
     });
   };
+  //选择地址
+  const checkAddressClick = (item) => {
+    const params = new URLSearchParams(location.search);
+    const type = params.get("type");
+    console.log("type==", type);
+    if (type === "check") {
+      storage.set("checkAddress", item);
+      navigate(-1);
+    }
+  };
   useEffect(() => {
     getPageData();
   }, []);
@@ -95,7 +104,10 @@ const Address: React.FC = () => {
             const isDefault = item.isDefault;
             return (
               <div className="addressItem" key={index}>
-                <div className="addressLeft">
+                <div
+                  className="addressLeft"
+                  onClick={() => checkAddressClick(item)}
+                >
                   <div className="addressNameTel">
                     <span className="spn1">
                       {item.name} {item.phone}

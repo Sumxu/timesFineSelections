@@ -20,6 +20,7 @@ const Nft = lazy(() => import("@/pages/Nft"));
 const OutputList = lazy(() => import("@/pages/OutputList"));
 const PayResult = lazy(() => import("@/pages/PayResult"));
 const ShopApplication = lazy(() => import("@/pages/My/MyTools/ShopApplication"));
+const Search = lazy(() => import("@/pages/Search"));
 
 export const routes = [
   { path: "/", element: <Navigate to="/home" replace /> },
@@ -43,4 +44,5 @@ export const routes = [
   { path: "/login", element: <Login /> },
   { path: "/nft", element: <Nft /> },
   { path: "/shopApplication", element: <ShopApplication /> },
+  { path: "/search", element: <Search /> },
 ];

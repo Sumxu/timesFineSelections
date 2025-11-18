@@ -19,7 +19,7 @@ const ConversionPopup: React.FC<Props> = ({
   onSubmit,
 }) => {
   const [tabIndex, setTabIndex] = useState<string>("0");
-  const [goodsNum, setGoodsNum] = useState<string>("0");
+  const [goodsNum, setGoodsNum] = useState<string>("1");
   const specChange = (index) => {
      setTabIndex(index);
     specIndex = index;
@@ -58,6 +58,7 @@ const ConversionPopup: React.FC<Props> = ({
                 {goodsData?.items.map((specItem, index) => {
                   return (
                     <div
+                    key={index}
                       onClick={() => specChange(index)}
                       className={`specTxt ${
                         tabIndex == index ? "specCheckClass" : ""
@@ -91,10 +92,10 @@ const ConversionPopup: React.FC<Props> = ({
           </div>
           <div className="tag-box">
             <div className="txt-option">{t("可获得补贴积分")}</div>
-            <div className="txt-price-option">193.56</div>
+            <div className="txt-price-option">{goodsData?.items?.[tabIndex]?.integral}</div>
           </div>
           <div className="hint-txt-box">
-            <div className="hint-txt-option">{t("需支付")}:193.56 USDT</div>
+            <div className="hint-txt-option">{t("需支付")}:{goodsData?.items?.[tabIndex]?.price*goodsNum} USDT</div>
             <div className="hint-txt-option right-option">
               {t("余额")}：8690.32 USDT
             </div>

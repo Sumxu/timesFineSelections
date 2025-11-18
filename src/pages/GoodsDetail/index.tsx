@@ -61,7 +61,6 @@ const GoodsDetail: React.FC = () => {
   };
   const submitOrderClick = (specIndex,specNum) => {
     setShowPopup(false);
-    console.log("specIndex==",specIndex)
     setSpecIndex(specIndex)
     setSpecNum(specNum)
   };
@@ -127,7 +126,7 @@ const GoodsDetail: React.FC = () => {
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
             <div className="label">{t("补贴")}</div>
-            <div className="value">193.56 {t("积分")}</div>
+            <div className="value">{ specIndex==''?'暂未选择' : `${goodsInfo?.items?.[specIndex]?.integral}${t("积分")}`}</div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>

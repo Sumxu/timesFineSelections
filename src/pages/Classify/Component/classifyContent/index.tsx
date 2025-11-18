@@ -1,40 +1,83 @@
 import "./index.scss";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import USDTIcon from "@/assets/home/USDT.png";
 import moenyIcon from "@/assets/home/moenyIcon.png";
 import { t } from "i18next";
+import NoData from "@/components/NoData";
 
-const ContentItem = () => {
+import { useZoneConfig } from "@/config/classifyData";
+interface Props {
+  contentList: goodsInfoItem[];
+  contentTxt: string;
+}
+interface goodsInfoItem {
+  id: number;
+  name: string;
+  pic: string;
+  price: number;
+  classify: number;
+  details: string; // 富文本 html
+  merchantName: string;
+  merchantAddress: string;
+  publishTime: string;
+  sellCount: number;
+  picImg: string;
+  items: GoodsItemSpec[];
+}
+export interface GoodsItemSpec {
+  id: number;
+  name: string;
+  pic: string;
+  price: number;
+}
+const ContentItem = ({ data }) => {
+  const { getZoneInfo } = useZoneConfig();
+  const navigate = useNavigate();
+  const goodDetail = (data) => {
+    navigate(`/goodsDetail?id=${data.id}`);
+  };
   return (
-    <div className="content-scroll-item">
-      <div className="left-img"></div>
+    <div
+      className="content-scroll-item"
+      onClick={() => {
+        goodDetail(data);
+      }}
+    >
+      <img src={data.picImg} className="left-img"></img>
       <div className="right-content">
-        <div className="title-s">徕芬LE30国庆限定</div>
+        <div className="title-s">{data.name}</div>
         <div className="info-bottom">
           <div className="left-bottom">
             {/* <img src={USDTIcon} className="usdt-icon"></img> */}
             <img src={moenyIcon} className="usdt-icon"></img>
-            <div className="price-number">193.56</div>
+            <div className="price-number">{data.price}</div>
           </div>
-          <div className="right-btn">{t('补贴')}100%</div>
+          {data.classify != "" && (
+            <div className="right-btn">
+              {t("补贴")}
+              {getZoneInfo(data.classify)?.subsidy}%
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 };
-const ClassifyContent: React.FC = () => {
+const ClassifyContent: React.FC<Props> = ({ contentList, contentTxt }) => {
   return (
-    <>
-      <div className="classify-option">
-        <div className="classify-title">{t('全部商品')}</div>
-        <div className="classify-content-scroll">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 9].map((item,index) => {
-            return <ContentItem  key={index}/>;
-          })}
-        </div>
+    <div className="classify-option">
+      <div className="classify-title">{contentTxt}</div>
+      <div className="classify-content-scroll">
+        {contentList.length == 0 ? (
+          <NoData />
+        ) : (
+          contentList.map((item, index) => {
+            return <ContentItem data={item} key={index} />;
+          })
+        )}
       </div>
-    </>
+    </div>
   );
 };
 export default ClassifyContent;

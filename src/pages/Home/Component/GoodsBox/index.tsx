@@ -7,15 +7,25 @@ import { useNavigate } from "react-router-dom";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { t } from "i18next";
 import { Spin } from "antd";
-import { InfiniteScroll } from "antd-mobile";
 import { userAddress } from "@/Store/Store.ts";
 import NoData from "@/components/NoData";
 import { useZoneConfig } from "@/config/classifyData";
 
+interface RecordItem {
+  pic: string;
+  [key: string]: any;
+}
+interface RecordItem {
+  id: number;
+  name: string;
+  pic: string;      // 后端返回的 pic
+  picImg?: string;  // 我们本地添加的新字段
+  // 你可以加更多字段...
+}
 const GoodsBox: React.FC = () => {
   const wallertAddress = userAddress().address;
-  const [list, setList] = useState([]);
-  const { zoneList, getZoneInfo } = useZoneConfig();
+ const [list, setList] = useState<RecordItem[]>([]);
+  const {getZoneInfo } = useZoneConfig();
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
@@ -45,7 +55,19 @@ const GoodsBox: React.FC = () => {
     })
       .then((res) => {
         if (res.success) {
-          setList((prevList) => [...prevList, ...res.data.data.records]);
+          setList((prevList) => [
+            ...prevList,
+            ...res.data.data.records.map((item: RecordItem) => {
+              const picImg = item.pic?.includes(",")
+                ? item.pic.split(",")[0]
+                : item.pic;
+
+              return {
+                ...item,
+                picImg,
+              };
+            }),
+          ]);
           if (res.data.data.records.length == dataParam.size) {
             setIsMore(true);
           } else {
@@ -74,7 +96,18 @@ const GoodsBox: React.FC = () => {
       },
     });
     if (result.data.code == 200) {
-      setList((prevList) => [...prevList, ...result.data.data.records]);
+      setList((prevList) => [
+        ...prevList,
+        ...result.data.data.records.map((item: RecordItem) => {
+          const picImg = item.pic?.includes(",")
+            ? item.pic.split(",")[0]
+            : item.pic;
+          return {
+            ...item,
+            picImg,
+          };
+        }),
+      ]);
       if (result.data.data.records.length == dataParam.size) {
         setIsMore(true);
       } else {
@@ -94,7 +127,7 @@ const GoodsBox: React.FC = () => {
     <div className="goods-box">
       <div className="goods-name-option">
         <div className="goods-left-title">{t("精选推荐")}</div>
-        <div className="goods-right">
+        <div className="goods-right"  onClick={()=>navigate('/search')}>
           <div className="right-txt">{t("更多商品")}</div>
           <img src={moreIcon} className="right-icon" />
         </div>
@@ -111,7 +144,7 @@ const GoodsBox: React.FC = () => {
                 className="goods-item"
                 key={index}
               >
-                <img className="goods-img" src={item.pic}></img>
+                <img className="goods-img" src={item.picImg}></img>
                 <div className="goods-txt">{item.name}</div>
                 <div className="goods-bottom-option">
                   <img src={usdtIcon} className="usdt-icon"></img>

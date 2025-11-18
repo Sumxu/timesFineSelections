@@ -4,7 +4,60 @@ import React, { useEffect, useState } from "react";
 import Header from "@/pages/Home/Component/Header";
 import ClassifyLeft from "./Component/classifyLeft";
 import ClassifyContent from "./Component/classifyContent";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
+import { useZoneConfig } from "@/config/classifyData";
+interface RecordItem {
+  id: number;
+  name: string;
+  pic: string; // 后端返回的 pic
+  picImg?: string; // 我们本地添加的新字段
+  // 你可以加更多字段...
+}
+interface RecordItem {
+  pic: string;
+  [key: string]: any;
+}
 const Classify: React.FC = () => {
+  //获取浏览器路径参数 判断是否从别的页面跳转进来的
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id") || "0";
+  const [classifyId, setClassifyId] = useState<string>("");
+  const [list, setList] = useState<RecordItem[]>([]);
+  const { zoneList, getZoneInfo } = useZoneConfig();
+  const getGoodsData = async () => {
+    const result = await NetworkRequest({
+      Url: "product/list",
+      Method: "post",
+      Data: {
+        size: 10,
+        current: 1,
+        isHome: false,
+        classify: classifyId,
+      },
+    });
+    if (result.success) {
+      setList((prevList) => [
+        ...prevList,
+        ...result.data.data.records.map((item) => {
+          const picImg = item.pic?.includes(",")
+            ? item.pic.split(",")[0]
+            : item.pic;
+
+          return {
+            ...item,
+            picImg,
+          };
+        }),
+      ]);
+    }
+  };
+  useEffect(() => {
+    setClassifyId(id);
+    getGoodsData();
+  }, [id]);
+  useEffect(() => {
+    getGoodsData();
+  }, [classifyId]);
   return (
     <>
       <div className="classify-page-box">
@@ -13,10 +66,16 @@ const Classify: React.FC = () => {
         </div>
         <div className="classify-list-box">
           <div className="classify-left-option">
-            <ClassifyLeft />
+            <ClassifyLeft
+              classifyId={classifyId}
+              classifyLeftChange={(value) => setClassifyId(value)}
+            />
           </div>
           <div className="classify-content-option">
-            <ClassifyContent />
+            <ClassifyContent
+              contentList={list}
+              contentTxt={getZoneInfo(classifyId)?.name || "全部商品"}
+            />
           </div>
         </div>
       </div>
