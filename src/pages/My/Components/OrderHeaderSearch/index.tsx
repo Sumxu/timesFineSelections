@@ -6,12 +6,15 @@ import { SearchOutline } from "antd-mobile-icons";
 import { t } from "i18next";
 import { useNavigate } from "react-router-dom";
 
-const OrderHeaderSearch: React.FC = () => {
+const OrderHeaderSearch: React.FC = ({ inputChange }) => {
   const navigate = useNavigate();
-
+  const [inputValue, setInputValue] = useState<string>("");
   const leftBackClick = () => {
     navigate(-1);
   };
+  useEffect(() => {
+    inputChange(inputValue);
+  }, [inputValue]);
   return (
     <div className="order-header-search-box">
       <img
@@ -23,7 +26,12 @@ const OrderHeaderSearch: React.FC = () => {
         <div className="search-icon">
           <SearchOutline fontSize={14} color="#A9A9A9" />
         </div>
-        <Input placeholder={t("搜索订单")} className="input-class"></Input>
+        <Input
+          placeholder={t("搜索订单")}
+          className="input-class"
+          value={inputValue}
+          onChange={(value) => setInputValue(value)}
+        ></Input>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import "./index.scss";
-import React, { useEffect, useState ,useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import { Switch, Input } from "antd-mobile";
@@ -66,7 +66,6 @@ const EditAddress: React.FC = () => {
   const findLabelsByValue = (data, valueArray) => {
     const labels = [];
     let currentLevel = data;
-
     for (const val of valueArray) {
       const found = currentLevel.find((item) => item.value === val);
       if (found) {
@@ -80,10 +79,7 @@ const EditAddress: React.FC = () => {
     return labels;
   };
 
-  const CascaderOptions = useMemo(
-    () => transformToCascader(rawData),
-    []
-  );
+  const CascaderOptions = useMemo(() => transformToCascader(rawData), []);
   // 文本回显
   const addressText = findLabelsByValue(CascaderOptions, addressCascader).join(
     " "
@@ -95,11 +91,53 @@ const EditAddress: React.FC = () => {
       clearAddress();
     } else {
       const info = storage.get("editAddressInfo", {});
+
       if (typeof info === "object") {
         setAddressInfo((prev) => ({ ...prev, ...info }));
+        const value = findValuesByLabels(CascaderOptions, [
+          info.province,
+          info.city,
+          info.area,
+        ]);
+        setAddressCascader(value);
       }
     }
   };
+  function findValuesByLabels(
+    options: any[],
+    labels: string[]
+  ): (number | string)[] {
+    let currentLevel = options;
+    let values: (number | string)[] = [];
+
+    for (const label of labels) {
+      const found = currentLevel.find((item) => item.label === label);
+
+      if (!found) return []; // 找不到则返回空数组
+
+      values.push(found.value);
+      currentLevel = found.children || [];
+    }
+
+    return values;
+  }
+  // 根据 value 数组找到对应的 items（路径上的所有节点）
+  function getItemsByValue(
+    options: CascaderOption[],
+    valueArr: (string | number)[]
+  ) {
+    const result: CascaderOption[] = [];
+    let current = options;
+    for (const val of valueArr) {
+      const found = current.find((item) => item.value === val);
+      if (!found) break;
+      result.push(found);
+      current = found.children || [];
+    }
+
+    return result; // 等同于 extend.items
+  }
+
   const onConfirmCascader = (val) => {
     setAddressCascader(val);
     setCascaderVisible(false);
@@ -118,28 +156,42 @@ const EditAddress: React.FC = () => {
       Totast("手机号不能为空", "error");
       return false;
     }
+    const phoneReg = /^1[3-9]\d{9}$/;
+    if (!phoneReg.test(info.phone)) {
+      Totast("手机号格式不正确", "error");
+      return false;
+    }
     if (!info.province.trim() || !info.city.trim()) {
       Totast("省市不能为空", "error");
       return false;
     }
+
     if (!info.details.trim()) {
       Totast("详细地址不能为空", "error");
       return false;
     }
     return true;
   };
- 
+
   // 保存
   const saveClick = async () => {
+    console.log("addressInfo==", addressInfo);
+
     setBtnLoading(true);
     if (!validateAddressInfo(addressInfo)) {
       setBtnLoading(false);
       return;
     }
+    const items = getItemsByValue(CascaderOptions, addressCascader);
+    const labels = items.map((i) => i.label);
+    console.log("labels==", labels);
 
     const param: AddressInfo = { ...addressInfo };
     let urlPath = "";
-
+    param.province = labels[0];
+    param.city = labels[1];
+    param.area = labels[2];
+    console.log("param==", param);
     if (type === "add") {
       delete param.id;
       param.isDefault == "" ? false : "";
@@ -266,6 +318,9 @@ const EditAddress: React.FC = () => {
         visible={cascaderVisible}
         onClose={() => setCascaderVisible(false)}
         value={addressCascader}
+        onSelect={(val, extend) => {
+          console.log("onSelect", val, extend.items);
+        }}
         onConfirm={onConfirmCascader}
       />
       {/* 保存按钮 */}
