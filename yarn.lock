@@ -812,6 +812,25 @@
     "@parcel/watcher-win32-ia32" "2.5.1"
     "@parcel/watcher-win32-x64" "2.5.1"
 
+"@province-city-china/data@^8.5.8":
+  version "8.5.8"
+  resolved "https://registry.npmjs.org/@province-city-china/data/-/data-8.5.8.tgz"
+  integrity sha512-Semt87JcKtygaLa6EqzFruuSNg2ymi+cMk1Ro6CGUJEamFrMKShrfqFfti1OLRV21sIOB/pDHRYnG2hTxM/DHQ==
+  dependencies:
+    "@province-city-china/types" "8.5.8"
+
+"@province-city-china/types@8.5.8":
+  version "8.5.8"
+  resolved "https://registry.npmjs.org/@province-city-china/types/-/types-8.5.8.tgz"
+  integrity sha512-KZ3NyM8HsaBVcn5BRhWaOeZRhqEvm18PfB6HfRDuZfwwWhJLoTxB81mTENrBlONr2g8fy/fSbjsh44gvOj+/Lw==
+
+"@province-city-china/utils@^8.5.8":
+  version "8.5.8"
+  resolved "https://registry.npmjs.org/@province-city-china/utils/-/utils-8.5.8.tgz"
+  integrity sha512-NpgFE6uDNoul/QA8nZlAwatp1SyMDimEFmCjNtaZ3QpVHeWK8/1dleyb15kkaHcozrV+oGI+20O+pP33vN8VBA==
+  dependencies:
+    "@province-city-china/types" "8.5.8"
+
 "@rc-component/async-validator@^5.0.3":
   version "5.0.4"
   resolved "https://registry.npmmirror.com/@rc-component/async-validator/-/async-validator-5.0.4.tgz"
@@ -1940,6 +1959,11 @@ antd@^5.27.0:
     scroll-into-view-if-needed "^3.1.0"
     throttle-debounce "^5.0.2"
 
+area-data@>=5.0.6:
+  version "5.0.6"
+  resolved "https://registry.npmjs.org/area-data/-/area-data-5.0.6.tgz"
+  integrity sha512-QxLoA+823xXKyhw5S3750I9TToki0OS42HU9ol3rCOsCXfkjtl8RtQ/eoj0cK0Levn4//oEM05FmMumfw/HIlg==
+
 argparse@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmmirror.com/argparse/-/argparse-2.0.1.tgz"
@@ -1966,6 +1990,11 @@ array-includes@^3.1.1:
     get-intrinsic "^1.3.0"
     is-string "^1.1.1"
     math-intrinsics "^1.1.0"
+
+array-tree-filter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/array-tree-filter/-/array-tree-filter-2.1.0.tgz"
+  integrity sha512-4ROwICNlNw/Hqa9v+rk5h22KjmzB1JGTMVKP2AKJBOCgb0yL0ASf0+YvCcLNNwquOHNX48jkeZIJ3a+oOQqKcw==
 
 arraybuffer.prototype.slice@^1.0.4:
   version "1.0.4"
@@ -2010,6 +2039,14 @@ axios@^1.9.0:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
     proxy-from-env "^1.1.0"
+
+babel-runtime@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz"
+  integrity sha512-ITKNuq2wKlW1fJg9sSW52eepoYgZBggvOAHC0u/CYu/qxQ9EVzThCgR69BnSXLHjy2f7SY5zaQ4yt7H9ZVxY2g==
+  dependencies:
+    core-js "^2.4.0"
+    regenerator-runtime "^0.11.0"
 
 bail@^1.0.0:
   version "1.0.5"
@@ -2303,6 +2340,11 @@ copy-to-clipboard@^3.3.1, copy-to-clipboard@^3.3.3:
   integrity sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==
   dependencies:
     toggle-selection "^1.0.6"
+
+core-js@^2.4.0, core-js@^2.6.12:
+  version "2.6.12"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-2.6.12.tgz"
+  integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
 
 cross-fetch@^3.1.5:
   version "3.2.0"
@@ -3758,6 +3800,11 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
+lodash.find@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.npmjs.org/lodash.find/-/lodash.find-4.6.0.tgz"
+  integrity sha512-yaRZoAV3Xq28F1iafWN1+a0rflOej93l1DQUejs3SZ41h2O9UJBoS9aueGjPDgAl4B6tPC0NuuchLKaDQQ3Isg==
+
 lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz"
@@ -4411,7 +4458,7 @@ prismjs@^1.23.0:
   resolved "https://registry.npmjs.org/prismjs/-/prismjs-1.30.0.tgz"
   integrity sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==
 
-prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -4840,13 +4887,42 @@ react-activation@^0.13.4:
     react-node-key "^0.4.0"
     szfe-tools "^0.0.0-beta.7"
 
-react-dom@*, "react-dom@^16 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^18.0.0 || ^19.0.0", react-dom@^18.2.0, "react-dom@>= 16.8.0 || ^18.0.0", react-dom@>=16.0.0, react-dom@>=16.11.0, react-dom@>=16.14, react-dom@>=16.8, react-dom@>=16.9.0, react-dom@>=18, "react-dom@16.8.0 - 18":
+react-area-linkage@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/react-area-linkage/-/react-area-linkage-3.0.0.tgz"
+  integrity sha512-9ImDw5xbrlVuSHakJL22O3wm9eLPW6Qb7817X0IWM23231EDZNwEjla2pmwHc5tkAmFsz3qQnbCoECzu5i4pog==
+  dependencies:
+    array-tree-filter "^2.1.0"
+    classnames "^2.2.5"
+    lodash.find "^4.6.0"
+    prop-types "^15.6.0"
+
+react-distpicker@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/react-distpicker/-/react-distpicker-1.0.2.tgz"
+  integrity sha512-HlH+IjkjK82lyHHv94fjJ8x5t7Yf3ARTNsO4VRQe+gDdegjeEE65amaTbRH4iH7Qdi2SWBNaQtaOVPtZpi2oiQ==
+  dependencies:
+    prop-types "^15.6.2"
+    react "^16.5.0"
+    react-dom "^16.5.0"
+
+react-dom@*, "react-dom@^16 || ^17 || ^18", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom@^18.0.0 || ^19.0.0", react-dom@^18.2.0, "react-dom@>= 16.8.0 || ^18.0.0", react-dom@>=15.0.0, react-dom@>=16.0.0, react-dom@>=16.11.0, react-dom@>=16.14, react-dom@>=16.8, react-dom@>=16.9.0, react-dom@>=18, "react-dom@16.8.0 - 18":
   version "18.3.1"
   resolved "https://registry.npmmirror.com/react-dom/-/react-dom-18.3.1.tgz"
   integrity sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==
   dependencies:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
+
+react-dom@^16.5.0:
+  version "16.14.0"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-16.14.0.tgz"
+  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
 
 react-fast-compare@^3.2.0, react-fast-compare@^3.2.2:
   version "3.2.2"
@@ -4974,12 +5050,21 @@ react-use@^17.3.1:
     ts-easing "^0.2.0"
     tslib "^2.1.0"
 
-react@*, "react@^16 || ^17 || ^18", "react@^16.3 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || ^17.0.0-rc.1", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react@^18.0.0 || ^19.0.0", react@^18.2.0, react@^18.3.1, "react@>= 16.14", "react@>= 16.8.0", "react@>= 16.8.0 || ^18.0.0", react@>=0.14.9, react@>=16, react@>=16.0.0, react@>=16.11.0, react@>=16.14, react@>=16.8, react@>=16.8.0, react@>=16.9.0, react@>=18, react@>=18.0.0, "react@15.x || 16.x || 17.x || 18.x", "react@16.8.0 - 18":
+react@*, "react@^16 || ^17 || ^18", "react@^16.3 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react@^16.8.0 || ^17.0.0-rc.1", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1", "react@^18.0.0 || ^19.0.0", react@^18.2.0, react@^18.3.1, "react@>= 15.0.0", "react@>= 16.14", "react@>= 16.8.0", "react@>= 16.8.0 || ^18.0.0", react@>=0.14.9, react@>=16, react@>=16.0.0, react@>=16.11.0, react@>=16.14, react@>=16.8, react@>=16.8.0, react@>=16.9.0, react@>=18, react@>=18.0.0, "react@15.x || 16.x || 17.x || 18.x", "react@16.8.0 - 18":
   version "18.3.1"
   resolved "https://registry.npmmirror.com/react/-/react-18.3.1.tgz"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
   dependencies:
     loose-envify "^1.1.0"
+
+react@^16.14.0, react@^16.5.0:
+  version "16.14.0"
+  resolved "https://registry.npmjs.org/react/-/react-16.14.0.tgz"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
 
 readdirp@^4.0.1:
   version "4.1.2"
@@ -4999,6 +5084,11 @@ reflect.getprototypeof@^1.0.6, reflect.getprototypeof@^1.0.9:
     get-intrinsic "^1.2.7"
     get-proto "^1.0.1"
     which-builtin-type "^1.2.1"
+
+regenerator-runtime@^0.11.0:
+  version "0.11.1"
+  resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz"
+  integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
 
 regexp.prototype.flags@^1.5.1, regexp.prototype.flags@^1.5.4:
   version "1.5.4"
@@ -5213,6 +5303,14 @@ sass@*, sass@^1.3.0, sass@^1.89.2:
     source-map-js ">=0.6.2 <2.0.0"
   optionalDependencies:
     "@parcel/watcher" "^2.4.1"
+
+scheduler@^0.19.1:
+  version "0.19.1"
+  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.19.1.tgz"
+  integrity sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
 
 scheduler@^0.23.2:
   version "0.23.2"

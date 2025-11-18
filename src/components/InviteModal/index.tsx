@@ -3,16 +3,23 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
 import i18n, { t } from "i18next";
-import ContractSend from "@/Hooks/ContractSend.ts";
-import { Totast } from "@/Hooks/Utils.ts";
-const InviteModal: React.FC = () => {
-  // 是否显示绑定邀请人弹出层
-  const [showBindFloat, setShowBindFloat] = useState<boolean>(false);
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
+import { Totast, isValidAddress, concatSign } from "@/Hooks/Utils.ts";
+import { userAddress } from "@/Store/Store";
+import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
+import { storage } from "@/Hooks/useLocalStorage";
+
+interface PropsClass {
+  isShow: boolean;
+  onClose: () => void;
+}
+const InviteModal = (Props: PropsClass) => {
+  const navigate = useNavigate();
+  const { signMessage } = UseSignMessage(); //获取钱包签名
   // 绑定的邀请人地址
   const [inputAddress, setInputAddress] = useState<string>("");
   // 绑定按钮加载
   const [butLoading, setLoading] = useState<boolean>(false);
-
   // 获取邀请码
   const { search } = useLocation();
   const query = new URLSearchParams(search);
@@ -26,10 +33,9 @@ const InviteModal: React.FC = () => {
     }
   }
   const invite: string = inviteUrlArr[0];
-
   // 关闭绑定邀请人
   const closeBindFloat = () => {
-    setShowBindFloat(false);
+    Props.onClose();
   };
 
   // 绑定按钮执行
@@ -39,16 +45,34 @@ const InviteModal: React.FC = () => {
       return;
     }
     setLoading(true);
-    await ContractSend({
-      tokenName: "IDO",
-      methodsName: "bind",
-      params: [inputAddress],
-    }).then((res) => {
-      if (res.value) {
-        Totast(t("绑定成功"), "success"); // 绑定成功
-        setShowBindFloat(false);
-      }
-    });
+    const currentAddress = userAddress.getState().address;
+    const bigRes = concatSign(currentAddress);
+    const sigResult = await signMessage(bigRes);
+    if (!sigResult) {
+      return setLoading(false);
+    }
+    //判断当前邀请人格式是否正确
+    if (isValidAddress(inputAddress)) {
+      await NetworkRequest({
+        Url: "auth/login",
+        Method: "post",
+        Data: {
+          address: currentAddress,
+          inviteAddress: inputAddress,
+          msg: bigRes,
+          signature: sigResult,
+        },
+      }).then((res) => {
+        if (res.success) {
+          //成功后直接进入首页
+          storage.set("token", res.data.data);
+          navigate("/home");
+        }
+      });
+    } else {
+      //提示无效地址
+      Totast(t("邀请人地址无效"), "warning"); //
+    }
     setLoading(false);
   };
 
@@ -57,7 +81,7 @@ const InviteModal: React.FC = () => {
       {/*绑定邀请人*/}
       <Modal
         title=""
-        open={showBindFloat}
+        open={Props.isShow}
         closable={true}
         onCancel={closeBindFloat}
         footer={null}

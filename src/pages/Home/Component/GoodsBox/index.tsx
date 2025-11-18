@@ -7,14 +7,14 @@ import { t } from "i18next";
 const GoodsBox: React.FC = () => {
   const navigate = useNavigate();
   const goodsItemClick = () => {
-    navigate("/goodsDetail");
+    navigate("/goodsDetail?id=1");
   };
   return (
     <div className="goods-box">
       <div className="goods-name-option">
-        <div className="goods-left-title">{t('精选推荐')}</div>
+        <div className="goods-left-title">{t("精选推荐")}</div>
         <div className="goods-right">
-          <div className="right-txt">{t('更多商品')}</div>
+          <div className="right-txt">{t("更多商品")}</div>
           <img src={moreIcon} className="right-icon" />
         </div>
       </div>
@@ -32,12 +32,12 @@ const GoodsBox: React.FC = () => {
                 <img src={usdtIcon} className="usdt-icon"></img>
                 <div className="goods-price">193.56</div>
               </div>
-              <div className="goods-hint-txt">{t('补贴')}100%</div>
+              <div className="goods-hint-txt">{t("补贴")}100%</div>
             </div>
           );
         })}
       </div>
-      <div className="loading-more-option">{t('查看更多商品')}</div>
+      <div className="loading-more-option">{t("查看更多商品")}</div>
     </div>
   );
 };

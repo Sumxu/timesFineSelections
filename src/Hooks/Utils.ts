@@ -329,5 +329,4 @@ export const getLangObj = () => {
   return langInfo;
 };
 export const logOut = () => {
-  console.log('23431')
 };

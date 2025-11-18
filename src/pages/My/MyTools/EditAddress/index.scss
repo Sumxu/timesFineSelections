@@ -2,7 +2,7 @@
   height: 100vh;
   background: #000000;
   padding: 16px;
-  .addressContent{
+  .addressContent {
     margin-top: 12px;
   }
   .addressBtnBox {
@@ -35,6 +35,11 @@
       }
       .rightContent {
         flex: auto;
+        display: flex;
+        align-items: center;
+        .distpickerWrapper {
+          color: rgba(255, 255, 255, 0.75);
+        }
       }
     }
     .addressInfoBottomBorder {
@@ -54,5 +59,18 @@
     .adm-switch-inner {
       // background: #000000 !important;
     }
+  }
+}
+.adm-cascader-header{
+  background: #fff !important;
+}
+.adm-tabs-tab-list{
+  background: #fff !important;
+}
+
+.adm-cascader{
+  background: #fff !important;
+  .adm-cascader-header-button a{
+      color: #0be72f !important;
   }
 }
