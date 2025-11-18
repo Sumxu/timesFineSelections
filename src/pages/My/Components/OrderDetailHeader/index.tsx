@@ -6,8 +6,14 @@ import orderDetailNone from "@/assets/component/orderDetailNone.png";
 import orderDetailSuccess from "@/assets/component/orderDetailSuccess.png";
 import logoOrderDetailBg from "@/assets/component/logoOrderDetailBg.png";
 import { icons } from "antd/es/image/PreviewGroup";
+import { useNavigate } from "react-router-dom";
+
 import { t } from "i18next";
-const OrderDetailHeader: React.FC = () => {
+const OrderDetailHeader: React.FC = ({ status }) => {
+  const navigate = useNavigate();
+  const leftBackClick = () => {
+    navigate(-1);
+  };
   const statusArray = [
     {
       status: "1",
@@ -29,7 +35,7 @@ const OrderDetailHeader: React.FC = () => {
     },
   ];
   const getOrderStatusDom = (status) => {
-    const findObj=statusArray.find((item)=>item.status==status)
+    const findObj = statusArray.find((item) => item.status == status);
     return (
       <div>
         <div className="status-option">
@@ -46,10 +52,14 @@ const OrderDetailHeader: React.FC = () => {
   };
   return (
     <div className="header-box">
-       <div className="left-option">
-          <img className="left-icon" src={leftBackIcon}></img>
-        </div>
-        {getOrderStatusDom(3)}
+      <div className="left-option">
+        <img
+          className="left-icon"
+          src={leftBackIcon}
+          onClick={() => leftBackClick()}
+        ></img>
+      </div>
+      {getOrderStatusDom(status)}
       <img src={logoOrderDetailBg} className="logo-order-detail"></img>
     </div>
   );

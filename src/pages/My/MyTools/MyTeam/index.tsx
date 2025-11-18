@@ -4,9 +4,22 @@ import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import copyIcon from "@/assets/my/copy.png";
 import { t } from "i18next";
+import { InfiniteScroll } from "antd-mobile";
 import { userAddress } from "@/Store/Store.ts";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
-import { Totast } from "@/Hooks/Utils.ts";
+import {
+  Totast,
+  copyToClipboard,
+  formatDate,
+  SubAddress,
+} from "@/Hooks/Utils.ts";
+import NoData from "@/components/NoData";
+export interface listItem {
+  address?: string;
+  createTime?: string;
+  myPerf?: number;
+}
+
 const levelMap = [
   { performance: 10000, accelerate: 10, level: "1" },
   { performance: 50000, accelerate: 15, level: "2" },
@@ -15,17 +28,42 @@ const levelMap = [
   { performance: 1500000, accelerate: 30, level: "5" },
   { performance: 5000000, accelerate: 35, level: "6" },
 ];
-
 const MyTeam: React.FC = () => {
   const [location, setLocation] = useState(""); //网页地址
 
-  const wallertAddress = userAddress().address;
+  const walletAddress = userAddress().address;
 
   const [teamInfo, setTeamInfo] = useState<object>({});
+  const [list, setList] = useState<listItem[]>([]);
+  // 是否还有更多数据可以加载
+  const [isMore, setIsMore] = useState<boolean>(false);
+
+  const [current, setCurrent] = useState<number>(1);
 
   function getLevel(level: number) {
     return levelMap.filter((item) => level >= item).pop() || null;
   }
+
+  const loadMoreAction = async () => {
+    const nexPage = current + 1;
+    setCurrent(nexPage);
+    await NetworkRequest({
+      Url: "userRecord/ticketRecord",
+      Data: {
+        current: nexPage,
+        size: 10,
+      },
+    }).then((res) => {
+      if (res.success) {
+        setList((prevList) => [...prevList, ...res.data.data.records]);
+        if (res.data.data.records.length == 10) {
+          setIsMore(true);
+        } else {
+          setIsMore(false);
+        }
+      }
+    });
+  };
 
   const getDataPage = async () => {
     const result = await NetworkRequest({
@@ -38,17 +76,31 @@ const MyTeam: React.FC = () => {
   };
 
   const copyAction = () => {
-    //获取window浏览器地址
-    const input = document.createElement("textarea");
-    input.value = location + "?invite=" + wallertAddress;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand("copy");
-    document.body.removeChild(input);
-    Totast("复制成功", "success"); // 复制成功
+    const inviteUrl = `${window.location.href}?invite=${walletAddress}`;
+    copyToClipboard(inviteUrl, "邀请链接已复制");
+  };
+
+  const getTeamList = async () => {
+    const result = await NetworkRequest({
+      Url: "team/invitations",
+      Method: "post",
+      Data: {
+        current: 1,
+        size: 10,
+      },
+    });
+    if (result.success) {
+      setList((prevList) => [...prevList, ...result.data.data.records]);
+      if (result.data.data.records.length == 10) {
+        setIsMore(true);
+      } else {
+        setIsMore(false);
+      }
+    }
   };
   useEffect(() => {
     getDataPage();
+    getTeamList(); //团队列表
     setLocation(window.location.origin);
   }, []);
   return (
@@ -91,21 +143,21 @@ const MyTeam: React.FC = () => {
             )}
           </div>
         </div>
-
-        <div className="box inviteBox">
-          <div className="inviteEnd">
-            <span className="spn1">{t("邀请链接")}：</span>
-            <span className="spn2">{location}</span>
-            <img
-              src={copyIcon}
-              className="copyIcon"
-              onClick={() => {
-                copyAction();
-              }}
-            ></img>
+        {teamInfo.myPerf != 0 && (
+          <div className="box inviteBox">
+            <div className="inviteEnd">
+              <span className="spn1">{t("邀请链接")}：</span>
+              <span className="spn2">{location}</span>
+              <img
+                src={copyIcon}
+                className="copyIcon"
+                onClick={() => {
+                  copyAction();
+                }}
+              ></img>
+            </div>
           </div>
-        </div>
-
+        )}
         <div className="hintTeamListTxt">{t("团队列表")}</div>
         <div className="box teamList">
           <div className="teamHeaderOption">
@@ -113,17 +165,32 @@ const MyTeam: React.FC = () => {
             <div className="itemTxt">{t("类型")}</div>
             <div className="itemTxt itemTxtRight">{t("贡献业绩")}(USDT)</div>
           </div>
-          {[1, 2, 3, 4, 7, 5, 6].map((item, index) => {
-            return (
-              <div className="teamListBox">
-                <div className="teamItem">
-                  <div className="itemTxt">0x325…0086</div>
-                  <div className="itemTxt">2025-09-23 18:36:56</div>
-                  <div className="itemTxt txtUsdt itemTxtRight">10,390.00</div>
-                </div>
-              </div>
-            );
-          })}
+          {list.length == 0 ? (
+            <NoData />
+          ) : (
+            <div className="record-body">
+              {list.map((item, index) => {
+                return (
+                  <div className="teamListBox" key={index}>
+                    <div className="teamItem">
+                      <div className="itemTxt">{SubAddress(item.address)}</div>
+                      <div className="itemTxt">
+                        {formatDate(item.createTime)}
+                      </div>
+                      <div className="itemTxt txtUsdt itemTxtRight">
+                        {formatDate(item.myPerf)}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              <InfiniteScroll
+                loadMore={loadMoreAction}
+                hasMore={isMore}
+              ></InfiniteScroll>
+            </div>
+          )}
         </div>
       </div>
     </div>

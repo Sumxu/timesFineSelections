@@ -4,11 +4,15 @@ import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import shopIcon from "@/assets/component/shopIcon.png";
 import { t } from "i18next";
+import ApplyStore from "@/components/Popup/ApplyStore";
 const ShopApplication: React.FC = () => {
   const navigate = useNavigate();
   const detailClick = () => {
+    // setApplyStoreShow(true);
     navigate("/merchantCenter");
   };
+  const [applyStoreShow, setApplyStoreShow] = useState<boolean>(false);
+
   return (
     <div className="shopApplicationPage">
       <LeftBackHeader title={t("商家入驻")} />
@@ -58,6 +62,7 @@ const ShopApplication: React.FC = () => {
           </div>
         </div>
       </div>
+      <ApplyStore isShow={applyStoreShow} onClose={() => setApplyStoreShow(false)}></ApplyStore>
     </div>
   );
 };

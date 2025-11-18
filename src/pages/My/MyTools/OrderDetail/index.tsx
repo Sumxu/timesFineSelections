@@ -6,116 +6,173 @@ import copyIcon from "@/assets/my/copy.png";
 import address from "@/assets/component/address.png";
 import usdt from "@/assets/home/USDT.png";
 import { RightOutline } from "antd-mobile-icons";
-import car from '@/assets/component/car.png'
+import car from "@/assets/component/car.png";
 import { t } from "i18next";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
+import shopPng from "@/assets/component/shopPng.png";
+import { Totast, copyToClipboard } from "@/Hooks/Utils.ts";
+
+export interface OrderDetail {
+  id: number;
+  orderSn: string;
+  name: string;
+  itemName: string;
+  pic: string;
+  price: number;
+  integral: number;
+  classify: number;
+  count: number;
+  payType: number;
+  status: number;
+  remark: string;
+  logisticsCompany: string;
+  trackingNumber: string;
+
+  receiverName: string;
+  receiverPhone: string;
+  detailAddress: string;
+
+  merchantName: string;
+  merchantAddress: string;
+
+  createTime: string;
+}
 const Order: React.FC = () => {
+  const [orderInfo, setOrderInfo] = useState<OrderDetail>({});
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const id = query.get("id");
+  //获取订单详细信息
+  const getPageData = async () => {
+    const result = await NetworkRequest({
+      Url: "order/info",
+      Data: {
+        id,
+      },
+    });
+    if (result.success) {
+      setOrderInfo(result.data.data);
+    }
+  };
+  const copyClick = (txt, val) => {
+    copyToClipboard(val, txt);
+  };
+  useEffect(() => {
+    getPageData();
+  }, []);
   return (
-    <>
-      <div className="order-detail-page">
-        <OrderDetailHeader></OrderDetailHeader>
-        <div className="content-box">
+    <div className="order-detail-page">
+      <OrderDetailHeader status={orderInfo.status}></OrderDetailHeader>
+      <div className="content-box">
+        {orderInfo.status != 1 && (
           <div className="wuLiuBox">
             <div className="leftIconOption">
               <img src={car} className="icon"></img>
             </div>
             <div className="contentOption">
-              <div className="topContent">中通快递 78950999230400</div>
-              <div className="bottomOption">{t('物流状态请自行查询')}</div>
+              <div className="topContent">
+                {orderInfo.logisticsCompany} {orderInfo.trackingNumber}
+              </div>
+              <div className="bottomOption">{t("物流状态请自行查询")}</div>
             </div>
             <div className="rightOption">
-              <img className="copyIcon" src={copyIcon}></img>
+              <img
+                className="copyIcon"
+                src={copyIcon}
+                onClick={() =>
+                  copyClick("物流单号复制成功", orderInfo.trackingNumber)
+                }
+              ></img>
             </div>
           </div>
+        )}
 
-          <div className="address-info-box">
-            <div className="info-header-option">
-              <div className="icon-option">
-                <img src={address} className="address-icon"></img>
-              </div>
-              <div className="right-option">
-                <span className="spn-1">王传福</span>
-                <span className="spn-2">18690088588</span>
-              </div>
+        <div className="address-info-box">
+          <div className="info-header-option">
+            <div className="icon-option">
+              <img src={address} className="address-icon"></img>
             </div>
-            <div className="addressDetailsOption">
-              湖南省长沙市岳麓区 麓谷街道和馨园社区西湖雅苑32栋2008号麓谷街道
+            <div className="right-option">
+              <span className="spn-1">{orderInfo.receiverName}</span>
+              <span className="spn-2">{orderInfo.receiverPhone}</span>
             </div>
           </div>
+          <div className="addressDetailsOption">{orderInfo.detailAddress}</div>
+        </div>
 
-          <div className="goodsInfoBox">
-            <div className="headerTopOption">
-              <div className="Icon"></div>
-              <div className="txt">徕芬时空优品旗舰店</div>
-            </div>
-            <div className="goodsItemOption">
-              <div className="goodsImg"></div>
-              <div className="goodsItemRightOption">
-                <div className="goodsItemHeader">
-                  <div className="goodsItemTxt">徕芬LE30国庆限定礼盒款护发</div>
-                  <div className="goodsItemCount">X1</div>
-                </div>
-                <div className="goodsItemPrice">
-                  <img src={usdt} className="priceIcon"></img>
-                  <div className="goodsPrice">193.56</div>
-                </div>
-                <div className="goodsItemSpec">{t('已选规格')}：LE30橙色 礼盒款</div>
-              </div>
-            </div>
-            <div className="goodsItemLineOption">
-              <div className="leftOption">{t('配送方式')}：</div>
-              <div className="rightOption">
-                <div className="rightTxt">{t('快递包邮')}</div>
-                <RightOutline color="#888888" fontSize={14} />
-              </div>
-            </div>
-            <div className="goodsItemLineOption">
-              <div className="leftOption">{t('商品金额')}：</div>
-              <div className="rightOption">
-                <div className="rightTxt">193.56</div>
-              </div>
-            </div>
+        <div className="goodsInfoBox">
+          <div className="headerTopOption">
+            <img src={shopPng} className="Icon"></img>
+            <div className="txt"> {orderInfo.merchantName}</div>
+          </div>
+          <div className="goodsItemOption">
+            <img src={orderInfo.pic} className="goodsImg"></img>
 
-            <div className="goodsItemLineOption">
-              <div className="leftOption">{t('运费')}：</div>
-              <div className="rightOption">
-                <div className="rightTxt">+0.00</div>
+            <div className="goodsItemRightOption">
+              <div className="goodsItemHeader">
+                <div className="goodsItemTxt">{orderInfo.name}</div>
+                <div className="goodsItemCount">X{orderInfo.count}</div>
               </div>
-            </div>
-
-            <div className="goodsItemLineOption">
-              <div className="leftOption">{t('补贴积分')}：</div>
-              <div className="rightOption">
-                <div className="rightTxt rightTxtOrige">193.56</div>
+              <div className="goodsItemPrice">
+                <img src={usdt} className="priceIcon"></img>
+                <div className="goodsPrice">{orderInfo.price}</div>
+              </div>
+              <div className="goodsItemSpec">
+                {t("已选规格")}：{orderInfo.itemName}
               </div>
             </div>
           </div>
-
-          <div className="order-info-box">
-            <div className="item-option">
-              <div className="left-item-option">{t("订单编号")}：</div>
-              <div className="right-item-option">
-                <span className="spn-1">202509231603830023</span>
-                <img src={copyIcon} className="copyIcon"></img>
-              </div>
+          <div className="goodsItemLineOption">
+            <div className="leftOption">{t("配送方式")}：</div>
+            <div className="rightOption">
+              <div className="rightTxt">{t("快递包邮")}</div>
+              <RightOutline color="#888888" fontSize={14} />
             </div>
-
-            <div className="item-option">
-              <div className="left-item-option">{t("支付方式")}：</div>
-              <div className="right-item-option">
-                <span className="spn-1">USDT</span>
-              </div>
+          </div>
+          <div className="goodsItemLineOption">
+            <div className="leftOption">{t("商品金额")}：</div>
+            <div className="rightOption">
+              <div className="rightTxt">{orderInfo.price}</div>
             </div>
+          </div>
 
-            <div className="item-option">
-              <div className="left-item-option">{t("下单时间")}：</div>
-              <div className="right-item-option">
-                <span className="spn-1">2025-09-23 18:56:32</span>
-              </div>
+          <div className="goodsItemLineOption">
+            <div className="leftOption">{t("补贴积分")}：</div>
+            <div className="rightOption">
+              <div className="rightTxt rightTxtOrige">{orderInfo.integral}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="order-info-box">
+          <div className="item-option">
+            <div className="left-item-option">{t("订单编号")}：</div>
+            <div className="right-item-option">
+              <span className="spn-1">{orderInfo.orderSn}</span>
+              <img
+                src={copyIcon}
+                className="copyIcon"
+                onClick={() => copyClick("复制成功", orderInfo.orderSn)}
+              ></img>
+            </div>
+          </div>
+
+          <div className="item-option">
+            <div className="left-item-option">{t("支付方式")}：</div>
+            <div className="right-item-option">
+              <span className="spn-1">USDT</span>
+            </div>
+          </div>
+
+          <div className="item-option">
+            <div className="left-item-option">{t("下单时间")}：</div>
+            <div className="right-item-option">
+              <span className="spn-1">{orderInfo.createTime}</span>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default Order;

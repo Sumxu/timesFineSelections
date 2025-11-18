@@ -3,15 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Popup, Input } from "antd-mobile";
 import { CloseOutline } from "antd-mobile-icons";
-import popupHintIcon from "@/assets/popup/popupHintIcon.png"
+import popupHintIcon from "@/assets/popup/popupHintIcon.png";
 import { t } from "i18next";
 
-const MyPopup: React.FC = () => {
-  const [isShow, setIsShow] = useState<boolean>(true);
+const MyPopup: React.FC = ({ isShow, onClose }) => {
   const [inputNumber, setInputNumber] = useState<string>("");
   const [isFocus, setIsFocus] = useState(false); // ✅ 是否获得焦点
   const onCloseChange = () => {
-    setIsShow(false);
+    onClose();
   };
   return (
     <>
@@ -24,7 +23,7 @@ const MyPopup: React.FC = () => {
         <div className="my-popup-page">
           <div className="header-option">
             <div className="title">{t("提现")}</div>
-            <div className="close-icon" onClick={()=>onCloseChange()}>
+            <div className="close-icon" onClick={() => onCloseChange()}>
               <CloseOutline fontSize={12} color="#969797" />
             </div>
           </div>
@@ -35,11 +34,11 @@ const MyPopup: React.FC = () => {
           <div className="input-box">
             <div className="input-hint-txt-option">
               <div className="txt-option">{t("提现数量")}:</div>
-              <div className="txt-option right-txt">{t("余额")}:2,805.78 TUSD</div>
+              <div className="txt-option right-txt">
+                {t("余额")}:2,805.78 TUSD
+              </div>
             </div>
-            <div
-              className={`input-option ${isFocus ? "input-focus" : ""}`}
-            >
+            <div className={`input-option ${isFocus ? "input-focus" : ""}`}>
               <Input
                 placeholder={t("请输入内容")}
                 value={inputNumber}
@@ -57,7 +56,7 @@ const MyPopup: React.FC = () => {
 
           <div className="input-box">
             <div className="input-hint-txt-option">
-              <div className="txt-option">{t('将获得')}TAX:</div>
+              <div className="txt-option">{t("将获得")}TAX:</div>
             </div>
             <div className="input-option input-no">
               <div className="input-number">0.00</div>
@@ -66,14 +65,14 @@ const MyPopup: React.FC = () => {
           </div>
 
           <div className="hint-txt-box">
-            <div className="hint-txt-option">{t('手续费')}(3.0%):</div>
+            <div className="hint-txt-option">{t("手续费")}(3.0%):</div>
             <div className="hint-txt-option right-bold">-0.00TAX</div>
           </div>
           <div className="hint-txt-box">
-            <div className="hint-txt-option">{t('实际到账')}:</div>
+            <div className="hint-txt-option">{t("实际到账")}:</div>
             <div className="hint-txt-option right-option">0.00 TAX</div>
           </div>
-          <div className="btn-submit">{t('确认提现')}</div>
+          <div className="btn-submit">{t("确认提现")}</div>
         </div>
       </Popup>
     </>

@@ -3,19 +3,16 @@ import React, { useEffect, useState } from "react";
 import usdt from "@/assets/home/USDT.png";
 import shopIcon from "@/assets/component/shopPng.png";
 import { t } from "i18next";
-interface OrderItemClass {
-  onClickDetail: () => void;
-  data: object;
-}
+ 
 const statusMap: Record<number, { text: string; className: string }> = {
   1: { text: "已购买", className: "spn-status-none" },
   2: { text: "已发货", className: "spn-status-ing" },
   3: { text: "已完成", className: "spn-status-success" },
 };
 
-function OrderItem(Props: OrderItemClass) {
+function OrderItem({onClickDetail,data}) {
   const itemClick = () => {
-    Props.onClickDetail();
+     onClickDetail(data.id);
   };
   return (
     <div className="order-item">
@@ -54,7 +51,7 @@ function OrderItem(Props: OrderItemClass) {
         <div className="btn" onClick={() => itemClick()}>
           {t("订单详情")}
         </div>
-        <div className="btn">{t("查看物流")}</div>
+        {data.status!=1&&<div className="btn">{t("查看物流")}</div>}
       </div>
     </div>
   );

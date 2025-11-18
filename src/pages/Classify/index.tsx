@@ -95,11 +95,12 @@ const Classify: React.FC = () => {
       }
     });
   };
+ useEffect(() => {
+  if (id === classifyId) return;  // 防止重复调用
+  setClassifyId(id);
+}, [id]);
   useEffect(() => {
-    setClassifyId(id);
-    getGoodsData();
-  }, [id]);
-  useEffect(() => {
+     if (!classifyId) return;
     getGoodsData();
   }, [classifyId]);
   return (

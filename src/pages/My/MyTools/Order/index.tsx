@@ -41,8 +41,8 @@ const Order: React.FC = () => {
     },
   ];
   const [tabIndex, setTabIndex] = useState<string>("0");
-  const orderItemClick = () => {
-    navigate("/orderDetail");
+  const orderItemClick = (id) => {
+    navigate(`/orderDetail?id=${id}`);
   };
   // 获取更多团队列表
   const loadMoreAction = async () => {
@@ -83,6 +83,7 @@ const Order: React.FC = () => {
     });
     if (result.data.code == 200) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
+      console.log("list===", result.data.data.records);
       if (result.data.data.records.length == dataParam.size) {
         setIsMore(true);
       } else {
@@ -128,9 +129,9 @@ const Order: React.FC = () => {
                 {list.map((item, index) => {
                   return (
                     <OrderItem
-                    data={item}
+                      data={item}
                       key={index}
-                      onClickDetail={() => orderItemClick()}
+                      onClickDetail={(id) => orderItemClick(id)}
                     ></OrderItem>
                   );
                 })}

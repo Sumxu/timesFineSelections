@@ -328,5 +328,42 @@ export const getLangObj = () => {
 
   return langInfo;
 };
-export const logOut = () => {
-};
+/**
+ * 复制文本到剪贴板
+ * @param text 要复制的内容
+ * @param message 复制成功提示（可选）
+ */
+export function copyToClipboard(text: string, message: string = "复制成功") {
+  if (!text) return;
+
+  // 现代浏览器支持 navigator.clipboard
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        Totast(message, "success");
+      },
+      () => {
+        Totast("复制失败，请手动复制", "error");
+      }
+    );
+  } else {
+    // 兼容旧浏览器
+    const input = document.createElement("textarea");
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        Totast(message, "success");
+      } else {
+        Totast("复制失败，请手动复制", "error");
+      }
+    } catch (err) {
+      Totast("复制失败，请手动复制", "error");
+    }
+
+    document.body.removeChild(input);
+  }
+}

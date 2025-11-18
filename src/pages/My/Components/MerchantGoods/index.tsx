@@ -2,28 +2,97 @@ import "./index.scss";
 import React, { useEffect, useState } from "react";
 import { Input } from "antd-mobile";
 import { SearchOutline } from "antd-mobile-icons";
-import usdtIcon from '@/assets/home/USDT.png' 
+import usdtIcon from "@/assets/home/USDT.png";
 import { t } from "i18next";
+import NetworkRequest from "@/Hooks/NetworkRequest.ts";
+import NoData from "@/components/NoData";
+import { InfiniteScroll } from "antd-mobile";
+interface listItem {
+  id: number;
+  name: string;
+  pic: string;
+  classify: string;
+  price: string;
+  sellCount: string;
+  publishTime: string;
+}
 const MerchantGoods: React.FC = () => {
   const tabArray = [
     {
       label: "全部",
-      value: "1",
+      value: "0",
     },
     {
       label: "安品区",
-      value: "2",
+      value: "1",
     },
     {
       label: "优品区",
-      value: "3",
+      value: "2",
     },
     {
       label: "臻品区",
-      value: "4",
+      value: "3",
     },
   ];
-  const [tabIndex, setTabIndex] = useState<string>("1");
+  const [current, setCurrent] = useState<number>(1);
+  const [tabIndex, setTabIndex] = useState<string>("0");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [list, setList] = useState<listItem[]>([]);
+  const [isMore, setIsMore] = useState<boolean>(false);
+  const getGoodsList = async () => {
+    setList([]);
+    const result = await NetworkRequest({
+      Url: "merchant/products",
+      Method: "post",
+      Data: {
+        current: 1,
+        size: 10,
+        name: inputValue,
+        classify: tabIndex == 0 ? "" : tabIndex,
+      },
+    });
+    if (result.success) {
+      setList((prevList) => [...prevList, ...result.data.data.records]);
+      if (result.data.data.records.length == 10) {
+        setIsMore(true);
+      } else {
+        setIsMore(false);
+      }
+    }
+  };
+  const loadMoreAction = async () => {
+    const nexPage = current + 1;
+    setCurrent(nexPage);
+    await NetworkRequest({
+      Url: "merchant/products",
+      Method: "post",
+      Data: {
+        current: nexPage,
+        size: 10,
+        name: inputValue,
+        classify: tabIndex == 0 ? "" : tabIndex,
+      },
+    }).then((res) => {
+      if (res.success) {
+        setList((prevList) => [...prevList, ...res.data.data.records]);
+        if (res.data.data.records.length == 10) {
+          setIsMore(true);
+        } else {
+          setIsMore(false);
+        }
+      }
+    });
+  };
+
+  useEffect(() => {
+    getGoodsList();
+  }, []);
+
+  useEffect(() => {
+    getGoodsList();
+  }, [inputValue, tabIndex]);
+
   return (
     <div className="MerchantGoods">
       <div className="hintTxt">店铺商品</div>
@@ -34,6 +103,8 @@ const MerchantGoods: React.FC = () => {
         <Input
           placeholder={t("输入商品名称/编号搜索")}
           className="inputClass"
+          value={inputValue}
+          onChange={(value) => setInputValue(value)}
           style={{
             "--color": "#fff",
             "--font-size": "14px",
@@ -57,23 +128,42 @@ const MerchantGoods: React.FC = () => {
         })}
       </div>
       <div className="goodsListBox">
-        <div className="goodsItem">
-          <div className="topOption">
-            <div className="goodsImgLeft"></div>
-            <div className="goodsRight">
-              <div className="goodsName">徕芬LE30国庆限定礼盒款护发套徕芬LE30国庆限定礼盒款护发套</div>
-              <div className="goodsTypeTxt">安品区｜#883902303</div>
-              <div className="goodsPriceOption">
-                <img src={usdtIcon} className="usdtIcon"></img>
-                <span className="price">193.56</span>
-              </div>
-            </div>
+        {list.length == 0 ? (
+          <NoData />
+        ) : (
+          <div className="record-body">
+            {list.map((item, index) => {
+              return (
+                <div className="goodsItem" key={index}>
+                  <div className="topOption">
+                    <img src={item.pic} className="goodsImgLeft"></img>
+                    <div className="goodsRight">
+                      <div className="goodsName">{item.name}</div>
+                      <div className="goodsTypeTxt">{item.classify}</div>
+                      <div className="goodsPriceOption">
+                        <img src={usdtIcon} className="usdtIcon"></img>
+                        <span className="price">{item.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="endOption">
+                    <span className="spn">
+                      {t("上架日期")}：{item.publishTime}
+                    </span>
+                    <span className="spn">
+                      {t("销量")}：{item.sellCount}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+
+            <InfiniteScroll
+              loadMore={loadMoreAction}
+              hasMore={isMore}
+            ></InfiniteScroll>
           </div>
-          <div className="endOption">
-            <span className="spn">{t("上架日期")}：2025-09-23 18:56:32</span>
-            <span className="spn">{t("销量")}：128</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-.my-popup-page {
+.my-apply-store-popup-page {
   background: linear-gradient(180deg, #434545 0%, #161616 100%);
   box-shadow: 0px -6px 12px 0px rgba(0, 0, 0, 0.25);
   border-radius: 16px 16px 0px 0px;
@@ -10,7 +10,6 @@
     position: relative;
     .title {
       width: 100%;
-
       text-align: center;
       font-weight: bold;
       font-size: 18px;
@@ -48,7 +47,7 @@
       .txt-option {
         font-weight: 400;
         font-size: 14px;
-        color: #ffffff;
+        color: #fff;
       }
       .right-txt {
         font-weight: 400;
@@ -56,12 +55,9 @@
         color: rgba(255, 255, 255, 0.65);
       }
     }
-    .margin-12{
-      margin-top: 12px;
+    .input-focus {
+      border: 1px solid #0be72f !important;
     }
-     .input-focus{
-    border: 1px solid #0BE72F !important;
-  }
     .input-option {
       border-radius: 8px;
       margin-top: 8px;
@@ -76,14 +72,14 @@
         flex: auto;
         color: #fff !important;
       }
-      .adm-input-element{
+      .adm-input-element {
         color: #fff !important;
       }
 
-  input:focus {
-    caret-color: #0BE72F;
-  }
- 
+      input:focus {
+        caret-color: #0be72f;
+      }
+
       .input-txt {
         flex: none;
         font-weight: 500;
@@ -96,31 +92,49 @@
       }
     }
     .input-no {
-        border: none;
+      border: none;
       background: rgba(255, 255, 255, 0.15);
     }
   }
-  .hint-txt-box {
+  .payPriceBox {
     margin-top: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    .priceTxt {
+      font-weight: bold;
+      font-size: 24px;
+      color: #0be72f;
+      text-align: center;
+    }
+    .priceHintTxt {
+      text-align: center;
+      margin-top: 6px;
+      font-weight: 500;
+      font-size: 14rpx;
+      color: #ffffff;
+    }
+  }
+  .hint-txt-box {
+    margin-top: 90px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     .hint-txt-option {
       font-weight: 400;
       font-size: 14px;
-      color: #ffffff;
+      color: #0be72f;
     }
-    .right-bold {
-      font-weight: 500;
+    .right-txt {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.65) !important;
     }
     .right-option {
-      font-size: 16px;
-      color: #0be72f;
-      font-weight: bold;
     }
   }
   .btn-submit {
-    margin-top: 74px;
+    margin-top: 16px;
+
     height: 50px;
     line-height: 50px;
     text-align: center;
