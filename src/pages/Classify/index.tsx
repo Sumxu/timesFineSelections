@@ -18,20 +18,26 @@ interface RecordItem {
   [key: string]: any;
 }
 const Classify: React.FC = () => {
+  // 列表加载中
+  const [listLoding, setListLoding] = useState<boolean>(false);
   //获取浏览器路径参数 判断是否从别的页面跳转进来的
   const params = new URLSearchParams(location.search);
   const id = params.get("id") || "0";
   const [classifyId, setClassifyId] = useState<string>("");
   const [list, setList] = useState<RecordItem[]>([]);
-  const { zoneList, getZoneInfo } = useZoneConfig();
+  const { getZoneInfo } = useZoneConfig();
+  const [current, setCurrent] = useState<number>(1);
+  // 是否还有更多数据可以加载
+  const [isMore, setIsMore] = useState<boolean>(false);
   const getGoodsData = async () => {
+    setList([]);
+    setIsMore(false);
     const result = await NetworkRequest({
       Url: "product/list",
       Method: "post",
       Data: {
         size: 10,
         current: 1,
-        isHome: false,
         classify: classifyId,
       },
     });
@@ -49,7 +55,45 @@ const Classify: React.FC = () => {
           };
         }),
       ]);
+      if (result.data.data.records.length == 10) {
+        setIsMore(true);
+      } else {
+        setIsMore(false);
+      }
     }
+  };
+  //加载更多
+  const loadMoreAction = async () => {
+    const nexPage = current + 1;
+    setCurrent(nexPage);
+    await NetworkRequest({
+      Url: "userRecord/ticketRecord",
+      Data: {
+        size: 10,
+        current: nexPage,
+        classify: classifyId,
+      },
+    }).then((res) => {
+      if (res.success) {
+        setList((prevList) => [
+          ...prevList,
+          ...res.data.data.records.map((item: RecordItem) => {
+            const picImg = item.pic?.includes(",")
+              ? item.pic.split(",")[0]
+              : item.pic;
+            return {
+              ...item,
+              picImg,
+            };
+          }),
+        ]);
+        if (res.data.data.records.length ==10) {
+          setIsMore(true);
+        } else {
+          setIsMore(false);
+        }
+      }
+    });
   };
   useEffect(() => {
     setClassifyId(id);
@@ -74,6 +118,9 @@ const Classify: React.FC = () => {
           <div className="classify-content-option">
             <ClassifyContent
               contentList={list}
+              isMore={isMore}
+              listLoding={listLoding}
+              contentLoadMore={() => loadMoreAction()}
               contentTxt={getZoneInfo(classifyId)?.name || "全部商品"}
             />
           </div>

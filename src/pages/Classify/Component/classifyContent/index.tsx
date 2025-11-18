@@ -5,7 +5,8 @@ import USDTIcon from "@/assets/home/USDT.png";
 import moenyIcon from "@/assets/home/moenyIcon.png";
 import { t } from "i18next";
 import NoData from "@/components/NoData";
-
+import { InfiniteScroll } from "antd-mobile";
+import { Spin } from "antd";
 import { useZoneConfig } from "@/config/classifyData";
 interface Props {
   contentList: goodsInfoItem[];
@@ -33,10 +34,12 @@ export interface GoodsItemSpec {
 }
 const ContentItem = ({ data }) => {
   const { getZoneInfo } = useZoneConfig();
+
   const navigate = useNavigate();
   const goodDetail = (data) => {
     navigate(`/goodsDetail?id=${data.id}`);
   };
+
   return (
     <div
       className="content-scroll-item"
@@ -64,7 +67,11 @@ const ContentItem = ({ data }) => {
     </div>
   );
 };
-const ClassifyContent: React.FC<Props> = ({ contentList, contentTxt }) => {
+const ClassifyContent: React.FC<Props> = ({ contentList, contentTxt,isMore ,contentLoadMore}) => {
+  const loadMoreAction = () => {
+    console.log("更多进来了---");
+    contentLoadMore()
+  };
   return (
     <div className="classify-option">
       <div className="classify-title">{contentTxt}</div>
@@ -72,10 +79,13 @@ const ClassifyContent: React.FC<Props> = ({ contentList, contentTxt }) => {
         {contentList.length == 0 ? (
           <NoData />
         ) : (
-          contentList.map((item, index) => {
+         contentList.map((item, index) => {
             return <ContentItem data={item} key={index} />;
           })
         )}
+        <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
+
+        </InfiniteScroll>
       </div>
     </div>
   );
