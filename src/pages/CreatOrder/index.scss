@@ -162,6 +162,7 @@
   }
   .payFn {
     .hintTxt {
+      padding-top: 12px;
       font-weight: 400;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.75);
@@ -251,10 +252,10 @@
       flex: none;
       width: 170px;
       height: 40px;
-      line-height: 40px;
       text-align: center;
       background: #0be72f;
       border-radius: 20px;
+      
     }
   }
 }

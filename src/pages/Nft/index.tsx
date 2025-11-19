@@ -110,6 +110,7 @@ const Home: React.FC = () => {
   const multicallFn = () => {
     const calls = Array.from({ length: Number(balanceOf) }).map((_, index) => ({
       contractAddress: ContractList["SpaceNFT"].address,
+      abi: ContractList["SpaceNFT"].abi,
       params: [walletAddress, index],
     }));
 
@@ -127,8 +128,10 @@ const Home: React.FC = () => {
 
   const queryPending = (data: BigNumber[]) => {
     const contractAddress = ContractList["SpaceNFT"].address;
+    const abi = ContractList["SpaceNFT"].abi;
     const calls = data.map((bn) => ({
       contractAddress,
+      abi,
       params: [bn],
     }));
     fetch("pending", calls).then((result) => {
@@ -137,14 +140,18 @@ const Home: React.FC = () => {
       }
     });
   };
+  
   //通过tokenId 拿到对应的信息 minerInfo
   const minerInfoFn = (data: BigNumber[]) => {
     setNftListLoading(true);
     const contractAddress = ContractList["SpaceNFT"].address;
+    const abi = ContractList["SpaceNFT"].abi;
     const calls = data.map((bn) => ({
       contractAddress,
+      abi,
       params: [bn],
     }));
+    console.log("bn",bn)
     fetch("minerInfo", calls).then((result) => {
       setNftListLoading(false);
       if (result.success) {

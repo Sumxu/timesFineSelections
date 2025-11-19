@@ -140,6 +140,7 @@ const EditAddress: React.FC = () => {
 
   const onConfirmCascader = (val) => {
     setAddressCascader(val);
+    console.log("val--", val);
     setCascaderVisible(false);
   };
   useEffect(() => {
@@ -161,6 +162,7 @@ const EditAddress: React.FC = () => {
       Totast("手机号格式不正确", "error");
       return false;
     }
+    console.log("info--", info);
     if (!info.province.trim() || !info.city.trim()) {
       Totast("省市不能为空", "error");
       return false;
@@ -178,29 +180,31 @@ const EditAddress: React.FC = () => {
     console.log("addressInfo==", addressInfo);
 
     setBtnLoading(true);
-    if (!validateAddressInfo(addressInfo)) {
-      setBtnLoading(false);
-      return;
-    }
+
     const items = getItemsByValue(CascaderOptions, addressCascader);
     const labels = items.map((i) => i.label);
-    console.log("labels==", labels);
 
     const param: AddressInfo = { ...addressInfo };
+
     let urlPath = "";
     param.province = labels[0];
     param.city = labels[1];
     param.area = labels[2];
-    console.log("param==", param);
+    if (!validateAddressInfo(param)) {
+      setBtnLoading(false);
+      return;
+    }
+    console.log("param-00-0", param);
     if (type === "add") {
       delete param.id;
-      param.isDefault == "" ? false : "";
+      param.isDefault ? param.isDefault : false;
       urlPath = "address/add";
     } else {
       urlPath = "address/update";
     }
-    console.log("param", param);
-
+    if (param.isDefault == "" || param.isDefault == null) {
+      param.isDefault = false;
+    }
     const result = await NetworkRequest({
       Url: urlPath,
       Method: "post",

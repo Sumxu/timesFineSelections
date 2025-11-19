@@ -8,17 +8,20 @@ import { Picker } from "antd-mobile";
 import shopPng from "@/assets/Component/shopPng.png";
 import { t } from "i18next";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
- const basicColumns = [
+import ContractRequest from "@/Hooks/ContractRequest.ts";
+import { userAddress } from "@/Store/Store.ts";
+
+const basicColumns = [
   [
-    { value: '1', label: '安品区' },
-    { value: '2', label: '优品区' },
-    { value: '3', label: '臻品区' },
-  ]
-]
+    { value: "1", label: "安品区" },
+    { value: "2", label: "优品区" },
+    { value: "3", label: "臻品区" },
+  ],
+];
 
 interface MerchantInfo {
   /** 用户类型 1.普通 2.安品区 3.优品区 4.臻品区 */
-  userType: 1 | 2 | 3 | 4;
+  userType: 0 | 1 | 2 | 3;
   /** 商家名称 */
   merchantName: string;
 
@@ -50,10 +53,10 @@ interface MerchantInfo {
   yearSell: number;
 }
 enum UserType {
-  Normal = 1,
-  Anpin = 2,
-  Youpin = 3,
-  Zhenpin = 4,
+  Normal = 0,
+  Anpin = 1,
+  Youpin = 2,
+  Zhenpin = 3,
 }
 
 const userTypeMap: Record<UserType, string> = {
@@ -63,9 +66,12 @@ const userTypeMap: Record<UserType, string> = {
   [UserType.Zhenpin]: "臻品区",
 };
 const MerchantCenter: React.FC = () => {
+    const [userInfo, setUserInfo] = useState({}); //用户信息
+    const walletAddress = userAddress((state) => state.address);
+  
   const [merchantInfo, setMerchantInfo] = useState<MerchantInfo>({});
-  const [leavelVisible,setLeavelVisible]=useState(false)
-  const [leavelValue,setLeavelValue]=useState('')
+  const [leavelVisible, setLeavelVisible] = useState(false);
+  const [leavelValue, setLeavelValue] = useState("");
   const getPageInfo = async () => {
     const result = await NetworkRequest({
       Url: "merchant/info",
@@ -74,12 +80,24 @@ const MerchantCenter: React.FC = () => {
       setMerchantInfo(result.data.data);
     }
   };
-  const  leaveChange=()=>{
-    console.log("进来了")
-    setLeavelVisible(true)
-  }
+  const leaveChange = () => {
+    console.log("进来了");
+    setLeavelVisible(true);
+  };
+  const getUserInfo = async () => {
+    const result = await ContractRequest({
+      tokenName: "storeToken",
+      methodsName: "userInfo",
+      params: [walletAddress],
+    });
+    if (result.value) {
+      console.log("result.value--", result.value);
+      setUserInfo(result.value);
+    }
+  };
   useEffect(() => {
     getPageInfo();
+    getUserInfo();
   }, []);
   return (
     <div className="MerchantCenterPage">
@@ -92,13 +110,10 @@ const MerchantCenter: React.FC = () => {
 
           <div className="topInfo">
             <div className="topTxt">
-              <span className="spn1">{merchantInfo.merchantName}</span>
+              <span className="spn1">{userInfo.merchantName}</span>
               <span className="spn2">
-                {userTypeMap[merchantInfo.userType] || "未入驻"}
+                {userTypeMap[(userInfo?.merchantLevel?.toNumber() ?? 0)] || "未入驻"}
               </span>
-            </div>
-            <div className="rightTxt">
-              <span className="spn2" onClick={()=>leaveChange()}>升级</span>
             </div>
           </div>
 

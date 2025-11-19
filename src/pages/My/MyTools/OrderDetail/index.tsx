@@ -6,7 +6,8 @@ import copyIcon from "@/assets/my/copy.png";
 import address from "@/assets/component/address.png";
 import usdt from "@/assets/home/USDT.png";
 import { RightOutline } from "antd-mobile-icons";
-import car from "@/assets/component/car.png";
+import car from "@/assets/component/wuliuIcon.png";
+
 import { t } from "i18next";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import shopPng from "@/assets/component/shopPng.png";

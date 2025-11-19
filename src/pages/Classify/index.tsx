@@ -32,6 +32,7 @@ const Classify: React.FC = () => {
   const getGoodsData = async () => {
     setList([]);
     setIsMore(false);
+
     const result = await NetworkRequest({
       Url: "product/list",
       Method: "post",
@@ -87,7 +88,7 @@ const Classify: React.FC = () => {
             };
           }),
         ]);
-        if (res.data.data.records.length ==10) {
+        if (res.data.data.records.length == 10) {
           setIsMore(true);
         } else {
           setIsMore(false);
@@ -95,12 +96,12 @@ const Classify: React.FC = () => {
       }
     });
   };
- useEffect(() => {
-  if (id === classifyId) return;  // 防止重复调用
-  setClassifyId(id);
-}, [id]);
   useEffect(() => {
-     if (!classifyId) return;
+    if (id === classifyId) return; // 防止重复调用
+    setClassifyId(id);
+  }, [id]);
+  useEffect(() => {
+    if (!classifyId) return;
     getGoodsData();
   }, [classifyId]);
   return (
@@ -122,7 +123,7 @@ const Classify: React.FC = () => {
               isMore={isMore}
               listLoding={listLoding}
               contentLoadMore={() => loadMoreAction()}
-              contentTxt={getZoneInfo(classifyId)?.name || "全部商品"}
+              contentTxt={getZoneInfo(Number(classifyId))?.name || "全部商品"}
             />
           </div>
         </div>

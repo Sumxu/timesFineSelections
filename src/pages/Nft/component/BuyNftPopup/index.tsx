@@ -71,7 +71,6 @@ function BuyNftPopup(Props: buyNftPopupClass) {
     //开始授权 进行购买
     let applyAmount: BigNumber = BigNumber.from(0);
     let isApply = false;
-
     await ContractRequest({
       tokenName: "USDTToken",
       methodsName: "allowance",

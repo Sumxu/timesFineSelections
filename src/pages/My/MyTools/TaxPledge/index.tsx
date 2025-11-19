@@ -2,43 +2,151 @@ import "./index.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
-import { Input } from "antd-mobile";
+import { Input, Toast } from "antd-mobile";
 import { t } from "i18next";
 import RedemptionPopup from "@/components/Popup/RedemptionPopup";
-import NetworkRequest from "@/Hooks/NetworkRequest.ts";
-import { InfiniteScroll } from "antd-mobile";
+import { InfiniteScroll, Button } from "antd-mobile";
 import NoData from "@/components/NoData";
+import { useNFTMulticall } from "@/Hooks/useNFTTokensByOwner";
+import ContractRequest from "@/Hooks/ContractRequest.ts";
+import ContractSend from "@/Hooks/ContractSend.ts";
+import ContractList from "@/Contract/Contract";
+import { userAddress } from "@/Store/Store.ts";
+import { BigNumber } from "ethers";
+import { fromWei, toWei, timestampToFull, Totast } from "@/Hooks/Utils";
+interface TaxInfo {
+  claimed: BigNumber;
+  amount: BigNumber;
+  ping: BigNumber;
+  claim: BigNumber;
+  rate: BigNumber;
+  startTime: number;
+  isRedeem: boolean;
+}
 const TaxPledge: React.FC = () => {
   const navigate = useNavigate();
+
   const [inputNumber, setInputNumber] = useState<string>("");
   const [isFocus, setIsFocus] = useState(false); // ✅ 是否获得焦点
   const [list, setList] = useState<listItem[]>([]);
   // 是否还有更多数据可以加载
   const [isMore, setIsMore] = useState<boolean>(false);
-
   const [current, setCurrent] = useState<number>(1);
   const [redemptionShow, setRedemptionShow] = useState<boolean>(false);
+  const walletAddress = userAddress((state) => state.address);
+  const [claimLoading, setClaimLoading] = useState<boolean>(false);
+  const [redeemLoading, setRedeemLoading] = useState<boolean>(false);
+  //得到taxList数组
+  const [taxList, setTaxList] = useState<TaxInfo[]>([]);
+  //得到pendingList数组
+  const [pendingList, setPendingList] = useState<BigNumber[]>([]);
+  const [totalDesposit, setTotalDesposit] = useState<BigNumber>(
+    BigNumber.from(0)
+  );
+  const [totalReward, setTotalReward] = useState<BigNumber>(BigNumber.from(0));
 
-  const loadMoreAction = async () => {
-    const nexPage = current + 1;
-    setCurrent(nexPage);
-    await NetworkRequest({
-      Url: "userRecord/ticketRecord",
-      Data: {
-        current: nexPage,
-        size: 10,
-      },
-    }).then((res) => {
-      if (res.success) {
-        setList((prevList) => [...prevList, ...res.data.data.records]);
-        if (res.data.data.records.length == 10) {
-          setIsMore(true);
-        } else {
-          setIsMore(false);
+  const [dataIndex, setDataIndex] = useState<string>("");
+  const { fetch } = useNFTMulticall();
+
+  const getDataListSize = async () => {
+    const result = await ContractRequest({
+      tokenName: "TaxPool",
+      methodsName: "depositLength",
+      params: [walletAddress],
+    });
+    if (result.value) {
+      const depositLength = Number(result.value);
+      if (depositLength < 0) return;
+      const calls = Array.from({ length: depositLength }).map((_, index) => ({
+        contractAddress: ContractList["TaxPool"].address,
+        abi: ContractList["TaxPool"].abi,
+        params: [walletAddress, index],
+      }));
+      fetch("depositInfo", calls).then((result) => {
+        if (result.success) {
+          setTaxList(result.data);
+          queryPending(depositLength);
         }
+      });
+    }
+  };
+  //通过tokenId 拿到对应的待领取内容
+  const queryPending = async (depositLength) => {
+    const calls = Array.from({ length: depositLength }).map((_, index) => ({
+      contractAddress: ContractList["TaxPool"].address,
+      abi: ContractList["TaxPool"].abi,
+      params: [walletAddress, index],
+    }));
+    fetch("pending", calls).then((result) => {
+      if (result.success) {
+        setPendingList(result.data);
       }
     });
   };
+  //赎回
+  const getRedeem = async (index) => {
+    setDataIndex(index);
+    setRedeemLoading(true);
+    const result = await ContractSend({
+      tokenName: "TaxPool",
+      methodsName: "redeem",
+      params: [index],
+    });
+    if (result.value) {
+      initData();
+    }
+    setRedeemLoading(false);
+  };
+  //领取收益
+  const getClaim = async (index) => {
+    if (pendingList[index].isZero()) {
+      return Totast("不能领取", "info");
+    }
+    setClaimLoading(true);
+    const result = await ContractSend({
+      tokenName: "TaxPool",
+      methodsName: "claim",
+      params: [index],
+    });
+    if (result.value) {
+      initData();
+    }
+    setClaimLoading(false);
+  };
+  const closeRedemptionShow = () => {
+    setRedemptionShow(false);
+    initData();
+  };
+  //获取总质押
+  const getTotalDeposit = async () => {
+    const result = await ContractRequest({
+      tokenName: "TaxPool",
+      methodsName: "totalDeposit",
+      params: [walletAddress],
+    });
+    if (result.value) {
+      setTotalDesposit(result.value);
+    }
+  };
+  //获取总收益
+  const getTotalReward = async () => {
+    const result = await ContractRequest({
+      tokenName: "TaxPool",
+      methodsName: "totalReward",
+      params: [walletAddress],
+    });
+    if (result.value) {
+      setTotalReward(result.value);
+    }
+  };
+  const initData = () => {
+    getDataListSize();
+    getTotalDeposit();
+    getTotalReward();
+  };
+  useEffect(() => {
+    initData();
+  }, []);
 
   return (
     <div className="TaxPledgePage">
@@ -46,12 +154,12 @@ const TaxPledge: React.FC = () => {
       <div className="headerBox">
         <div className="headerTopOption">
           <div className="itemNumber">
-            <div className="number">328.56</div>
+            <div className="number">{fromWei(totalDesposit)}</div>
             <div className="txt">{t("质押数量")}(TAX)</div>
           </div>
           <div className="line"></div>
           <div className="itemNumber">
-            <div className="number">328.56</div>
+            <div className="number">{fromWei(totalReward)}</div>
             <div className="txt">{t("获得收益")}(TAX)</div>
           </div>
         </div>
@@ -63,50 +171,61 @@ const TaxPledge: React.FC = () => {
       </div>
       <div className="hintTeamListTxt">{t("质押列表")}</div>
       <div className="box teamList">
-        {list.length > 0 ? (
+        {taxList.length == 0 ? (
           <NoData />
         ) : (
           <div className="record-body">
-            {[1, 1, 1].map((item, index) => {
+            {taxList.map((item, index) => {
               return (
                 <div className="teamListBox" key={index}>
                   <div className="teamItem">
                     <div className="itemTxt">
                       <div className="itemOption">
-                        投入时间:<span>12312321</span>
+                        投入时间:
+                        <span>
+                          {timestampToFull(item.startTime.toString())}
+                        </span>
                       </div>
                       <div className="itemOption">
-                        投入值:<span>12312321</span>
+                        投入值:<span>{fromWei(item.amount)}</span>
                       </div>
                     </div>
                     <div className="itemTxt">
                       <div className="itemOption">
-                        {" "}
-                        待领取收益:<span>12312321</span>
+                        待领取收益:<span>{fromWei(pendingList[index])}</span>
                       </div>
                       <div className="itemOption">
-                        已领取收益:<span>12312321</span>
+                        已领取收益:<span>{fromWei(item.claim)}</span>
                       </div>
                     </div>
                     <div className="itemTxt">
-                      <div className="btn btnOne">赎回</div>
-                      <div className="btn btnTwo">领取收益</div>
+                      <Button
+                        className="btn btnOne"
+                        onClick={() => getRedeem(index)}
+                        disabled={item.isRedeem}
+                        loading={redeemLoading}
+                      >
+                        赎回
+                      </Button>
+                      <Button
+                        className="btn btnTwo"
+                        disabled={item.isRedeem}
+                        onClick={() => getClaim(index)}
+                        loading={claimLoading}
+                      >
+                        领取收益
+                      </Button>
                     </div>
                   </div>
                 </div>
               );
             })}
-
-            <InfiniteScroll
-              loadMore={loadMoreAction}
-              hasMore={isMore}
-            ></InfiniteScroll>
           </div>
         )}
       </div>
       <RedemptionPopup
         isShow={redemptionShow}
-        onClose={() => setRedemptionShow(false)}
+        onClose={() => closeRedemptionShow()}
       ></RedemptionPopup>
     </div>
   );

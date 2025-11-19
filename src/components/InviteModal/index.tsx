@@ -8,6 +8,9 @@ import { Totast, isValidAddress, concatSign } from "@/Hooks/Utils.ts";
 import { userAddress } from "@/Store/Store";
 import { UseSignMessage } from "@/Hooks/UseSignMessage.ts";
 import { storage } from "@/Hooks/useLocalStorage";
+import ContractSend from "@/Hooks/ContractSend.ts";
+import ContractRequest from "@/Hooks/ContractRequest.ts";
+import { ethers } from "ethers";
 
 interface PropsClass {
   isShow: boolean;
@@ -37,7 +40,6 @@ const InviteModal = (Props: PropsClass) => {
   const closeBindFloat = () => {
     Props.onClose();
   };
-
   // 绑定按钮执行
   const bindInviteAction = async () => {
     if (!inputAddress) {
@@ -45,44 +47,49 @@ const InviteModal = (Props: PropsClass) => {
       return;
     }
     setLoading(true);
-    const currentAddress = userAddress.getState().address;
-    const bigRes = concatSign(currentAddress);
-    const sigResult = await signMessage(bigRes);
-    if (!sigResult) {
-      return setLoading(false);
-    }
     //判断当前邀请人格式是否正确
     if (isValidAddress(inputAddress)) {
-      await NetworkRequest({
-        Url: "auth/login",
-        Method: "post",
-        Data: {
-          address: currentAddress,
-          inviteAddress: inputAddress,
-          msg: bigRes,
-          signature: sigResult,
-        },
-      }).then((res) => {
-        if (res.success) {
-          //成功后直接进入首页
-          storage.set("token", res.data.data);
-          navigate("/home");
-        }
+      //判断输入的邀请人上级是否有邀请人
+      const result = await ContractRequest({
+        tokenName: "storeToken",
+        methodsName: "userInfo",
+        params: [inputAddress],
       });
+      if (result.value) {
+        if (result.value[0] != ethers.constants.AddressZero) {
+          bindInviter();
+        } else {
+    setLoading(false);
+
+          Totast(t("邀请人地址无效"), "warning"); //
+        }
+      }
     } else {
       //提示无效地址
       Totast(t("邀请人地址无效"), "warning"); //
     }
-    setLoading(false);
   };
+  const bindInviter = async () => {
+    const result = await ContractSend({
+      tokenName: "storeToken",
+      methodsName: "bind",
+      params: [inputAddress],
+    });
+    console.log("result==",result)
+    if (result.value) {
+      closeBindFloat();
+    }
+    setLoading(false);
 
+  };
   return (
     <div className="InviteModalPage">
       {/*绑定邀请人*/}
       <Modal
         title=""
         open={Props.isShow}
-        closable={true}
+        closable={false}
+        maskClosable={false}
         onCancel={closeBindFloat}
         footer={null}
       >

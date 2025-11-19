@@ -22,8 +22,10 @@ export default class EnvConfigProvider {
       contractSpaceNFT: "0x263D57668c2fFE0848171533DC510EAc70140e5a",
       contractUsdt: "0x2Cba653C50e9A2e97411104d1460EBFAECE50E9C",
       contractTAXToken: "0xA731812CF8bAb136ACEa9835A2e54493a3A1f2e2",
+      taxPool: "0xa7e3Ce0176de606C476Fc742cB20c2EF17AA1f09",
       chainId: "0x61",
       multiCallToken: "0xcA11bde05977b3631167028862bE2a173976CA11",
+      storeToken: "0x87663d59f95ed4689D74733206b04806477e82b3",
       rpcUrl: "https://bsc-testnet-rpc.publicnode.com/",
       blockExplorerUrls: "http://143.92.39.28:9030/api",
       chainName: "BNB Smart Chain Mainnet",
@@ -32,7 +34,9 @@ export default class EnvConfigProvider {
   /** 生产环境配置（主网） */
   static getProdConfig(): EnvConfig {
     return {
+      storeToken: "0x87663d59f95ed4689D74733206b04806477e82b3",
       apiBase: "https://api.taxshop.plus/dapp/",
+      taxPool: "0xa7e3Ce0176de606C476Fc742cB20c2EF17AA1f09",
       contractSpaceNFT: "0x764eEaB717b68056C02a75677C784b98e54Fc042",
       multiCallToken: "0xcA11bde05977b3631167028862bE2a173976CA11",
       contractUsdt: "0x55d398326f99059fF775485246999027B3197955",

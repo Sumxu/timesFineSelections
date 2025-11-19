@@ -26,10 +26,8 @@ const Login: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false);
   const [inviteShow, setInviteShow] = useState<boolean>(false);
   const [value, setValue] = useState("1");
-
   // 当前钱包地址
   const navigate = useNavigate();
-
   //钱包签名
   const { signMessage } = UseSignMessage(); //获取钱包签名
 
@@ -38,31 +36,12 @@ const Login: React.FC = () => {
     ensureWalletConnected().then((res) => {
       if (res) {
         //判断用户是否可以进行登录
-        isLogin();
         // navigate("/home");
+        authLogin()
       }
     });
   };
-  const isLogin = async () => {
-    //获取
-    const currentAddress = userAddress.getState().address;
 
-    NetworkRequest({
-      Url: "auth/verify",
-      Method: "get",
-      Data: {
-        address: currentAddress,
-      },
-    }).then((res) => {
-      if (res.success && !res.data.data) {
-        //需要绑定邀请人
-        setInviteShow(!res.data.data);
-      } else {
-        //签名进行登录
-        authLogin();
-      }
-    });
-  };
   const authLogin = async () => {
     const currentAddress = userAddress.getState().address;
     const bigRes = concatSign(currentAddress);
@@ -75,7 +54,6 @@ const Login: React.FC = () => {
       Method: "post",
       Data: {
         address: currentAddress,
-        inviteAddress: "",
         msg: bigRes,
         signature: sigResult,
       },

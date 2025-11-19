@@ -117,7 +117,7 @@ const GoodsDetail: React.FC = () => {
 
         <div className="goodsOptions">
           <div className="goodsInfoItem" onClick={()=>specOpen()}>
-            <div className="label">{t("规格")}{specIndex}</div>
+            <div className="label">{t("规格")}</div>
             <div className="value"> { specIndex==''?'请选择' : goodsInfo?.items?.[specIndex]?.name} </div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
@@ -126,7 +126,7 @@ const GoodsDetail: React.FC = () => {
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
             <div className="label">{t("补贴")}</div>
-            <div className="value">{ specIndex==''?'暂未选择' : `${goodsInfo?.items?.[specIndex]?.integral}${t("积分")}`}</div>
+            <div className="value">{ specIndex==''?'暂未选择' : `${(goodsInfo?.items?.[specIndex]?.integral*specNum)}${t("积分")}`}</div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>

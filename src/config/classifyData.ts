@@ -16,10 +16,8 @@ export function useZoneConfig() {
     ],
     []
   );
-
   /** 根据 ID 获取区间配置 */
   const getZoneInfo = (id: number) => zoneList.find((z) => z.id === id);
-
   return {
     zoneList,
     getZoneInfo,

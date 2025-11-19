@@ -1,9 +1,8 @@
 .classify-left-option {
-  height: calc(100vh - 140px);
   box-sizing: border-box;
   margin-top: 16px;
-  overflow-y: scroll;
   .item {
+    box-sizing: border-box;
     padding: 13px 26px 13px 16px;
     font-weight: 500;
     font-size: 14px;

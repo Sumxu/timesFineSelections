@@ -367,3 +367,10 @@ export function copyToClipboard(text: string, message: string = "复制成功") 
     document.body.removeChild(input);
   }
 }
+
+export function timestampToFull(ts: number, isMs = false) {
+  const date = new Date(isMs ? ts : ts * 1000);
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
