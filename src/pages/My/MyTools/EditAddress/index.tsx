@@ -25,7 +25,7 @@ type AddressInfo = {
 const EditAddress: React.FC = () => {
   const navigate = useNavigate();
   const { lastPath } = useRouteRecorder();
-  const [addressCascader, setAddressCascader] = useState([1, 110000, 110101]); // 默认回显
+  const [addressCascader, setAddressCascader] = useState(["", "", ""]); // 默认回显
   const [btnLoading, setBtnLoading] = useState<boolean>(false);
   const [cascaderVisible, setCascaderVisible] = useState<boolean>(false);
   // 初始化 state，保证省市区不会是 undefined
@@ -87,6 +87,7 @@ const EditAddress: React.FC = () => {
 
   // 初始化数据
   const initData = () => {
+    console.log("lastPath00", lastPath);
     if (type === "add") {
       clearAddress();
     } else {
@@ -140,7 +141,6 @@ const EditAddress: React.FC = () => {
 
   const onConfirmCascader = (val) => {
     setAddressCascader(val);
-    console.log("val--", val);
     setCascaderVisible(false);
   };
   useEffect(() => {
@@ -178,6 +178,7 @@ const EditAddress: React.FC = () => {
   // 保存
   const saveClick = async () => {
     console.log("addressInfo==", addressInfo);
+    console.log("addressInfo==", addressInfo);
 
     setBtnLoading(true);
 
@@ -194,7 +195,6 @@ const EditAddress: React.FC = () => {
       setBtnLoading(false);
       return;
     }
-    console.log("param-00-0", param);
     if (type === "add") {
       delete param.id;
       param.isDefault ? param.isDefault : false;
@@ -212,9 +212,8 @@ const EditAddress: React.FC = () => {
       Method: "post",
       Data: { ...param },
     });
-
     if (result.success) {
-      navigate(lastPath);
+      navigate(-1);
     }
     setBtnLoading(false);
   };

@@ -165,7 +165,7 @@ const MyTeam: React.FC = () => {
         <div className="box teamList">
           <div className="teamHeaderOption">
             <div className="itemTxt">{t("钱包地址")}</div>
-            <div className="itemTxt">{t("类型")}</div>
+            <div className="itemTxt">{t("时间")}</div>
             <div className="itemTxt itemTxtRight">{t("贡献业绩")}(USDT)</div>
           </div>
           {list.length == 0 ? (
@@ -178,10 +178,10 @@ const MyTeam: React.FC = () => {
                     <div className="teamItem">
                       <div className="itemTxt">{SubAddress(item.address)}</div>
                       <div className="itemTxt">
-                        {formatDate(item.createTime)}
+                        {item.createTime}
                       </div>
                       <div className="itemTxt txtUsdt itemTxtRight">
-                        {formatDate(item.myPerf)}
+                        {item.myPerf}
                       </div>
                     </div>
                   </div>

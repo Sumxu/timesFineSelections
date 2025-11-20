@@ -221,5 +221,10 @@
   "获得安品区、优品区、臻品区产品售卖资格": "Get all zone rights",
   "商家中心": "Merchant Center",
   "邀请链接已复制": "Invite link copied",
-  "暂无团队": "No team"
+  "暂无团队": "No team",
+  "已复制": "Copied",
+    "是否退出登录？": "Log out?",
+  "取消": "Cancel",
+  "已退出登录": "Logged out",
+  "已取消": "Canceled"
 }

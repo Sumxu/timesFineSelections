@@ -46,7 +46,9 @@ const Address: React.FC = () => {
   //删除地址
   const delClick = async (id, index) => {
     Dialog.confirm({
-      content:t("确定要删除该地址吗?"),
+      content: t("确定要删除该地址吗?"),
+      confirmText: t("确认"), // 确认按钮文字
+      cancelText: t("取消"), // 取消按钮文字
       onConfirm: async () => {
         try {
           const result = await NetworkRequest({

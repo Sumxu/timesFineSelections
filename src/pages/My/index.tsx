@@ -19,7 +19,6 @@ const My: React.FC = () => {
       params: [walletAddress],
     });
     if (result.value) {
-      console.log("result.value--", Number(result.value.releaseStartTime));
       setUserInfo(result.value);
     }
   };
