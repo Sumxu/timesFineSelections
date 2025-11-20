@@ -83,8 +83,10 @@ const AssetDetails: React.FC = () => {
       6: t("质押收益"),
       7: t("卖出商品"),
       8: t("团队加速"),
+      9: t("平级加速"),
+      10: t("直推"),
+      11: t("间推"),
     };
-
     return map[bizType] ?? t("未知类型");
   }
   const tabChange = (value) => {
