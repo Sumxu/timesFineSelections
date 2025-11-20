@@ -34,8 +34,9 @@ const TaxPledge: React.FC = () => {
   const [current, setCurrent] = useState<number>(1);
   const [redemptionShow, setRedemptionShow] = useState<boolean>(false);
   const walletAddress = userAddress((state) => state.address);
-  const [claimLoading, setClaimLoading] = useState<boolean>(false);
-  const [redeemLoading, setRedeemLoading] = useState<boolean>(false);
+
+  const [redeemLoadingIndex, setRedeemLoadingIndex] = useState<number | null>(null);
+const [claimLoadingIndex, setClaimLoadingIndex] = useState<number | null>(null);
   //得到taxList数组
   const [taxList, setTaxList] = useState<TaxInfo[]>([]);
   //得到pendingList数组
@@ -85,8 +86,7 @@ const TaxPledge: React.FC = () => {
   };
   //赎回
   const getRedeem = async (index) => {
-    setDataIndex(index);
-    setRedeemLoading(true);
+     setRedeemLoadingIndex(index)
     const result = await ContractSend({
       tokenName: "TaxPool",
       methodsName: "redeem",
@@ -95,14 +95,14 @@ const TaxPledge: React.FC = () => {
     if (result.value) {
       initData();
     }
-    setRedeemLoading(false);
+   setRedeemLoadingIndex(null);
   };
   //领取收益
   const getClaim = async (index) => {
     if (pendingList[index].isZero()) {
-      return Totast("不能领取", "info");
+      return Totast(t("不能领取"), "info");
     }
-    setClaimLoading(true);
+     setClaimLoadingIndex(index); // 只让当前 index loading
     const result = await ContractSend({
       tokenName: "TaxPool",
       methodsName: "claim",
@@ -111,7 +111,7 @@ const TaxPledge: React.FC = () => {
     if (result.value) {
       initData();
     }
-    setClaimLoading(false);
+   setClaimLoadingIndex(null);
   };
   const closeRedemptionShow = () => {
     setRedemptionShow(false);
@@ -181,21 +181,21 @@ const TaxPledge: React.FC = () => {
                   <div className="teamItem">
                     <div className="itemTxt">
                       <div className="itemOption">
-                        投入时间:
+                        {t('投入时间')}:
                         <span>
                           {timestampToFull(item.startTime.toString())}
                         </span>
                       </div>
                       <div className="itemOption">
-                        投入值:<span>{fromWei(item.amount)}</span>
+                        {t('投入值')}:<span>{fromWei(item.amount)}</span>
                       </div>
                     </div>
                     <div className="itemTxt">
                       <div className="itemOption">
-                        待领取收益:<span>{fromWei(pendingList[index])}</span>
+                        {t('待领取收益')}:<span>{fromWei(pendingList[index])}</span>
                       </div>
                       <div className="itemOption">
-                        已领取收益:<span>{fromWei(item.claim)}</span>
+                        {t('已领取收益')}:<span>{fromWei(item.claim)}</span>
                       </div>
                     </div>
                     <div className="itemTxt">
@@ -203,17 +203,19 @@ const TaxPledge: React.FC = () => {
                         className="btn btnOne"
                         onClick={() => getRedeem(index)}
                         disabled={item.isRedeem}
-                        loading={redeemLoading}
+                         loadingText={t('确认中')}
+                        loading={redeemLoadingIndex === index}
                       >
-                        赎回
+                        {t('赎回')}
                       </Button>
                       <Button
                         className="btn btnTwo"
                         disabled={item.isRedeem}
+                        loadingText={t('确认中')}
                         onClick={() => getClaim(index)}
-                        loading={claimLoading}
+                        loading={claimLoadingIndex === index}
                       >
-                        领取收益
+                        {t('领取收益')}
                       </Button>
                     </div>
                   </div>

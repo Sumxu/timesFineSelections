@@ -5,9 +5,9 @@ import shopIcon from "@/assets/component/shopPng.png";
 import { t } from "i18next";
  
 const statusMap: Record<number, { text: string; className: string }> = {
-  1: { text: "已购买", className: "spn-status-none" },
-  2: { text: "已发货", className: "spn-status-ing" },
-  3: { text: "已完成", className: "spn-status-success" },
+  1: { text: t("已购买"), className: "spn-status-none" },
+  2: { text: t("已发货"), className: "spn-status-ing" },
+  3: { text: t("已完成"), className: "spn-status-success" },
 };
 
 function OrderItem({onClickDetail,data}) {

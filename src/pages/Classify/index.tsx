@@ -6,6 +6,8 @@ import ClassifyLeft from "./Component/classifyLeft";
 import ClassifyContent from "./Component/classifyContent";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { useZoneConfig } from "@/config/classifyData";
+import { t } from "i18next";
+
 interface RecordItem {
   id: number;
   name: string;
@@ -123,7 +125,7 @@ const Classify: React.FC = () => {
               isMore={isMore}
               listLoding={listLoding}
               contentLoadMore={() => loadMoreAction()}
-              contentTxt={getZoneInfo(Number(classifyId))?.name || "全部商品"}
+              contentTxt={getZoneInfo(Number(classifyId))?.name || t("全部商品")}
             />
           </div>
         </div>

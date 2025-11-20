@@ -76,8 +76,10 @@ const MyTeam: React.FC = () => {
   };
 
   const copyAction = () => {
-    const inviteUrl = `${window.location.href}?invite=${walletAddress}`;
-    copyToClipboard(inviteUrl, "邀请链接已复制");
+    const origin = window.location.origin;
+
+    const inviteUrl = `${origin}/login?invite=${walletAddress}`;
+    copyToClipboard(inviteUrl, t("邀请链接已复制"));
   };
 
   const getTeamList = async () => {
@@ -123,7 +125,7 @@ const MyTeam: React.FC = () => {
           <div className="usdtNumber">{teamInfo.communityPerf} USDT</div>
           <div className="usdtEndOption">
             {teamInfo.level == 0 ? (
-              "暂无团队"
+              t("暂无团队")
             ) : (
               <>
                 <div className="itemEnd">
@@ -143,6 +145,7 @@ const MyTeam: React.FC = () => {
             )}
           </div>
         </div>
+        
         {teamInfo.myPerf != 0 && (
           <div className="box inviteBox">
             <div className="inviteEnd">

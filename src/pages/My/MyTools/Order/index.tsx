@@ -83,7 +83,6 @@ const Order: React.FC = () => {
     });
     if (result.data.code == 200) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
-      console.log("list===", result.data.data.records);
       if (result.data.data.records.length == dataParam.size) {
         setIsMore(true);
       } else {
@@ -91,11 +90,18 @@ const Order: React.FC = () => {
       }
     }
   };
+  const tabChange = (value) => {
+    setTabIndex(value);
+  };
+
   useEffect(() => {
     getDataList();
-  }, []);
+    setCurrent(1);
+  }, [tabIndex]);
   useEffect(() => {
+    if (orderSn == "") return;
     getDataList();
+    setCurrent(1);
   }, [orderSn]);
   return (
     <>
@@ -111,7 +117,7 @@ const Order: React.FC = () => {
               return (
                 <div
                   key={index}
-                  onClick={() => setTabIndex(item.value)}
+                  onClick={() => tabChange(item.value)}
                   className={`tab-item ${
                     tabIndex == item.value && "tab-active-item"
                   }`}

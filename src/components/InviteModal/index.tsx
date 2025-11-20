@@ -17,25 +17,13 @@ interface PropsClass {
   onClose: () => void;
 }
 const InviteModal = (Props: PropsClass) => {
+  const invite = storage.get("invite");
   const navigate = useNavigate();
   const { signMessage } = UseSignMessage(); //获取钱包签名
   // 绑定的邀请人地址
   const [inputAddress, setInputAddress] = useState<string>("");
   // 绑定按钮加载
   const [butLoading, setLoading] = useState<boolean>(false);
-  // 获取邀请码
-  const { search } = useLocation();
-  const query = new URLSearchParams(search);
-  const inviteUrlValue = query.get("invite") ? query.get("invite") : "";
-  let inviteUrlArr: string[] = [];
-  if (inviteUrlValue) {
-    if (inviteUrlValue.indexOf("?") != -1) {
-      inviteUrlArr = inviteUrlValue.split("?");
-    } else {
-      inviteUrlArr = [inviteUrlValue];
-    }
-  }
-  const invite: string = inviteUrlArr[0];
   // 关闭绑定邀请人
   const closeBindFloat = () => {
     Props.onClose();
@@ -55,12 +43,13 @@ const InviteModal = (Props: PropsClass) => {
         methodsName: "userInfo",
         params: [inputAddress],
       });
+      console.log("result==",result)
       if (result.value) {
+
         if (result.value[0] != ethers.constants.AddressZero) {
           bindInviter();
         } else {
-    setLoading(false);
-
+          setLoading(false);
           Totast(t("邀请人地址无效"), "warning"); //
         }
       }
@@ -75,13 +64,15 @@ const InviteModal = (Props: PropsClass) => {
       methodsName: "bind",
       params: [inputAddress],
     });
-    console.log("result==",result)
+    console.log("result==", result);
     if (result.value) {
       closeBindFloat();
     }
     setLoading(false);
-
   };
+  useEffect(() => {
+    setInputAddress(invite);
+  }, [invite]);
   return (
     <div className="InviteModalPage">
       {/*绑定邀请人*/}

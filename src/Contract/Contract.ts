@@ -3,6 +3,7 @@ import SpaceNFTABI from "./ABI/SpaceNFTABI.ts";
 import EnvManager from "@/config/EnvManager";
 import TaxPoolABI from "./ABI/TaxPoolABI.ts";
 import StoreABI from "./ABI/StoreABI.ts";
+import swapRouterABI from "./ABI/SwapRouterABI.ts";
 interface ContractItem {
   address: string;
   abi: any[]; // 或具体ABI类型
@@ -31,6 +32,10 @@ const Contract: ContractMap = {
   storeToken: {
     address: EnvManager.storeToken,
     abi: StoreABI,
+  },
+  swapRouterToken: {
+    address: EnvManager.swapRouter,
+    abi: swapRouterABI,
   },
 };
 // 正式

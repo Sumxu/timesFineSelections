@@ -89,7 +89,7 @@ const Search: React.FC = () => {
     navigate(`/goodsDetail?id=${item.id}`);
   };
   const getDataList = async () => {
-    setList([])
+    setList([]);
     setListLoding(true);
     const result = await NetworkRequest({
       Url: "product/list",
@@ -130,6 +130,7 @@ const Search: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    if(goodsName=='')return
     getDataList();
   }, [goodsName]);
 
@@ -185,7 +186,7 @@ const Search: React.FC = () => {
             </div>
           )}
           <div className="loading-more-option" onClick={() => loadMoreAction()}>
-            {isMore ? t("查看更多商品") : "没有更多商品了"}
+            {isMore ? t("查看更多商品") : t("没有更多商品了")}
             {listLoding && (
               <div className="loding flex flexCenter">
                 <Spin />

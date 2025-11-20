@@ -11,12 +11,14 @@ import { useState, useEffect } from "react";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { ethers } from "ethers";
 function App() {
-  const ready = useAuthGuard();
+ const { ready, invite } = useAuthGuard();
   const location = useLocation();
   const walletAddress = userAddress((s) => s.address);
   const showTab = ["/home", "/classify", "/my"].includes(location.pathname);
   const noLoginPage = !["/login"].includes(location.pathname);
   const [inviteShow, setInviteShow] = useState<boolean>(false);
+  const { search } = useLocation();
+
   // 统一监听钱包事件
   useWalletListener({
     onAccountsChanged: () => {
@@ -31,7 +33,6 @@ function App() {
       window.location.reload();
     },
   });
-
   if (!ready) {
     return (
       <div className="loading">
@@ -54,7 +55,6 @@ function App() {
     }
   };
   isInviterFn();
-  
   return (
     <div className="app">
       <div className="body">

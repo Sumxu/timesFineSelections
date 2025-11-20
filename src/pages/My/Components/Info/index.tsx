@@ -6,18 +6,61 @@ import tusd from "@/assets/my/tusd.png";
 import { t } from "i18next";
 import WithdrawPopup from "@/components/Popup/WithdrawPopup";
 import ConversionPopup from "@/components/Popup/ConversionPopup";
-import { fromWei } from "@/Hooks/Utils";
-const Info: React.FC = ({data,taxBalance}) => {
+import ContractSend from "@/Hooks/ContractSend.ts";
+import ContractRequest from "@/Hooks/ContractRequest.ts";
+import { fromWei ,Totast} from "@/Hooks/Utils";
+import { Button } from "antd-mobile";
+import { userAddress } from "@/Store/Store.ts";
+const Info: React.FC = ({ data, taxBalance, onUpData }) => {
   const navigate = useNavigate();
   const [withDrawShow, setWithDrawShow] = useState<boolean>(false); //提现
-
+  const walletAddress = userAddress((state) => state.address);
   const [conversionShow, setConversionShow] = useState<boolean>(false); //互转
+  const [submitLoading, setSubmitLoading] = useState<boolean>(false);
+  const [rewarInfo, setRewarInfo] = useState({});
   const withDrawShowClick = () => {
     setWithDrawShow(true);
   };
   const conversionShowClick = () => {
     setConversionShow(true);
   };
+  const withDrawShowCloseClick = () => {
+    setWithDrawShow(false);
+    onUpData();
+  };
+  //释放
+  const releaseFn = async () => {
+    console.log("");
+    if (rewarInfo.claimIntegral.isZero()) {
+      return Totast(t("没有可释放值"), "info");
+    }
+    setSubmitLoading(true);
+    const result = await ContractSend({
+      tokenName: "storeToken",
+      methodsName: "release",
+      params: [],
+    });
+    setSubmitLoading(false);
+    if (result.value) {
+      onUpData();
+      getRewardFn();
+    }
+  };
+  //查询可释放数据
+  const getRewardFn = async () => {
+    const result = await ContractRequest({
+      tokenName: "storeToken",
+      methodsName: "reward",
+      params: [walletAddress],
+    });
+    if (result.value) {
+      setRewarInfo(result.value);
+    }
+    console.log("getRewardFnresult", fromWei(result.value.claimIntegral));
+  };
+  useEffect(() => {
+    getRewardFn();
+  }, []);
   return (
     <>
       <div className="my-info-box">
@@ -39,46 +82,74 @@ const Info: React.FC = ({data,taxBalance}) => {
           >
             {t("提现")}
           </div>
-          {/* <div className="btn-option  btn-conversion"
-          onClick={()=>conversionShowClick()}
-          >{t("兑换")}</div> */}
         </div>
         <div className="info-tax-balance-box">
           <div className="info-tax-balance-option">
-            <div className="left-option">
-              <img className="icon" src={jifen} />
-              <div className="left-info-item">
-                <div className="number-option">{fromWei(data.integral)}</div>
-                <div className="txt-option">{t("待释放积分")}</div>
+            <div className="topCenterInfo">
+              <div className="left-option">
+                <img className="icon" src={jifen} />
+                <div className="left-info-item">
+                  <div className="number-option">{fromWei(data.integral)}</div>
+                  <div className="txt-option">{t("待释放积分")}</div>
+                </div>
+              </div>
+              <Button
+                className="right-option-btn"
+                loading={submitLoading}
+                loadingText={t("确认中")}
+                onClick={() => releaseFn()}
+              >
+                {t("释放")}
+              </Button>
+            </div>
+            <div className="endCenterInfo">
+              <div className="txtOption">
+                <span className="label">{t('可获得积分')}:</span>
+                <span className="value">
+                  {fromWei(rewarInfo.claimIntegral)}
+                </span>
+              </div>
+              <div className="txtOption">
+                <span className="label">{t('可获得')}USD:</span>
+                <span className="value">
+                  {fromWei(rewarInfo.usd)}
+                </span>
+              </div>
+              <div className="txtOption">
+                <span className="label">{t('可获得')}TUSD:</span>
+                <span className="value">
+                  {fromWei(rewarInfo.tusd)}
+                </span>
               </div>
             </div>
-            <div className="right-option">{t("领取")}</div>
           </div>
           <div className="info-tax-line"></div>
           <div className="info-tax-balance-option">
-            <div className="left-option">
-              <img className="icon" src={tusd} />
-              <div className="left-info-item">
-                <div className="number-option">{fromWei(taxBalance)}</div>
-                <div className="txt-option">TAX{t("余额")}</div>
+            <div className="topCenterInfo">
+              <div className="left-option">
+                <img className="icon" src={tusd} />
+                <div className="left-info-item">
+                  <div className="number-option">{fromWei(taxBalance)}</div>
+                  <div className="txt-option">TAX{t("余额")}</div>
+                </div>
               </div>
-            </div>
-            <div
-              className="right-option"
-              onClick={() => navigate("/assetDetails")}
-            >
-              {t("资产明细")}
+              <Button
+                className="right-option-btn"
+                onClick={() => navigate("/assetDetails")}
+              >
+                {t("资产明细")}
+              </Button>
             </div>
           </div>
         </div>
       </div>
-      <ConversionPopup
+      {/* <ConversionPopup
         isShow={conversionShow}
         onClose={() => setConversionShow(false)}
-      ></ConversionPopup>
+      ></ConversionPopup> */}
       <WithdrawPopup
         isShow={withDrawShow}
-        onClose={() => setWithDrawShow(false)}
+        onClose={() => withDrawShowCloseClick()}
       ></WithdrawPopup>
     </>
   );

@@ -48,7 +48,7 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
   const submitClick = async () => {
     //判断输入值和大于余额
     if (BigNumber.from(inputNumber).gt(taxBalance)) {
-      return Totast("余额不足", "info");
+      return Totast(t("余额不足"), "info");
     }
     //开始授权 进行购买
     let applyAmount: BigNumber = BigNumber.from(0);
@@ -172,9 +172,9 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
             </div>
           </div>
           <Button
-            className="btn-submit"
+            className="btn-redemption-submit"
             loading={submitLoading}
-            loadingText="确认中"
+            loadingText={t('确认中')}
             onClick={() => submitClick()}
           >
             {t("确认质押")}

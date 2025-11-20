@@ -13,9 +13,9 @@ import { userAddress } from "@/Store/Store.ts";
 
 const basicColumns = [
   [
-    { value: "1", label: "安品区" },
-    { value: "2", label: "优品区" },
-    { value: "3", label: "臻品区" },
+    { value: "1", label: t("安品区") },
+    { value: "2", label: t("优品区") },
+    { value: "3", label: t("臻品区") },
   ],
 ];
 
@@ -61,9 +61,9 @@ enum UserType {
 
 const userTypeMap: Record<UserType, string> = {
   [UserType.Normal]: "普通",
-  [UserType.Anpin]: "安品区",
-  [UserType.Youpin]: "优品区",
-  [UserType.Zhenpin]: "臻品区",
+  [UserType.Anpin]: t("安品区"),
+  [UserType.Youpin]: t("优品区"),
+  [UserType.Zhenpin]: t("臻品区"),
 };
 const MerchantCenter: React.FC = () => {
     const [userInfo, setUserInfo] = useState({}); //用户信息
@@ -81,7 +81,6 @@ const MerchantCenter: React.FC = () => {
     }
   };
   const leaveChange = () => {
-    console.log("进来了");
     setLeavelVisible(true);
   };
   const getUserInfo = async () => {
@@ -125,15 +124,15 @@ const MerchantCenter: React.FC = () => {
             <div className="line"></div>
             <div className="rightItem">
               <div className="goodsInfoOption">
-                <span className="spn1">安品区：</span>
+                <span className="spn1">{t('安品区')}：</span>
                 <span className="spn2">{merchantInfo.apCount}</span>
               </div>
               <div className="goodsInfoOption margin14">
-                <span className="spn1">优品区：</span>
+                <span className="spn1">{t('优品区')}：</span>
                 <span className="spn2">{merchantInfo.yxCount}</span>
               </div>
               <div className="goodsInfoOption margin14">
-                <span className="spn1">臻品区：</span>
+                <span className="spn1">{t('臻品区')}：</span>
                 <span className="spn2">{merchantInfo.zpCount}</span>
               </div>
             </div>

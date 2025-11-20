@@ -14,7 +14,7 @@ import shopPng from "@/assets/component/shopPng.png";
 import { t } from "i18next";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { useZoneConfig } from "@/config/classifyData";
-import { SubAddress ,Totast} from "@/Hooks/Utils";
+import { SubAddress, Totast } from "@/Hooks/Utils";
 import { storage } from "@/Hooks/useLocalStorage";
 
 export interface GoodsItemSpec {
@@ -49,24 +49,25 @@ const GoodsDetail: React.FC = () => {
   const [specNum, setSpecNum] = useState<string>(""); //规格数量
   const { zoneList, getZoneInfo } = useZoneConfig();
   const buyClick = () => {
+    storage.remove("checkAddress");
     //判断是否选择了规格
-    if(specIndex==''){
-      return Totast('请选择规格','info')
+    if (specIndex == "") {
+      return Totast(t("请选择规格"), "info");
     }
-    let orderParam=JSON.parse(JSON.stringify(goodsInfo))
-    orderParam.specIndex=specIndex
-    orderParam.specNum=specNum
-    storage.set('orderParam',orderParam)
+    let orderParam = JSON.parse(JSON.stringify(goodsInfo));
+    orderParam.specIndex = specIndex;
+    orderParam.specNum = specNum;
+    storage.set("orderParam", orderParam);
     navigate("/creatOrder");
   };
-  const submitOrderClick = (specIndex,specNum) => {
+  const submitOrderClick = (specIndex, specNum) => {
     setShowPopup(false);
-    setSpecIndex(specIndex)
-    setSpecNum(specNum)
+    setSpecIndex(specIndex);
+    setSpecNum(specNum);
   };
-  const specOpen=()=>{
+  const specOpen = () => {
     setShowPopup(true);
-  }
+  };
   const getGoodsInfo = async () => {
     const result = await NetworkRequest({
       Url: "product/info",
@@ -84,7 +85,6 @@ const GoodsDetail: React.FC = () => {
       setPic(arr);
     }
   };
-
   useEffect(() => {
     getGoodsInfo();
   }, []);
@@ -116,9 +116,14 @@ const GoodsDetail: React.FC = () => {
         </div>
 
         <div className="goodsOptions">
-          <div className="goodsInfoItem" onClick={()=>specOpen()}>
+          <div className="goodsInfoItem" onClick={() => specOpen()}>
             <div className="label">{t("规格")}</div>
-            <div className="value"> { specIndex==''?'请选择' : goodsInfo?.items?.[specIndex]?.name} </div>
+            <div className="value">
+              {" "}
+              {specIndex == ""
+                ? t("请选择")
+                : goodsInfo?.items?.[specIndex]?.name}{" "}
+            </div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>
@@ -126,7 +131,13 @@ const GoodsDetail: React.FC = () => {
           <div className="goodsInfoLine"></div>
           <div className="goodsInfoItem">
             <div className="label">{t("补贴")}</div>
-            <div className="value">{ specIndex==''?'暂未选择' : `${(goodsInfo?.items?.[specIndex]?.integral*specNum)}${t("积分")}`}</div>
+            <div className="value">
+              {specIndex == ""
+                ? t("暂未选择")
+                : `${goodsInfo?.items?.[specIndex]?.integral * specNum}${t(
+                    t("积分")
+                  )}`}
+            </div>
             <div className="icon">
               <RightOutline color="#727272" fontSize={12} />
             </div>
@@ -193,7 +204,7 @@ const GoodsDetail: React.FC = () => {
         goodsData={goodsInfo}
         specIndex={specIndex}
         onClose={() => setShowPopup(false)}
-        onSubmit={(index,goodsNum) => submitOrderClick(index,goodsNum)}
+        onSubmit={(index, goodsNum) => submitOrderClick(index, goodsNum)}
       ></GoodsBuyPopup>
     </div>
   );

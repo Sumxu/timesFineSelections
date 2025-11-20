@@ -74,7 +74,7 @@ const ConversionPopup: React.FC<Props> = ({
           </div>
           <div className="specBox">
             <div className="specItem">
-              <div className="specName">选择规格</div>
+              <div className="specName">{t('选择规格')}</div>
               <div className="specList">
                 {goodsData?.items.map((specItem, index) => {
                   return (

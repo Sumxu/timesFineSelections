@@ -69,12 +69,11 @@ const ContentItem = ({ data }) => {
 };
 const ClassifyContent: React.FC<Props> = ({ contentList, contentTxt,isMore ,contentLoadMore}) => {
   const loadMoreAction = () => {
-    console.log("更多进来了---");
     contentLoadMore()
   };
   return (
     <div className="classify-option">
-      <div className="classify-title">{contentTxt}</div>
+      <div className="classify-title">{t(contentTxt)}</div>
       <div className="classify-content-scroll">
         {contentList.length == 0 ? (
           <NoData />

@@ -181,6 +181,37 @@ const abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "integral",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "usd",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "tusd",
+        type: "uint256",
+      },
+    ],
+    name: "Release",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "bytes32",
         name: "role",
@@ -711,6 +742,13 @@ const abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "release",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "bytes32",
@@ -744,6 +782,35 @@ const abi = [
     name: "revokeRole",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "reward",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "claimIntegral",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "usd",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "tusd",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -952,6 +1019,16 @@ const abi = [
         name: "merchantName",
         type: "string",
       },
+      {
+        internalType: "uint256",
+        name: "releaseStartTime",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "releaseRatio",
+        type: "uint256",
+      },
     ],
     stateMutability: "view",
     type: "function",
@@ -993,5 +1070,4 @@ const abi = [
     type: "function",
   },
 ];
-
 export default abi;

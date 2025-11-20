@@ -11,19 +11,19 @@ const ClassifyLeft: React.FC = ({ classifyId, classifyLeftChange }) => {
       value: "0",
     },
     {
-      label: "安品区",
+      label: t("安品区"),
       value: "1",
     },
     {
-      label: "优品区",
+      label: t("优品区"),
       value: "2",
     },
     {
-      label: "臻品区",
+      label: t("臻品区"),
       value: "3",
     },
     {
-      label: "兑换区",
+      label: t("兑换区"),
       value: "4",
     },
   ];

@@ -9,7 +9,7 @@ const AssetDetails: React.FC = () => {
   const tabArray = [
     {
       label: "TUSD",
-      value: "1",
+      value: "3",
     },
     {
       label: "USD",
@@ -17,18 +17,18 @@ const AssetDetails: React.FC = () => {
     },
     {
       label: "TAX",
-      value: "3",
+      value: "4",
     },
     {
       label: t("积分"),
-      value: "4",
+      value: "5",
     },
   ];
   const [list, setList] = useState([]);
   // 是否还有更多数据可以加载
   const [isMore, setIsMore] = useState<boolean>(false);
   const [current, setCurrent] = useState<number>(1);
-  const [tabIndex, setTabIndex] = useState<string>("1");
+  const [tabIndex, setTabIndex] = useState<string>("3");
   // 获取更多
   const loadMoreAction = async () => {
     const nexPage = current + 1;
@@ -64,7 +64,6 @@ const AssetDetails: React.FC = () => {
         coinType: tabIndex,
       },
     });
-    console.log("result===", result);
     if (result.success) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
       if (result.data.data.records.length == 10) {
@@ -74,7 +73,25 @@ const AssetDetails: React.FC = () => {
       }
     }
   };
+  function getBizTypeName(bizType: number) {
+    const map: Record<number, string> = {
+      1: t("积分释放"),
+      2: t("购买商品"),
+      3: t("提现"),
+      4: t("质押"),
+      5: t("赎回"),
+      6: t("质押收益"),
+      7: t("卖出商品"),
+      8: t("团队加速"),
+    };
 
+    return map[bizType] ?? t("未知类型");
+  }
+  const tabChange = (value) => {
+    setTabIndex(value);
+    setCurrent(1);
+    getDataPage();
+  };
   useEffect(() => {
     getDataPage();
   }, []);
@@ -87,7 +104,7 @@ const AssetDetails: React.FC = () => {
             return (
               <div
                 key={index}
-                onClick={() => setTabIndex(item.value)}
+                onClick={() => tabChange(item.value)}
                 className={`tab-item ${
                   tabIndex == item.value && "tab-active-item"
                 }`}
@@ -111,14 +128,11 @@ const AssetDetails: React.FC = () => {
                 {list.map((item, index) => {
                   return (
                     <div className="list-item-box" key={index}>
-                      <div className="item-option date">
-                        2025-09-23 18:36:56
-                      </div>
+                      <div className="item-option date">{item.createTime}</div>
                       <div className="item-option item-center">
-                        <div>{t("积分释放")}</div>
-                        <div>200.00 TAX</div>
+                        <div>{getBizTypeName(item.bizType)}</div>
                       </div>
-                      <div className="item-option">+32.56</div>
+                      <div className="item-option">{(item.amount).toFixed(4)}</div>
                     </div>
                   );
                 })}

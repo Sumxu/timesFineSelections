@@ -27,9 +27,9 @@ const ShopApplication: React.FC = () => {
     shopPriceTwo: BigNumber,
     shopPriceThree: BigNumber
   ) => ({
-    1: { name: "安品区", price: shopPriceOne },
-    2: { name: "优品区", price: shopPriceTwo },
-    3: { name: "臻品区", price: shopPriceThree },
+    1: { name: t("安品区"), price: shopPriceOne },
+    2: { name: t("优品区"), price: shopPriceTwo },
+    3: { name: t("臻品区"), price: shopPriceThree },
   });
   const [buyInfo, setBuyInfo] = useState({});
   const [userInfo, setUserInfo] = useState({}); //用户信息
@@ -45,7 +45,6 @@ const ShopApplication: React.FC = () => {
       params: [walletAddress],
     });
     if (result.value) {
-      console.log("result.value--", result.value);
       setUserInfo(result.value);
     }
   };
@@ -137,9 +136,9 @@ const ShopApplication: React.FC = () => {
         <div className="item">
           <div className="itemHeaderOption">
             <img src={shopIcon} className="iconImg" />
-            <div className="shopTxt">安品区入驻</div>
+            <div className="shopTxt">{t("安品区入驻")}</div>
           </div>
-          <div className="hintTxt">获得安品区产品售卖资格</div>
+          <div className="hintTxt">{t("获得安品区产品售卖资格")}</div>
           <div className="bottomInfoOption">
             <div className="leftTxt">
               <span className="spn1">{t("入驻费用")}</span>
@@ -153,9 +152,9 @@ const ShopApplication: React.FC = () => {
         <div className="item">
           <div className="itemHeaderOption">
             <img src={shopIcon} className="iconImg" />
-            <div className="shopTxt">优品区入驻</div>
+            <div className="shopTxt">{t("优品区入驻")}</div>
           </div>
-          <div className="hintTxt">获得优品区产品售卖资格</div>
+          <div className="hintTxt">{t("获得优品区产品售卖资格")}</div>
           <div className="bottomInfoOption">
             <div className="leftTxt">
               <span className="spn1">{t("入驻费用")}</span>
@@ -169,9 +168,9 @@ const ShopApplication: React.FC = () => {
         <div className="item">
           <div className="itemHeaderOption">
             <img src={shopIcon} className="iconImg" />
-            <div className="shopTxt">臻品区入驻</div>
+            <div className="shopTxt">{t("臻品区入驻")}</div>
           </div>
-          <div className="hintTxt">获得安品区、优品区、臻品区产品售卖资格</div>
+          <div className="hintTxt">{t("获得安品区、优品区、臻品区产品售卖资格")}</div>
           <div className="bottomInfoOption">
             <div className="leftTxt">
               <span className="spn1">{t("入驻费用")}</span>

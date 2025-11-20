@@ -28,8 +28,6 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
       methodsName: "balanceOf",
       params: [walletAddress],
     });
-    console.log("taxResult---", taxResult);
-
     if (taxResult.value) {
       setTaxBalance(taxResult.value);
     }
@@ -39,11 +37,11 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
   const submitClick = async () => {
     //判断是否输入了
     if (shopNameInput == "") {
-      return Totast("请输入店铺名称", "info");
+      return Totast(t("请输入店铺名称"), "info");
     }
     //判断输入值和大于余额
     if (BigNumber.from(data.taxPrice).gt(taxBalance)) {
-      return Totast("余额不足", "info");
+      return Totast(t("余额不足"), "info");
     }
     //开始授权 进行购买
     let applyAmount: BigNumber = BigNumber.from(0);
@@ -105,7 +103,6 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
         onClose();
       }
       setSubmitLoading(false);
-      
     } catch (e) {
       setSubmitLoading(false);
       console.error(e);
@@ -138,7 +135,10 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
           </div>
           <div className="payPriceBox">
             <div className="priceTxt">{fromWei(data?.taxPrice)}TAX</div>
-            <div className="priceHintTxt">即可入驻{data?.name}</div>
+            <div className="priceHintTxt">
+              {t("即可入驻")}
+              {data?.name}
+            </div>
           </div>
 
           <div className="input-box">
@@ -175,7 +175,7 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
           <Button
             className="btn-submit"
             loading={submitLoading}
-            loadingText="确认中"
+            loadingText={t("确认中")}
             onClick={() => submitClick()}
           >
             {t("确认申请")}

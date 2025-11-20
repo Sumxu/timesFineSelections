@@ -162,7 +162,7 @@ const GoodsBox: React.FC = () => {
         </div>
       )}
       <div className="loading-more-option" onClick={() => loadMoreAction()}>
-        {isMore ? t("查看更多商品") : "没有更多商品了"}
+        {isMore ? t("查看更多商品") : t("没有更多商品了")}
         {listLoding && (
           <div className="loding flex flexCenter">
             <Spin />

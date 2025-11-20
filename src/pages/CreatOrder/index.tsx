@@ -50,7 +50,7 @@ const CreatOrder: React.FC = () => {
   const payOptions = [
     { id: 1, icon: usdt, label: "USDT", balance: usdtBalance },
     { id: 2, icon: tusd, label: "TUSD", balance: userInfo.tusd },
-    { id: 3, icon: tusd, label: "USD", balance: userInfo.tusd },
+    { id: 3, icon: tusd, label: "USD", balance: userInfo.usd },
   ];
 
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ const CreatOrder: React.FC = () => {
   const submitOrder = () => {
     //判断地址是否选择了
     if (!addressInfo.id) {
-      return Totast("请选择地址", "info");
+      return Totast(t("请选择地址"), "info");
     }
     const paramData = [
       orderInfo.items[orderInfo.specIndex].id,
@@ -76,8 +76,9 @@ const CreatOrder: React.FC = () => {
     const totalPrice = orderInfo?.price * orderInfo?.specNum;
     //判断余额是否足够
     if (fromWei(price) < totalPrice) {
-      return Totast("余额不足", "info");
+      return Totast(t("余额不足"), "info");
     }
+    storage.set('payMethodName',payOptions[payMethod- 1].label)
     if (payMethod == 1) {
       usdtBuyFn(paramData, totalPrice);
     } else {
@@ -194,7 +195,6 @@ const CreatOrder: React.FC = () => {
       params: [walletAddress],
     });
     if (result.value) {
-      console.log("result.value--", result.value);
       setUserInfo(result.value);
     }
   };
@@ -305,8 +305,10 @@ const CreatOrder: React.FC = () => {
           <div className="hintTxt">{t("支付方式")}</div>
           {payOptions
             .filter((item) => {
-              if (payType === 4) return item.id === 1; // 只显示 USDT
-              return item.id !== 1; // payType 不是 4 时不显示 USDT
+              if (payType === 4) {
+                return item.id === 3; // 只能显示 USD
+              }
+              return item.id !== 3; // 其他情况不显示 USD
             })
             .map((item, index, arr) => (
               <div
@@ -336,21 +338,6 @@ const CreatOrder: React.FC = () => {
               </div>
             ))}
         </div>
-
-        <div className="box remarkBox">
-          <div className="label">{t("备注")}</div>
-          <div className="value">
-            <Input
-              placeholder={t("填写备注信息")}
-              clearable
-              style={{
-                "--font-size": "14px",
-                "--color": "#fff",
-                "--placeholder-color": "rgba(255,255,255,0.35)",
-              }}
-            ></Input>
-          </div>
-        </div>
       </div>
 
       <div className="endFixedBox">
@@ -364,7 +351,7 @@ const CreatOrder: React.FC = () => {
         </div>
         <Button
           loading={submitLoading}
-          loadingText="确认中"
+          loadingText={t("确认中")}
           className="rightOption"
           onClick={() => submitOrder()}
         >

@@ -10,7 +10,7 @@ const OrderHeaderSearch: React.FC = ({ inputChange }) => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState<string>("");
   const leftBackClick = () => {
-    navigate(-1);
+    navigate("/my");
   };
   useEffect(() => {
     inputChange(inputValue);

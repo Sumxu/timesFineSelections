@@ -19,19 +19,19 @@ interface listItem {
 const MerchantGoods: React.FC = () => {
   const tabArray = [
     {
-      label: "全部",
+      label: t("全部"),
       value: "0",
     },
     {
-      label: "安品区",
+      label: t("安品区"),
       value: "1",
     },
     {
-      label: "优品区",
+      label: t("优品区"),
       value: "2",
     },
     {
-      label: "臻品区",
+      label: t("臻品区"),
       value: "3",
     },
   ];
@@ -95,7 +95,7 @@ const MerchantGoods: React.FC = () => {
 
   return (
     <div className="MerchantGoods">
-      <div className="hintTxt">店铺商品</div>
+      <div className="hintTxt">{t('店铺商品')}</div>
       <div className="inputBox">
         <div className="searchIcon">
           <SearchOutline fontSize={14} color="rgba(255,255,255,0.35)" />

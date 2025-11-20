@@ -19,7 +19,7 @@ const My: React.FC = () => {
       params: [walletAddress],
     });
     if (result.value) {
-      console.log("result.value--", result.value);
+      console.log("result.value--", Number(result.value.releaseStartTime));
       setUserInfo(result.value);
     }
   };
@@ -43,7 +43,11 @@ const My: React.FC = () => {
     <div className="my-page">
       <Header data={userInfo}></Header>
       <div className="tools-my-box">
-        <Info data={userInfo} taxBalance={taxBalance}></Info>
+        <Info
+          data={userInfo}
+          taxBalance={taxBalance}
+          onUpData={getUserInfo}
+        ></Info>
         <Tools></Tools>
       </div>
     </div>

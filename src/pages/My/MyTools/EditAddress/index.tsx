@@ -205,6 +205,8 @@ const EditAddress: React.FC = () => {
     if (param.isDefault == "" || param.isDefault == null) {
       param.isDefault = false;
     }
+    setBtnLoading(true);
+
     const result = await NetworkRequest({
       Url: urlPath,
       Method: "post",

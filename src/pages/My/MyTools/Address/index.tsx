@@ -46,7 +46,7 @@ const Address: React.FC = () => {
   //删除地址
   const delClick = async (id, index) => {
     Dialog.confirm({
-      content: "确定要删除该地址吗？",
+      content:t("确定要删除该地址吗?"),
       onConfirm: async () => {
         try {
           const result = await NetworkRequest({
@@ -62,12 +62,12 @@ const Address: React.FC = () => {
               newList.splice(index, 1); // 删除对应下标
               return newList;
             });
-            Totast("删除成功", "success");
+            Totast(t("删除成功"), "success");
           } else {
-            Totast("删除失败", "info");
+            Totast(t("删除失败"), "info");
           }
         } catch (error) {
-          Totast("删除失败", "info");
+          Totast(t("删除失败"), "info");
           console.error(error);
         }
       },
