@@ -11,22 +11,27 @@ import { useState, useEffect } from "react";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { ethers } from "ethers";
 function App() {
- const { ready, invite } = useAuthGuard();
+  const { ready, invite } = useAuthGuard();
   const location = useLocation();
   const walletAddress = userAddress((s) => s.address);
   const showTab = ["/home", "/classify", "/my"].includes(location.pathname);
   const noLoginPage = !["/login"].includes(location.pathname);
   const [inviteShow, setInviteShow] = useState<boolean>(false);
   const { search } = useLocation();
-
+  const clearFn = () => {
+    storage.remove("token");
+    storage.remove("editAddressInfo");
+    storage.remove("payMethodName");
+    storage.remove("checkAddress");
+  };
   // 统一监听钱包事件
   useWalletListener({
     onAccountsChanged: () => {
-      storage.remove("token");
+      clearFn();
       window.location.href = "/login"; // 更保险，不会出现 React 状态问题
     },
     onDisconnected: () => {
-      storage.remove("token");
+      clearFn();
       window.location.href = "/login";
     },
     onChainChanged: () => {

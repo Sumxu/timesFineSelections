@@ -52,7 +52,7 @@ const GoodsDetail: React.FC = () => {
     storage.remove("checkAddress");
     //判断是否选择了规格
     if (specIndex == "") {
-      return Totast(t("请选择规格"), "info");
+      return setShowPopup(true);
     }
     let orderParam = JSON.parse(JSON.stringify(goodsInfo));
     orderParam.specIndex = specIndex;

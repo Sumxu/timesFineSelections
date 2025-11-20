@@ -163,8 +163,17 @@ const EditAddress: React.FC = () => {
       return false;
     }
     console.log("info--", info);
-    if (!info.province.trim() || !info.city.trim()) {
+    if (!info.province.trim()) {
       Totast("省市不能为空", "error");
+      return false;
+    }
+    if (!info.city) {
+      Totast("市区不能为空", "error");
+      return false;
+    }
+
+    if (!info.area) {
+      Totast("地区不能为空", "error");
       return false;
     }
 
@@ -177,11 +186,7 @@ const EditAddress: React.FC = () => {
 
   // 保存
   const saveClick = async () => {
-    console.log("addressInfo==", addressInfo);
-    console.log("addressInfo==", addressInfo);
-
     setBtnLoading(true);
-
     const items = getItemsByValue(CascaderOptions, addressCascader);
     const labels = items.map((i) => i.label);
 
@@ -206,7 +211,6 @@ const EditAddress: React.FC = () => {
       param.isDefault = false;
     }
     setBtnLoading(true);
-
     const result = await NetworkRequest({
       Url: urlPath,
       Method: "post",
