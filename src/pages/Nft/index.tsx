@@ -151,7 +151,6 @@ const Home: React.FC = () => {
       abi,
       params: [bn],
     }));
-    console.log("bn",bn)
     fetch("minerInfo", calls).then((result) => {
       setNftListLoading(false);
       if (result.success) {

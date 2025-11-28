@@ -18,15 +18,18 @@ interface RecordItem {
 interface RecordItem {
   id: number;
   name: string;
-  pic: string;      // 后端返回的 pic
-  picImg?: string;  // 我们本地添加的新字段
+  pic: string; // 后端返回的 pic
+  picImg?: string; // 我们本地添加的新字段
   // 你可以加更多字段...
 }
 const GoodsBox: React.FC = () => {
   const wallertAddress = userAddress().address;
- const [list, setList] = useState<RecordItem[]>([]);
-  const {getZoneInfo } = useZoneConfig();
-  // 列表是否加载
+  const [list, setList] = useState<RecordItem[]>([]);
+  const { getZoneInfo } = useZoneConfig();
+  //加载数据
+  const [goodsLoding, setGoodsLoding] = useState<boolean>(false);
+
+  // 列表是否加载更多
   const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
   const [isMore, setIsMore] = useState<boolean>(false);
@@ -85,7 +88,7 @@ const GoodsBox: React.FC = () => {
     navigate(`/goodsDetail?id=${item.id}`);
   };
   const getDataList = async () => {
-    setListLoding(true);
+    setGoodsLoding(true);
     const result = await NetworkRequest({
       Url: "product/list",
       Method: "post",
@@ -114,9 +117,9 @@ const GoodsBox: React.FC = () => {
         setIsMore(false);
       }
       console.log("isMore", isMore);
-      setListLoding(false);
+      setGoodsLoding(false);
     } else {
-      setListLoding(false);
+      setGoodsLoding(false);
     }
   };
 
@@ -127,13 +130,17 @@ const GoodsBox: React.FC = () => {
     <div className="goods-box">
       <div className="goods-name-option">
         <div className="goods-left-title">{t("精选推荐")}</div>
-        <div className="goods-right"  onClick={()=>navigate('/search')}>
+        <div className="goods-right" onClick={() => navigate("/search")}>
           <div className="right-txt">{t("更多商品")}</div>
           <img src={moreIcon} className="right-icon" />
         </div>
       </div>
 
-      {list.length == 0 ? (
+      {goodsLoding ? (
+        <div className="loading-box">
+          <Spin />
+        </div>
+      ) : list.length === 0 ? (
         <NoData />
       ) : (
         <div className="goods-item-box">
@@ -144,13 +151,15 @@ const GoodsBox: React.FC = () => {
                 className="goods-item"
                 key={index}
               >
-                <img className="goods-img" src={item.picImg}></img>
+                <img className="goods-img" src={item.picImg} />
                 <div className="goods-txt">{item.name}</div>
+
                 <div className="goods-bottom-option">
-                  <img src={usdtIcon} className="usdt-icon"></img>
+                  <img src={usdtIcon} className="usdt-icon" />
                   <div className="goods-price">{item.price}</div>
                 </div>
-                {getZoneInfo(item.classify).subsidy != 0 && (
+
+                {getZoneInfo(item.classify).subsidy !== 0 && (
                   <div className="goods-hint-txt">
                     {t("补贴")}
                     {getZoneInfo(item.classify).subsidy}%
@@ -161,14 +170,16 @@ const GoodsBox: React.FC = () => {
           })}
         </div>
       )}
-      <div className="loading-more-option" onClick={() => loadMoreAction()}>
-        {isMore ? t("查看更多商品") : t("没有更多商品了")}
-        {listLoding && (
-          <div className="loding flex flexCenter">
-            <Spin />
-          </div>
-        )}
-      </div>
+      {goodsLoding == false && (
+        <div className="loading-more-option" onClick={() => loadMoreAction()}>
+          {isMore ? t("查看更多商品") : t("没有更多商品了")}
+          {listLoding && (
+            <div className="loding flex flexCenter">
+              <Spin />
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

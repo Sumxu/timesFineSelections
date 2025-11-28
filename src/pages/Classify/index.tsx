@@ -34,14 +34,14 @@ const Classify: React.FC = () => {
   const getGoodsData = async () => {
     setList([]);
     setIsMore(false);
-
+    setListLoding(true)
     const result = await NetworkRequest({
       Url: "product/list",
       Method: "post",
       Data: {
         size: 10,
         current: 1,
-        classify: classifyId,
+        classify: classifyId == 0 ? "" : classifyId,
       },
     });
     if (result.success) {
@@ -64,6 +64,8 @@ const Classify: React.FC = () => {
         setIsMore(false);
       }
     }
+    setListLoding(false)
+
   };
   //加载更多
   const loadMoreAction = async () => {
@@ -74,7 +76,7 @@ const Classify: React.FC = () => {
       Data: {
         size: 10,
         current: nexPage,
-        classify: classifyId,
+        classify: classifyId == 0 ? "" : classifyId,
       },
     }).then((res) => {
       if (res.success) {
@@ -125,7 +127,9 @@ const Classify: React.FC = () => {
               isMore={isMore}
               listLoding={listLoding}
               contentLoadMore={() => loadMoreAction()}
-              contentTxt={getZoneInfo(Number(classifyId))?.name || t("全部商品")}
+              contentTxt={
+                getZoneInfo(Number(classifyId))?.name || t("全部商品")
+              }
             />
           </div>
         </div>

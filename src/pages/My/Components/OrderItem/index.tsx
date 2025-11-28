@@ -3,16 +3,17 @@ import React, { useEffect, useState } from "react";
 import usdt from "@/assets/home/USDT.png";
 import shopIcon from "@/assets/component/shopPng.png";
 import { t } from "i18next";
- 
+import { Calc } from "@/Hooks/calc";
+
 const statusMap: Record<number, { text: string; className: string }> = {
   1: { text: t("已购买"), className: "spn-status-none" },
   2: { text: t("已发货"), className: "spn-status-ing" },
   3: { text: t("已完成"), className: "spn-status-success" },
 };
 
-function OrderItem({onClickDetail,data}) {
+function OrderItem({ onClickDetail, data }) {
   const itemClick = () => {
-     onClickDetail(data.id);
+    onClickDetail(data.id);
   };
   return (
     <div className="order-item">
@@ -36,7 +37,7 @@ function OrderItem({onClickDetail,data}) {
           </div>
           <div className="info-price-option">
             <img src={usdt} className="icon"></img>
-            <div className="price-number">{data.price * data.count}</div>
+            <div className="price-number">{data.price}</div>
           </div>
           <div className="info-spc">
             {t("已选规格")}：{data.itemName}{" "}
@@ -45,13 +46,19 @@ function OrderItem({onClickDetail,data}) {
       </div>
       <div className="logistics-information">
         <span className="spn-label">{t("实付款")}:</span>
-        <span className="spn-value">{data.price * data.count} USDT</span>
+        <span className="spn-value">
+          {Calc.toFixed(Calc.mul(data.price, data.count), 4)}
+        </span>
       </div>
       <div className="tools-btn-option">
         <div className="btn" onClick={() => itemClick()}>
           {t("订单详情")}
         </div>
-        {data.status!=1&&<div className="btn">{t("查看物流")}</div>}
+        {data.status != 1 && (
+          <div className="btn" onClick={() => itemClick()}>
+            {t("查看物流")}
+          </div>
+        )}
       </div>
     </div>
   );

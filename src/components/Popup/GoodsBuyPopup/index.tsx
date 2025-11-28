@@ -7,7 +7,8 @@ import { t } from "i18next";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { BigNumber, ethers } from "ethers";
-import { fromWei } from "@/Hooks/Utils";
+import { fromWei, Totast } from "@/Hooks/Utils";
+import { Calc } from "@/Hooks/calc";
 interface Props {
   visible: boolean;
   goodsData: object;
@@ -26,9 +27,38 @@ const ConversionPopup: React.FC<Props> = ({
   const [goodsNum, setGoodsNum] = useState<string>("1");
   const walletAddress = userAddress((state) => state.address);
   const [usdtBalance, setUsdtBalance] = useState<BigNumber>(BigNumber.from(0)); //usdt余额
+  const [usdBalance, setUsdBalance] = useState<BigNumber>(BigNumber.from(0)); //usd余额
   const specChange = (index) => {
     setTabIndex(index);
     specIndex = index;
+  };
+  //确认判断是否可以下单
+  const onBtnSubmit = (tabIndex, goodsNum) => {
+    if (goodsNum == 0) {
+      return Totast(t("请选择购买数量"), "info");
+    }
+
+    const totalPrice = Calc.toFixed(
+      Calc.mul(goodsData?.items?.[tabIndex]?.price, goodsNum),
+      4
+    );
+
+    // 转成 BigNumber（根据 token 精度修改 18）
+    const totalPriceBN = fromWei(totalPrice);
+
+    if (goodsData.classify === 4) {
+      // 判断 USD 余额
+      if (usdBalance.lt(totalPriceBN)) {
+        return Totast(t("余额不足"), "info");
+      }
+      onSubmit(tabIndex, goodsNum);
+    } else {
+      // 判断 USDT 余额
+      if (usdtBalance.lt(totalPriceBN)) {
+        return Totast(t("余额不足"), "info");
+      }
+      onSubmit(tabIndex, goodsNum);
+    }
   };
   //获取tax余额
   const getUsdtBalance = async () => {
@@ -41,9 +71,25 @@ const ConversionPopup: React.FC<Props> = ({
       setUsdtBalance(result.value);
     }
   };
+  //获取usd余额
+  const getUsdBalance = async () => {
+    const result = await ContractRequest({
+      tokenName: "storeToken",
+      methodsName: "userInfo",
+      params: [walletAddress],
+    });
+    if (result.value) {
+      setUsdBalance(result.value.usd);
+    }
+  };
   useEffect(() => {
     if (visible == false) return;
-    getUsdtBalance();
+
+    if (goodsData?.classify == 4) {
+      getUsdBalance();
+    } else {
+      getUsdtBalance();
+    }
   }, [visible]);
   return (
     <>
@@ -74,7 +120,7 @@ const ConversionPopup: React.FC<Props> = ({
           </div>
           <div className="specBox">
             <div className="specItem">
-              <div className="specName">{t('选择规格')}</div>
+              <div className="specName">{t("选择规格")}</div>
               <div className="specList">
                 {goodsData?.items.map((specItem, index) => {
                   return (
@@ -118,17 +164,28 @@ const ConversionPopup: React.FC<Props> = ({
             </div>
           </div>
           <div className="hint-txt-box">
-            <div className="hint-txt-option">
-              {t("需支付")}:{goodsData?.items?.[tabIndex]?.price * goodsNum}{" "}
-              USDT
-            </div>
+            {goodsData?.classify && (
+              <div className="hint-txt-option">
+                {t("需支付")}:
+                {Calc.toFixed(
+                  Calc.mul(goodsData?.items?.[tabIndex]?.price, goodsNum),
+                  4
+                )}
+                {goodsData?.classify == 4 ? "USD" : "USDT"}
+              </div>
+            )}
+
             <div className="hint-txt-option right-option">
-              {t("余额")}： {fromWei(usdtBalance)} USDT
+              {t("余额")}：{" "}
+              {goodsData?.classify == 4
+                ? fromWei(usdBalance)
+                : fromWei(usdtBalance)}
+              {goodsData?.classify == 4 ? "USD" : "USDT"}
             </div>
           </div>
           <div
             className="btn-submit"
-            onClick={() => onSubmit(tabIndex, goodsNum)}
+            onClick={() => onBtnSubmit(tabIndex, goodsNum)}
           >
             {t("确认")}
           </div>

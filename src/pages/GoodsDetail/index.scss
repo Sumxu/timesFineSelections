@@ -7,7 +7,9 @@
   }
   .goodsDetailContent {
     overflow-y: scroll;
-    height: calc(100vh - 70px);
+    padding-bottom: 40px;
+    color: #fff;
+    max-height: calc(100vh - 70px);
   }
   .goodsInfoBox {
     background: #272727;
@@ -154,6 +156,7 @@
       }
     }
     .richTextContent{
+      height: auto;
       img{
         width: 375px;
         height: auto;

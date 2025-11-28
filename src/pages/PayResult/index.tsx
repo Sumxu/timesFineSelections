@@ -6,6 +6,8 @@ import usdt from "@/assets/home/USDT.png";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import { t } from "i18next";
 import { storage } from "@/Hooks/useLocalStorage";
+import { Calc } from "@/Hooks/calc";
+
 const PayResult: React.FC = () => {
   const navigate = useNavigate();
   const goPath = (path) => {
@@ -31,7 +33,11 @@ const PayResult: React.FC = () => {
         <div className="payTxt">{t("支付成功")}</div>
         <div className="payPrice">
           <img src={usdt} className="icon"></img>
-          <span className="spn1">{orderParam.price * orderParam.specNum}</span>
+          {orderParam.price && (
+            <span className="spn1">
+              {Calc.toFixed(Calc.mul(orderParam.price, orderParam.specNum), 4)}
+            </span>
+          )}
         </div>
         <div className="payInfoBox">
           <div className="payInfoItem">
@@ -40,10 +46,17 @@ const PayResult: React.FC = () => {
           </div>
           <div className="payInfoItem">
             <span className="spn1">{t("补贴积分")}：</span>
-            <span className="spn1 color1">
-              {(orderParam?.items?.[orderParam?.specIndex ?? 0]?.integral ??
-                0) * (orderParam?.specNum ?? 1)}
-            </span>
+            {orderParam.price && (
+              <span className="spn1 color1">
+                {Calc.toFixed(
+                  Calc.mul(
+                    orderParam?.items?.[orderParam.specIndex]?.integral,
+                    orderParam?.specNum
+                  ),
+                  4
+                )}
+              </span>
+            )}
           </div>
           <div className="payInfoItem">
             <span className="spn1">{t("支付方式")}：</span>

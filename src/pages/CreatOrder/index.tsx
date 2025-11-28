@@ -12,13 +12,14 @@ import { RightOutline } from "antd-mobile-icons";
 import { t } from "i18next";
 import { storage } from "@/Hooks/useLocalStorage";
 import shopPng from "@/assets/component/shopPng.png";
-import { fromWei, Totast } from "@/Hooks/Utils";
+import { fromWei, Totast, toWei } from "@/Hooks/Utils";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { BigNumber, ethers } from "ethers";
 import ContractSend from "@/Hooks/ContractSend.ts";
 import ContractList from "@/Contract/Contract.ts";
+import { Calc } from "@/Hooks/calc";
 interface OrderInfo {
   id: string;
   amount: number;
@@ -52,7 +53,6 @@ const CreatOrder: React.FC = () => {
     { id: 2, icon: tusd, label: "TUSD", balance: userInfo.tusd },
     { id: 3, icon: tusd, label: "USD", balance: userInfo.usd },
   ];
-
   const navigate = useNavigate();
   //切换购买方式
   const payMethodClick = (index) => {
@@ -72,13 +72,19 @@ const CreatOrder: React.FC = () => {
       addressInfo.id,
       payMethod == 1 ? true : false,
     ];
+
     const price: BigNumber = payOptions[payMethod - 1].balance;
-    const totalPrice = orderInfo?.price * orderInfo?.specNum;
-    //判断余额是否足够
-    if (fromWei(price) < totalPrice) {
+
+    const totalPrice = Calc.toFixed(
+      Calc.mul(orderInfo?.price, orderInfo?.specNum),
+      4
+    );
+    const balance = price; // price本身就是BigNumber
+    const totalPriceBN = toWei(totalPrice); // 根据你的token精度自行调整
+    if (balance.lt(totalPriceBN)) {
       return Totast(t("余额不足"), "info");
     }
-    storage.set('payMethodName',payOptions[payMethod- 1].label)
+    storage.set("payMethodName", payOptions[payMethod - 1].label);
     if (payMethod == 1) {
       usdtBuyFn(paramData, totalPrice);
     } else {
@@ -167,6 +173,12 @@ const CreatOrder: React.FC = () => {
       setSubmitLoading(false);
     }
   };
+  const getPayName = (payMethod) => {
+    const filterArray = payOptions.filter((item) => item.id == payMethod);
+    if (filterArray.length == 0) return "";
+    return filterArray[0].label;
+  };
+
   const paySuccessFn = () => {
     navigate("/payResult");
   };
@@ -217,6 +229,11 @@ const CreatOrder: React.FC = () => {
     if (orderParam) {
       setOrderInfo(orderParam);
       setPayType(orderParam.classify);
+      if (orderParam.classify == 4) {
+        setPayMethods(3);
+      } else {
+        setPayMethods(1);
+      }
     }
   }, []);
   return (
@@ -343,11 +360,18 @@ const CreatOrder: React.FC = () => {
       <div className="endFixedBox">
         <div className="leftOption">
           <span className="spn1">{t("需支付")}：</span>
-          <span className="spn2">
-            {orderInfo?.items?.[orderInfo.specIndex]?.integral *
-              orderInfo?.specNum}{" "}
-            USDT
-          </span>
+          {orderInfo?.specNum && (
+            <span className="spn2">
+              {Calc.toFixed(
+                Calc.mul(
+                  orderInfo?.items?.[orderInfo.specIndex]?.price,
+                  orderInfo?.specNum
+                ),
+                4
+              )}
+              {getPayName(payMethod)}
+            </span>
+          )}
         </div>
         <Button
           loading={submitLoading}

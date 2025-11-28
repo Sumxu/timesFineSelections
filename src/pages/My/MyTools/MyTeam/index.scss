@@ -44,6 +44,19 @@
     }
     .usdtInfo {
       padding: 17px 12px;
+      .usdtTop{
+        display: flex;
+        align-items: center;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        .usdtTopItem{
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+      }
       .usdtTxt {
         text-align: center;
         font-weight: 500;
@@ -56,8 +69,6 @@
         color: #fd880a;
         margin-top: 8px;
         text-align: center;
-        padding-bottom: 15px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
       }
       .usdtEndOption {
         display: flex;

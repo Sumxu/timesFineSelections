@@ -45,7 +45,7 @@ const Header: React.FC = ({ data }) => {
       <div className="deafult-user-box">
         <div className="user-img-box">
           <img className="userImg-icon" src={deafultUserImg} />
-          <div className="user-type-option">{data?.merchantName}</div>
+          {data?.merchantName&&<div className="user-type-option">{data?.merchantName}</div>}
         </div>
         <div className="user-name-option">
           <div className="user-name">{formatAddress(wallertAddress)}</div>

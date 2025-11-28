@@ -89,14 +89,18 @@ const ShopApplication: React.FC = () => {
     setApplyStoreShow(false);
     getUserInfo();
     getShopPrice();
-
   };
   const openApplyStoreShow = () => {
     setApplyStoreShow(true);
   };
   const handleEnter = (needLevel: number) => {
-    const userLevel = (userInfo?.merchantLevel).toNumber();
-    const priceMap = prices(shopPriceOne, shopPriceTwo, shopPriceThree);
+    const priceMap = {
+      1: { name: t("安品区"), price: shopPriceOne }, // BigNumber
+      2: { name: t("优品区"), price: shopPriceTwo },
+      3: { name: t("臻品区"), price: shopPriceThree },
+    };
+
+    const userLevel = Number(userInfo?.merchantLevel) ?? 0;
 
     // 已开通等级或更高级别，直接跳转
     if (userLevel >= needLevel) {
@@ -105,15 +109,11 @@ const ShopApplication: React.FC = () => {
 
     let needPay = BigNumber.from(0);
 
-    // 只有开通臻品区（3）时才需要计算差价
-    if (needLevel === 3) {
-      const alreadyPrice = priceMap[userLevel]?.price ?? BigNumber.from(0);
-      const targetPrice = priceMap[3].price;
-      needPay = targetPrice.sub(alreadyPrice);
-    } else {
-      // 开通1或2，支付对应原价即可
-      needPay = priceMap[needLevel].price;
-    }
+    //计算支付差价： 目标价 - 已有等级对应的最低价
+    const alreadyPrice = priceMap[userLevel]?.price ?? BigNumber.from(0);
+    const targetPrice = priceMap[needLevel].price;
+
+    needPay = targetPrice.sub(alreadyPrice);
     console.log("本次需要支付 TAX:", needPay.toString());
     console.log("目标区域名称:", priceMap[needLevel].name);
     setBuyInfo({
@@ -122,12 +122,12 @@ const ShopApplication: React.FC = () => {
       needLevel,
       merchantName: userInfo.merchantName,
     });
+
     openApplyStoreShow();
   };
   useEffect(() => {
     getUserInfo();
     getShopPrice();
-
   }, []);
   return (
     <div className="shopApplicationPage">
@@ -170,7 +170,9 @@ const ShopApplication: React.FC = () => {
             <img src={shopIcon} className="iconImg" />
             <div className="shopTxt">{t("臻品区入驻")}</div>
           </div>
-          <div className="hintTxt">{t("获得安品区、优品区、臻品区产品售卖资格")}</div>
+          <div className="hintTxt">
+            {t("获得安品区、优品区、臻品区产品售卖资格")}
+          </div>
           <div className="bottomInfoOption">
             <div className="leftTxt">
               <span className="spn1">{t("入驻费用")}</span>

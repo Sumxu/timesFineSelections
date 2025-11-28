@@ -7,6 +7,7 @@ import { t } from "i18next";
 import { InfiniteScroll } from "antd-mobile";
 import { userAddress } from "@/Store/Store.ts";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
+import { Spin } from "antd";
 import {
   Totast,
   copyToClipboard,
@@ -39,9 +40,11 @@ const MyTeam: React.FC = () => {
   const [isMore, setIsMore] = useState<boolean>(false);
 
   const [current, setCurrent] = useState<number>(1);
+  //数据加载中
+  const [listLoading, setListLoading] = useState<boolean>(false);
 
   function getLevel(level: number) {
-    return levelMap.filter((item) => level >= item).pop() || null;
+    return levelMap.filter((item) => level == item.level).pop() || null;
   }
 
   const loadMoreAction = async () => {
@@ -83,6 +86,8 @@ const MyTeam: React.FC = () => {
   };
 
   const getTeamList = async () => {
+    setList([]);
+    setListLoading(true);
     const result = await NetworkRequest({
       Url: "team/invitations",
       Method: "post",
@@ -99,6 +104,7 @@ const MyTeam: React.FC = () => {
         setIsMore(false);
       }
     }
+    setListLoading(false);
   };
   useEffect(() => {
     getDataPage();
@@ -121,8 +127,18 @@ const MyTeam: React.FC = () => {
           </div>
         </div>
         <div className="box usdtInfo">
-          <div className="usdtTxt">{t("小区业绩")}</div>
-          <div className="usdtNumber">{teamInfo.communityPerf} USDT</div>
+          <div className="usdtTop">
+            <div className="usdtTopItem">
+              <div className="usdtTxt">{t("团队总业绩")}</div>
+              <div className="usdtNumber">{teamInfo.teamPerf || 0} USDT</div>
+            </div>
+            <div className="usdtTopItem">
+              <div className="usdtTxt">{t("小区业绩")}</div>
+              <div className="usdtNumber">
+                {teamInfo.communityPerf || 0} USDT
+              </div>
+            </div>
+          </div>
           <div className="usdtEndOption">
             {teamInfo.level == 0 ? (
               t("暂无团队")
@@ -145,7 +161,7 @@ const MyTeam: React.FC = () => {
             )}
           </div>
         </div>
-        
+
         {teamInfo.myPerf != 0 && (
           <div className="box inviteBox">
             <div className="inviteEnd">
@@ -168,7 +184,11 @@ const MyTeam: React.FC = () => {
             <div className="itemTxt">{t("时间")}</div>
             <div className="itemTxt itemTxtRight">{t("贡献业绩")}(USDT)</div>
           </div>
-          {list.length == 0 ? (
+          {listLoading ? (
+            <div className="myTeamSpinBox">
+              <Spin />
+            </div>
+          ) : list.length == 0 ? (
             <NoData />
           ) : (
             <div className="record-body">
@@ -177,9 +197,7 @@ const MyTeam: React.FC = () => {
                   <div className="teamListBox" key={index}>
                     <div className="teamItem">
                       <div className="itemTxt">{SubAddress(item.address)}</div>
-                      <div className="itemTxt">
-                        {item.createTime}
-                      </div>
+                      <div className="itemTxt">{item.createTime}</div>
                       <div className="itemTxt txtUsdt itemTxtRight">
                         {item.myPerf}
                       </div>

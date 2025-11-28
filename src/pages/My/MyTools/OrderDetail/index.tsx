@@ -7,6 +7,7 @@ import address from "@/assets/component/address.png";
 import usdt from "@/assets/home/USDT.png";
 import { RightOutline } from "antd-mobile-icons";
 import car from "@/assets/component/wuliuIcon.png";
+import { Calc } from "@/Hooks/calc";
 
 import { t } from "i18next";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
@@ -39,6 +40,11 @@ export interface OrderDetail {
   createTime: string;
 }
 const Order: React.FC = () => {
+  const payOptions = [
+    { id: 1, label: "USDT" },
+    { id: 2, label: "TUSD" },
+    { id: 3, label: "USD" },
+  ];
   const [orderInfo, setOrderInfo] = useState<OrderDetail>({});
   const location = useLocation();
   const query = new URLSearchParams(location.search);
@@ -54,6 +60,11 @@ const Order: React.FC = () => {
     if (result.success) {
       setOrderInfo(result.data.data);
     }
+  };
+  const getPayName = (payMethod) => {
+    const filterArray = payOptions.filter((item) => item.id == payMethod);
+    if (filterArray.length == 0) return "";
+    return filterArray[0].label;
   };
   const copyClick = (txt, val) => {
     copyToClipboard(val, txt);
@@ -130,13 +141,16 @@ const Order: React.FC = () => {
               <RightOutline color="#888888" fontSize={14} />
             </div>
           </div>
-          <div className="goodsItemLineOption">
-            <div className="leftOption">{t("商品金额")}：</div>
-            <div className="rightOption">
-              <div className="rightTxt">{orderInfo.price}</div>
+          {orderInfo.price && (
+            <div className="goodsItemLineOption">
+              <div className="leftOption">{t("支付金额")}：</div>
+              <div className="rightOption">
+                <div className="rightTxt">
+                  {Calc.toFixed(Calc.mul(orderInfo.price, orderInfo.count), 4)}
+                </div>
+              </div>
             </div>
-          </div>
-
+          )}
           <div className="goodsItemLineOption">
             <div className="leftOption">{t("补贴积分")}：</div>
             <div className="rightOption">
@@ -161,7 +175,7 @@ const Order: React.FC = () => {
           <div className="item-option">
             <div className="left-item-option">{t("支付方式")}：</div>
             <div className="right-item-option">
-              <span className="spn-1">USDT</span>
+              <span className="spn-1">{getPayName(orderInfo.payType)}</span>
             </div>
           </div>
 

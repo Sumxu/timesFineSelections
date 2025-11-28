@@ -67,24 +67,40 @@ const ContentItem = ({ data }) => {
     </div>
   );
 };
-const ClassifyContent: React.FC<Props> = ({ contentList, contentTxt,isMore ,contentLoadMore}) => {
+const ClassifyContent: React.FC<Props> = ({
+  contentList,
+  contentTxt,
+  isMore,
+  contentLoadMore,
+  listLoding,
+}) => {
   const loadMoreAction = () => {
-    contentLoadMore()
+    contentLoadMore();
   };
   return (
     <div className="classify-option">
       <div className="classify-title">{t(contentTxt)}</div>
       <div className="classify-content-scroll">
-        {contentList.length == 0 ? (
-          <NoData />
-        ) : (
-         contentList.map((item, index) => {
-            return <ContentItem data={item} key={index} />;
-          })
+        {/* 加载中 */}
+        {listLoding && (
+          <div className="spinBoxClasify">
+            <Spin />
+          </div>
         )}
-        <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore}>
 
-        </InfiniteScroll>
+        {/* 无数据 */}
+        {!listLoding && contentList.length === 0 && <NoData />}
+
+        {/* 内容列表 + 无限加载 */}
+        {!listLoding && contentList.length > 0 && (
+          <>
+            {contentList.map((item, index) => (
+              <ContentItem data={item} key={index} />
+            ))}
+
+            <InfiniteScroll loadMore={loadMoreAction} hasMore={isMore} />
+          </>
+        )}
       </div>
     </div>
   );

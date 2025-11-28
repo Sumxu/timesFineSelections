@@ -5,6 +5,7 @@ import { t } from "i18next";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { InfiniteScroll } from "antd-mobile";
 import NoData from "@/components/NoData";
+import { Spin } from "antd";
 const AssetDetails: React.FC = () => {
   const tabArray = [
     {
@@ -25,6 +26,7 @@ const AssetDetails: React.FC = () => {
     },
   ];
   const [list, setList] = useState([]);
+  const [listLoading, setListLoading] = useState<boolean>(false);
   // 是否还有更多数据可以加载
   const [isMore, setIsMore] = useState<boolean>(false);
   const [current, setCurrent] = useState<number>(1);
@@ -55,6 +57,7 @@ const AssetDetails: React.FC = () => {
   //加载数据
   const getDataPage = async () => {
     setList([]);
+    setListLoading(true)
     const result = await NetworkRequest({
       Url: "account/record",
       Method: "post",
@@ -72,6 +75,8 @@ const AssetDetails: React.FC = () => {
         setIsMore(false);
       }
     }
+    setListLoading(false)
+
   };
   function getBizTypeName(bizType: number) {
     const map: Record<number, string> = {
@@ -92,8 +97,10 @@ const AssetDetails: React.FC = () => {
   const tabChange = (value) => {
     setTabIndex(value);
     setCurrent(1);
-    getDataPage();
   };
+  useEffect(() => {
+    getDataPage();
+  }, [tabIndex]);
   useEffect(() => {
     getDataPage();
   }, []);
@@ -123,7 +130,11 @@ const AssetDetails: React.FC = () => {
             <div className="header-item">{t("数量")}</div>
           </div>
           <div className="list-box">
-            {list.length == 0 ? (
+            {listLoading ? (
+              <div className="assetDetailSpinBox">
+                <Spin />
+              </div>
+            ) : list.length == 0 ? (
               <NoData />
             ) : (
               <div className="record-body">
@@ -134,7 +145,9 @@ const AssetDetails: React.FC = () => {
                       <div className="item-option item-center">
                         <div>{getBizTypeName(item.bizType)}</div>
                       </div>
-                      <div className="item-option">{(item.amount).toFixed(4)}</div>
+                      <div className="item-option">
+                        {item.amount.toFixed(4)}
+                      </div>
                     </div>
                   );
                 })}

@@ -1,55 +1,77 @@
-.AppBox{
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+.AppBox {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
-.spinBox{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    height: 100vh;
+.spinBox {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
 }
-.flex{
-    display: flex;
+ 
+.assetDetailSpinBox {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 40vh;
 }
-.loading{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
-    box-sizing: border-box;
+.myTeamSpinBox {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 5vh;
 }
-.loding{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
+.spinBoxClasify {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30vh;
 }
-.column{
-    flex-direction: column;
+.flex {
+  display: flex;
+}
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+.loding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+}
+.column {
+  flex-direction: column;
 }
 
 .flexBetween {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
-.flexCenter{
-    justify-content: center;
+.flexCenter {
+  justify-content: center;
 }
 
-.flexStart{
-    justify-content: flex-start;
+.flexStart {
+  justify-content: flex-start;
 }
 
-.flexEnd{
-    justify-content: flex-end;
+.flexEnd {
+  justify-content: flex-end;
 }
 
-.flexWrap{
-    flex-wrap: wrap;
+.flexWrap {
+  flex-wrap: wrap;
 }
 
 .app {
@@ -65,13 +87,12 @@
 
 .body {
   flex: 1;
-  
 }
 
 .bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 999;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }
