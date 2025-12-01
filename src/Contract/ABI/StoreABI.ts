@@ -150,6 +150,31 @@ const abi = [
     inputs: [
       {
         indexed: false,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amountType",
+        type: "uint256",
+      },
+    ],
+    name: "GiveAmount",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
         internalType: "uint64",
         name: "version",
         type: "uint64",
@@ -190,18 +215,6 @@ const abi = [
         indexed: false,
         internalType: "uint256",
         name: "integral",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "usd",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "tusd",
         type: "uint256",
       },
     ],
@@ -350,6 +363,56 @@ const abi = [
       },
     ],
     name: "Settled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "integral",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "rewardType",
+        type: "uint256",
+      },
+    ],
+    name: "TeamReward",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "bool",
+        name: "status",
+        type: "bool",
+      },
+    ],
+    name: "UpdateLock",
     type: "event",
   },
   {
@@ -566,8 +629,13 @@ const abi = [
         name: "amount",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "_type",
+        type: "uint256",
+      },
     ],
-    name: "giveIntegral",
+    name: "giveAmount",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -674,6 +742,24 @@ const abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "users",
+        type: "address[]",
+      },
+      {
+        internalType: "bool",
+        name: "lock",
+        type: "bool",
+      },
+    ],
+    name: "multiSetLock",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -1028,6 +1114,11 @@ const abi = [
         internalType: "uint256",
         name: "releaseRatio",
         type: "uint256",
+      },
+      {
+        internalType: "bool",
+        name: "lock",
+        type: "bool",
       },
     ],
     stateMutability: "view",

@@ -57,7 +57,7 @@ const AssetDetails: React.FC = () => {
   //加载数据
   const getDataPage = async () => {
     setList([]);
-    setListLoading(true)
+    setListLoading(true);
     const result = await NetworkRequest({
       Url: "account/record",
       Method: "post",
@@ -75,8 +75,7 @@ const AssetDetails: React.FC = () => {
         setIsMore(false);
       }
     }
-    setListLoading(false)
-
+    setListLoading(false);
   };
   function getBizTypeName(bizType: number) {
     const map: Record<number, string> = {
@@ -91,6 +90,7 @@ const AssetDetails: React.FC = () => {
       9: t("平级加速"),
       10: t("直推"),
       11: t("间推"),
+      12: t("派送"),
     };
     return map[bizType] ?? t("未知类型");
   }
