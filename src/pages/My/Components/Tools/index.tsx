@@ -55,7 +55,7 @@ const Tools: React.FC = () => {
       name: t("语言设置"),
       icon: tools7,
       type: "2",
-      typeTxt:getLangObj().label,
+      typeTxt:getLangObj().label??'简体中文',
       path: "/langPage",
     },
   ];

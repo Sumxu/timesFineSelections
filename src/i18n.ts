@@ -1,13 +1,13 @@
 // src/i18n.ts
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import en from "./Lang/en.json";
 import zh from "./Lang/zh.json";
+import en from "./Lang/en.json";
 import zhHant from "./Lang/zhHant.json";
 i18n.use(initReactI18next).init({
   resources: {
-    en: { translation: en },
     zh: { translation: zh },
+    en: { translation: en },
     zhHant: { translation: zhHant },
   },
   lng: window.localStorage.getItem("lang") ?? "zh", // 设置默认语言

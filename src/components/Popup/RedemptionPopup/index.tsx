@@ -9,7 +9,7 @@ import ContractList from "@/Contract/Contract.ts";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { t } from "i18next";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, utils } from "ethers";
 import { fromWei, Totast, toWei } from "@/Hooks/Utils";
 const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
   const walletAddress = userAddress((state) => state.address);
@@ -46,8 +46,20 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
   };
   //提交质押
   const submitClick = async () => {
-    //判断输入值和大于余额
-    if (BigNumber.from(inputNumber).gt(taxBalance)) {
+    if (inputNumber == "") {
+      return Totast(t("请输入"), "info");
+    }
+    if (!/^\d+(\.\d+)?$/.test(inputNumber))
+      return Totast(t("输入格式不正确"), "info");
+    const decimals = 18; // 根据 token 实际 decimals
+    let amount: BigNumber;
+    try {
+      amount = utils.parseUnits(inputNumber, decimals); // 返回 ethers.BigNumber
+    } catch (err) {
+      return Totast(t("输入超出精度范围"), "info");
+    }
+
+    if (amount.gt(taxBalance)) {
       return Totast(t("余额不足"), "info");
     }
     //开始授权 进行购买
@@ -57,7 +69,6 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
     setSubmitLoading(true);
     try {
       setSubmitLoading(true);
-
       // 1. 获取 allowance（返回 BigNumber）
       const res = await ContractRequest({
         tokenName: "TaxToken",
@@ -66,10 +77,9 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
       });
 
       const applyAmount = BigNumber.from(res?.value || "0");
-      const inputBN = BigNumber.from(inputNumber || "0");
       let isApply = false;
       // 2. 判断授权是否足够
-      if (applyAmount.lt(inputBN)) {
+      if (applyAmount.lt(amount)) {
         // 需要授权
         const approveRes = await ContractSend({
           tokenName: "TaxToken",
@@ -84,7 +94,6 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
           isApply = true;
         } else {
           setSubmitLoading(false);
-          Totast(t("授权失败,请检查网络连接"), "error");
           return;
         }
       } else {
@@ -94,21 +103,19 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
       // 3. 最终检查
       if (!isApply) {
         setSubmitLoading(false);
-        Totast(
-          t("检查授权或者授权时发生了错误，请检查网络后重新尝试"),
-          "error"
-        );
         return;
       }
       //交易
       const submitResult = await ContractSend({
         tokenName: "TaxPool",
         methodsName: "deposit",
-        params: [toWei(inputNumber)],
+        params: [amount],
       });
-      if(submitResult.value){
-          setSubmitLoading(false)
-          onClose()
+      setSubmitLoading(false);
+
+      if (submitResult.value) {
+        setSubmitLoading(false);
+        onClose();
       }
     } catch (e) {
       setSubmitLoading(false);
@@ -174,7 +181,7 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
           <Button
             className="btn-redemption-submit"
             loading={submitLoading}
-            loadingText={t('确认中')}
+            loadingText={t("确认中")}
             onClick={() => submitClick()}
           >
             {t("确认质押")}
@@ -185,5 +192,3 @@ const RedemptionPopup: React.FC = ({ isShow, onClose }) => {
   );
 };
 export default RedemptionPopup;
- 
-

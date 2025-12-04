@@ -125,7 +125,6 @@ const CreatOrder: React.FC = () => {
           isApply = true;
         } else {
           setSubmitLoading(false);
-          Totast(t("授权失败,请检查网络连接"), "error");
           return;
         }
       } else {
@@ -277,10 +276,9 @@ const CreatOrder: React.FC = () => {
                 <div className="txt">{orderInfo?.name}</div>
                 <div className="count">x{orderInfo?.specNum}</div>
               </div>
-
               <div className="price">
                 <img src={usdt} className="icon"></img>
-                <div className="txt">{orderInfo?.price}</div>
+                <div className="txt">{orderInfo?.items?.[orderInfo.specIndex]?.price}</div>
               </div>
               <div className="hintTxt">
                 {t("已选规格")}：{orderInfo?.items?.[orderInfo.specIndex]?.name}
@@ -297,7 +295,7 @@ const CreatOrder: React.FC = () => {
             </div>
 
             <div className="goodsItem">
-              <div className="leftOption">{t("商品金额")}：</div>
+              <div className="leftOption">{t("商品总金额")}：</div>
               <div className="rightOption">
                 <div className="txt">
                   {orderInfo?.items?.[orderInfo.specIndex]?.price *

@@ -19,6 +19,7 @@ const My: React.FC = () => {
       params: [walletAddress],
     });
     if (result.value) {
+      console.log("userinfo----",result.value)
       setUserInfo(result.value);
     }
   };

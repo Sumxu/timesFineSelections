@@ -7,7 +7,7 @@ import { t } from "i18next";
 import ContractRequest from "@/Hooks/ContractRequest.ts";
 import { userAddress } from "@/Store/Store.ts";
 import { BigNumber, ethers } from "ethers";
-import { fromWei, Totast } from "@/Hooks/Utils";
+import { fromWei, Totast, toWei } from "@/Hooks/Utils";
 import { Calc } from "@/Hooks/calc";
 interface Props {
   visible: boolean;
@@ -42,10 +42,10 @@ const ConversionPopup: React.FC<Props> = ({
       Calc.mul(goodsData?.items?.[tabIndex]?.price, goodsNum),
       4
     );
+    console.log("totalPrice===", totalPrice);
 
     // 转成 BigNumber（根据 token 精度修改 18）
-    const totalPriceBN = fromWei(totalPrice);
-
+    const totalPriceBN = toWei(totalPrice);
     if (goodsData.classify === 4) {
       // 判断 USD 余额
       if (usdBalance.lt(totalPriceBN)) {
@@ -111,7 +111,9 @@ const ConversionPopup: React.FC<Props> = ({
               </div>
               <div className="priceOption">
                 <img src={usdt} className="usdtIcon"></img>
-                <div className="price">{goodsData?.price}</div>
+                <div className="price">
+                  {goodsData?.items?.[tabIndex].price}
+                </div>
               </div>
               <div className="spceName">
                 {t("已选规格")}： {goodsData?.items?.[tabIndex]?.name}
@@ -159,9 +161,14 @@ const ConversionPopup: React.FC<Props> = ({
           </div>
           <div className="tag-box">
             <div className="txt-option">{t("可获得补贴积分")}</div>
-            <div className="txt-price-option">
-              {goodsData?.items?.[tabIndex]?.integral}
-            </div>
+            {goodsData?.classify && (
+              <div className="txt-price-option">
+                {Calc.toFixed(
+                  Calc.mul(goodsData?.items?.[tabIndex]?.integral, goodsNum),
+                  4
+                )}
+              </div>
+            )}
           </div>
           <div className="hint-txt-box">
             {goodsData?.classify && (

@@ -114,8 +114,6 @@ const ShopApplication: React.FC = () => {
     const targetPrice = priceMap[needLevel].price;
 
     needPay = targetPrice.sub(alreadyPrice);
-    console.log("本次需要支付 TAX:", needPay.toString());
-    console.log("目标区域名称:", priceMap[needLevel].name);
     setBuyInfo({
       taxPrice: needPay,
       name: priceMap[needLevel].name,

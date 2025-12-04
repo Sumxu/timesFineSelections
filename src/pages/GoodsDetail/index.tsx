@@ -104,7 +104,7 @@ const GoodsDetail: React.FC = () => {
         <LeftBackHeader title={t("商品详情")}></LeftBackHeader>
       </div>
       {goodsLoding ? (
-        <div className="spinBoxGoodsDetail">
+        <div className="assetDetailSpinBox">
           <Spin />
         </div>
       ) : (

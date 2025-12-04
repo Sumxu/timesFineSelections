@@ -88,7 +88,7 @@ const Login: React.FC = () => {
   };
   // 获取当前语言
   const getCurrLang = () => {
-    const localLang: string = window.localStorage.getItem("lang") ?? "en";
+    const localLang: string = window.localStorage.getItem("lang") ?? "zh";
     i18n.changeLanguage(localLang);
     if (localLang == "zh") {
       setValue("1");

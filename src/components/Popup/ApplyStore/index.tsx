@@ -35,12 +35,14 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
 
   //申请开通店铺
   const submitClick = async () => {
+    console.log("needPay==",data.taxPrice)
+  
     //判断是否输入了
     if (shopNameInput == "") {
       return Totast(t("请输入店铺名称"), "info");
     }
     //判断输入值和大于余额
-    if (BigNumber.from(data.taxPrice).gt(taxBalance)) {
+    if (data.taxPrice.gt(taxBalance)) {
       return Totast(t("余额不足"), "info");
     }
     //开始授权 进行购买
@@ -49,16 +51,13 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
     //授权
     try {
       setSubmitLoading(true);
-
       // 1. 获取 allowance（返回 BigNumber）
       const res = await ContractRequest({
         tokenName: "TaxToken",
         methodsName: "allowance",
         params: [walletAddress, ContractList["storeToken"].address],
       });
-
       const applyAmount = BigNumber.from(res?.value || "0");
-
       let isApply = false;
       // 2. 判断授权是否足够
       if (applyAmount.lt(data.taxPrice)) {
@@ -76,7 +75,6 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
           isApply = true;
         } else {
           setSubmitLoading(false);
-          Totast(t("授权失败,请检查网络连接"), "error");
           return;
         }
       } else {
@@ -86,10 +84,6 @@ const ConversionPopup: React.FC = ({ isShow, onClose, data }) => {
       // 3. 最终检查
       if (!isApply) {
         setSubmitLoading(false);
-        Totast(
-          t("检查授权或者授权时发生了错误，请检查网络后重新尝试"),
-          "error"
-        );
         return;
       }
       //交易

@@ -30,7 +30,6 @@ const Info: React.FC = ({ data, taxBalance, onUpData }) => {
   };
   //释放
   const releaseFn = async () => {
-    console.log("");
     if (rewarInfo.claimIntegral.isZero()) {
       return Totast(t("没有可释放值"), "info");
     }
@@ -53,10 +52,10 @@ const Info: React.FC = ({ data, taxBalance, onUpData }) => {
       methodsName: "reward",
       params: [walletAddress],
     });
+    console.log("result=1=",result)
     if (result.value) {
       setRewarInfo(result.value);
     }
-    console.log("getRewardFnresult", fromWei(result.value.claimIntegral));
   };
   useEffect(() => {
     getRewardFn();

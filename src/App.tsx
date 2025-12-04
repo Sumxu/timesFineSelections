@@ -24,7 +24,6 @@ function App() {
     storage.remove("payMethodName");
     storage.remove("checkAddress");
   };
-  console.log("walletAddress===",walletAddress)
   // 统一监听钱包事件
   useWalletListener({
     onAccountsChanged: () => {

@@ -31,7 +31,6 @@ const MyPopup: React.FC = ({ isShow, onClose }) => {
       toWei(1),
       [ContractList["USDTToken"].address, ContractList["TaxToken"].address],
     ];
-    console.log("paramsData==", paramsData);
     const result = await ContractRequest({
       tokenName: "swapRouterToken",
       methodsName: "getAmountsOut",
@@ -58,43 +57,60 @@ const MyPopup: React.FC = ({ isShow, onClose }) => {
     }
   };
   const inputChange = (val) => {
-    // 1) 保存输入框内容
     setInputNumber(val);
-
-    // 如果 val 为空，直接归零
+    // 空或 <=0
     if (!val || Number(val) <= 0) {
-      setGetTaxNumber("0");
+      setGetTaxNumber(BigNumber.from(0));
       return;
     }
     try {
-      // 2) 转换为 wei（USDT 输入值 → wei）
-      const usdtWei = toWei(val); // BigNumber
-      // 3) 计算 TAX（wei）
-      // 公式：TAX = USDT × rate / 1e18
-      const taxWei = BigNumber.from(usdtWei)
-        .mul(rate) // USDT(wei) * RATE(wei) = 36 decimals
-        .div(utils.parseUnits("1", 18)); // 除 1e18 还原成 18 decimals
+      /**
+       * 1) USDT 输入转 wei（保持整数）
+       * parseUnits("105.3936", 18)
+       * 得到 105.3936 * 1e18 的 BigNumber
+       */
+      const usdtWei = utils.parseUnits(val, 18); // BigNumber
 
-      // 4) 保存结果（wei）
+      /**
+       * 2) rate 必须是 18 decimals（你的 rate 应该是 parseUnits 出来的）
+       * 比如 rate=0.1 → parseUnits("0.1", 18)
+       */
+      const rateWei = BigNumber.from(rate.toString());
+      /**
+       * 3) TAX = usdtWei * rateWei / 1e18
+       * 中间结果是 36 位精度，再 / 1e18
+       */
+      const taxWei = usdtWei.mul(rateWei).div(utils.parseUnits("1", 18));
+      // 保存（wei）
       setGetTaxNumber(taxWei);
     } catch (error) {
       console.error("转换错误:", error);
     }
   };
+
   //确认提现
   const submitClick = async () => {
-    console.log(
-      "BigNumber.from(inputNumber).lt(userInfo.tusd)",
-      BigNumber.from(inputNumber).gt(userInfo.tusd)
-    );
-    if (BigNumber.from(inputNumber).gt(userInfo.tusd)) {
+    if (inputNumber == "") {
+      return Totast(t("请输入"), "info");
+    }
+    if (!/^\d+(\.\d+)?$/.test(inputNumber))
+      return Totast(t("输入格式不正确"), "info");
+    const decimals = 18; // 根据 token 实际 decimals
+    let amount: BigNumber;
+    try {
+      amount = utils.parseUnits(inputNumber, decimals); // 返回 ethers.BigNumber
+    } catch (err) {
+      return Totast(t("输入超出精度范围"), "info");
+    }
+
+    if (amount.gt(userInfo.tusd)) {
       return Totast(t("余额不足"), "info");
     }
     setSubmitLoading(true);
     const submitResult = await ContractSend({
       tokenName: "storeToken",
       methodsName: "withdraw",
-      params: [toWei(inputNumber)],
+      params: [amount],
     });
     setSubmitLoading(false);
     if (submitResult.value) {

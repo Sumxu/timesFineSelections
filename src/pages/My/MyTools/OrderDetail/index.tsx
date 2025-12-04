@@ -42,8 +42,8 @@ export interface OrderDetail {
 const Order: React.FC = () => {
   const payOptions = [
     { id: 1, label: "USDT" },
-    { id: 2, label: "TUSD" },
-    { id: 3, label: "USD" },
+    { id: 2, label: "USD" },
+    { id: 3, label: "TUSD" },
   ];
   const [orderInfo, setOrderInfo] = useState<OrderDetail>({});
   const location = useLocation();

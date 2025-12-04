@@ -12,7 +12,6 @@ import { useZoneConfig } from "@/config/classifyData";
 import goodsImg from "@/assets/home/goodsImg.png";
 import usdtIcon from "@/assets/home/USDT.png";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
-
 interface RecordItem {
   pic: string;
   [key: string]: any;
@@ -28,6 +27,7 @@ interface RecordItem {
 const Search: React.FC = () => {
   const [list, setList] = useState<RecordItem[]>([]);
   const { getZoneInfo } = useZoneConfig();
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
@@ -90,7 +90,7 @@ const Search: React.FC = () => {
   };
   const getDataList = async () => {
     setList([]);
-    setListLoding(true);
+    setPageLoading(true);
     const result = await NetworkRequest({
       Url: "product/list",
       Method: "post",
@@ -120,7 +120,7 @@ const Search: React.FC = () => {
         setIsMore(false);
       }
       console.log("isMore", isMore);
-      setListLoding(false);
+      setPageLoading(false);
     } else {
       setListLoding(false);
     }
@@ -130,7 +130,7 @@ const Search: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if(goodsName=='')return
+    if (goodsName == "") return;
     getDataList();
   }, [goodsName]);
 
@@ -157,7 +157,12 @@ const Search: React.FC = () => {
           </div>
         </div>
         <div className="goodsList">
-          {list.length == 0 ? (
+          {pageLoading && (
+            <div className="spinBox">
+              <Spin />
+            </div>
+          )}
+          {!pageLoading&&list.length == 0 ? (
             <NoData />
           ) : (
             <div className="goods-item-box">
