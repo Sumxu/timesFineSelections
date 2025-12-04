@@ -53,8 +53,10 @@ const GoodsDetail: React.FC = () => {
   const { zoneList, getZoneInfo } = useZoneConfig();
   const buyClick = (specIndexPopup = "", specNum = "") => {
     storage.remove("checkAddress");
+    console.log("specIndexPopup==",specIndexPopup)
+    console.log("specNum==",specNum)
     //判断是否选择了规格
-    if (specIndexPopup == "") {
+    if (specIndexPopup==='') {
       return setShowPopup(true);
     }
 
@@ -65,6 +67,8 @@ const GoodsDetail: React.FC = () => {
     navigate("/creatOrder");
   };
   const submitOrderClick = (specIndex, specNum) => {
+    console.log("specIndex",specIndex)
+    console.log("specNum",specNum)
     setShowPopup(false);
     setSpecIndex(specIndex);
     setSpecNum(specNum);

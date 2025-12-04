@@ -15,7 +15,7 @@ function App() {
   const location = useLocation();
   const walletAddress = userAddress((s) => s.address);
   const showTab = ["/home", "/classify", "/my"].includes(location.pathname);
-  const noLoginPage = !["/login"].includes(location.pathname);
+  const noLoginPage = !["/login",'/'].includes(location.pathname);
   const [inviteShow, setInviteShow] = useState<boolean>(false);
   const { search } = useLocation();
   const clearFn = () => {

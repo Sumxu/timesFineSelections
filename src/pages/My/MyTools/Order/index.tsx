@@ -7,11 +7,13 @@ import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import { InfiniteScroll } from "antd-mobile";
 import { t } from "i18next";
 import NoData from "@/components/NoData";
+import { Spin } from "antd";
 
 const Order: React.FC = () => {
   const navigate = useNavigate();
 
   const [list, setList] = useState([]);
+  const [pageLoading, setPageLoading] = useState<boolean>(false);
   // 列表是否加载
   const [listLoding, setListLoding] = useState<boolean>(false);
   // 是否还有更多数据可以加载
@@ -72,6 +74,7 @@ const Order: React.FC = () => {
 
   const getDataList = async () => {
     setList([]);
+    setPageLoading(true);
     const result = await NetworkRequest({
       Url: "order/list",
       Method: "post",
@@ -82,7 +85,8 @@ const Order: React.FC = () => {
         status: tabIndex == 0 ? "" : tabIndex,
       },
     });
-    if (result.data.code == 200) {
+    setPageLoading(false);
+    if (result.success) {
       setList((prevList) => [...prevList, ...result.data.data.records]);
       if (result.data.data.records.length == dataParam.size) {
         setIsMore(true);
@@ -129,7 +133,12 @@ const Order: React.FC = () => {
             })}
           </div>
           <div className="order-list-box">
-            {list.length == 0 ? (
+            {pageLoading && (
+              <div className="assetDetailSpinBox">
+                <Spin />
+              </div>
+            )}
+            {!pageLoading && list.length == 0 ? (
               <NoData />
             ) : (
               <div className="record-body">

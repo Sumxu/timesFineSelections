@@ -23,7 +23,7 @@ const ShopApplication = lazy(() => import("@/pages/My/MyTools/ShopApplication"))
 const Search = lazy(() => import("@/pages/Search"));
 
 export const routes = [
-  { path: "/", element: <Navigate to="/home" replace /> },
+  { path: "/", element: <Navigate to="/login" replace /> },
   { path: "/home", element: <Home /> },
   { path: "/classify", element: <Classify /> },
   { path: "/my", element: <My /> },

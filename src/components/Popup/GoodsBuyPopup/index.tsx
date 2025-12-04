@@ -46,6 +46,7 @@ const ConversionPopup: React.FC<Props> = ({
 
     // 转成 BigNumber（根据 token 精度修改 18）
     const totalPriceBN = toWei(totalPrice);
+    console.log("goodsData===",goodsData)
     if (goodsData.classify === 4) {
       // 判断 USD 余额
       if (usdBalance.lt(totalPriceBN)) {
