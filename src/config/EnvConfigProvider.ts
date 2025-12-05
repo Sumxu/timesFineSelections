@@ -36,8 +36,8 @@ export default class EnvConfigProvider {
   static getProdConfig(): EnvConfig {
     return {
       apiBase: "https://api.taxshop.plus/dapp/",
-      taxPool: "0xa7e3Ce0176de606C476Fc742cB20c2EF17AA1f09",
-      storeToken: "0x87663d59f95ed4689D74733206b04806477e82b3",
+      taxPool: "0x9c50471153d3616CB67C95e3e2f0Cebe0146e945",
+      storeToken: "0x6644333c6B597a4c6701EfA7382b6BDCC76d0701",
       contractSpaceNFT: "0x764eEaB717b68056C02a75677C784b98e54Fc042",
       multiCallToken: "0xcA11bde05977b3631167028862bE2a173976CA11",
       contractUsdt: "0x55d398326f99059fF775485246999027B3197955",

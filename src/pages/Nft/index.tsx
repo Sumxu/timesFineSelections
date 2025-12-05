@@ -63,7 +63,7 @@ const Home: React.FC = () => {
   const [nftListLoading, setNftListLoading] = useState<boolean>(false);
 
   //领取状态
-  const [pendIngBtnLoading, setPendIngBtnLoading] = useState<boolean>(false);
+  const [pendIngBtnLoading, setPendIngBtnLoading] = useState<string>('');
 
   //剩余
   const [surplus, setSurplus] = useState<number>(0);
@@ -72,7 +72,9 @@ const Home: React.FC = () => {
   useEffect(() => {
     let soldOutNumber = Number(soldOutNumbers);
     const surplusNumber = maxMint.toNumber() - soldOutNumber;
-    const percentage = (soldOutNumber / surplusNumber) * 100;
+
+    const percentage = (soldOutNumber / maxMint.toNumber()) * 100;
+    
     setSurplus(surplusNumber);
     setPercentage(percentage);
   }, [soldOutNumbers]);
@@ -165,13 +167,13 @@ const Home: React.FC = () => {
       Totast(t("暂无奖励"), "warning");
       return;
     }
-    setPendIngBtnLoading(true);
+    setPendIngBtnLoading(index);
     const claimRes = await sendTransaction("claim", [tokenIds[index]], {});
     if (claimRes.success) {
       Totast(t("领取成功"), "success");
       fetchPrice();
     }
-    setPendIngBtnLoading(false);
+    setPendIngBtnLoading('');
   };
   useEffect(() => {
     if (Number(balanceOf) > 0) {
@@ -219,7 +221,7 @@ const Home: React.FC = () => {
               <div className="progress-bar">
                 <div
                   className="progress-bar-check"
-                  style={{ width: `${percentage}%` }}
+                  style={{ width: `${percentage.toFixed(2)}%` }}
                 ></div>
               </div>
               <div className="progress-bar-number">
