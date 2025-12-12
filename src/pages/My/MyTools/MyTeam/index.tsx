@@ -15,12 +15,19 @@ import {
   SubAddress,
 } from "@/Hooks/Utils.ts";
 import NoData from "@/components/NoData";
-export interface listItem {
+interface listItem {
   address?: string;
   createTime?: string;
   myPerf?: number;
 }
-
+interface TeamInfo {
+  communityPerf?: number;
+  directCount?: number;
+  level?: number;
+  myPerf?: number;
+  teamCount?: number;
+  teamPerf?: number;
+}
 const levelMap = [
   { performance: 10000, accelerate: 10, level: "1" },
   { performance: 50000, accelerate: 15, level: "2" },
@@ -34,7 +41,14 @@ const MyTeam: React.FC = () => {
 
   const walletAddress = userAddress().address;
 
-  const [teamInfo, setTeamInfo] = useState<object>({});
+  const [teamInfo, setTeamInfo] = useState<TeamInfo>({
+    communityPerf: 0,
+    directCount: 0,
+    level: 0,
+    myPerf: 0,
+    teamCount: 0,
+    teamPerf: 0,
+  });
   const [list, setList] = useState<listItem[]>([]);
   // 是否还有更多数据可以加载
   const [isMore, setIsMore] = useState<boolean>(false);
@@ -46,7 +60,6 @@ const MyTeam: React.FC = () => {
   function getLevel(level: number) {
     return levelMap.filter((item) => level == item.level).pop() || null;
   }
-
   const loadMoreAction = async () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
