@@ -76,7 +76,15 @@ class EnvManager {
   static get apiBase(): string {
     return EnvManager.config.apiBase;
   }
-
+ static get taxPool(): string {
+    return EnvManager.config.taxPool;
+  }
+   static get storeToken(): string {
+    return EnvManager.config.storeToken;
+  }
+     static get swapRouter(): string {
+    return EnvManager.config.swapRouter;
+  }
   /** 调试打印（仅开发环境） */
   static print(): void {
     if (EnvManager.isProd) return;

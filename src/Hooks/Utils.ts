@@ -1,5 +1,6 @@
 import { message } from "antd";
 import { ethers, BigNumber } from "ethers";
+
 /**
  * 格式化钱包地址
  * @param addr 钱包地址
@@ -263,7 +264,7 @@ export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
  * @param num 输入数字或字符串
  * @returns 格式化后的字符串，如 20000 -> "20,000.00"
  */
- export const formatNumber = (num: number | string): string => {
+export const formatNumber = (num: number | string): string => {
   if (num === null || num === undefined || num === "") return "0.00";
 
   const numberValue = typeof num === "string" ? parseFloat(num) : num;
@@ -277,20 +278,23 @@ export const BigNumberAdd = (big1: BigNumber, big2: BigNumber) => {
 };
 
 /**
- * 
+ *
  * @param timeStr 2025-10-19T17:32:00.02 格式数据
  * @returns  //返回毫秒级时间戳
  */
-export const toTimestamp = (timeStr: string): number => new Date(timeStr).getTime();
+export const toTimestamp = (timeStr: string): number =>
+  new Date(timeStr).getTime();
 
-
- /**
+/**
  * 计算两个 BigNumber 的整数百分比（不保留小数）
  * @param {BigNumber} part - 分子
  * @param {BigNumber} total - 分母
  * @returns {number} 整数百分比 (例如 25)
  */
-export const calcBigNumberPercentInt = (part: BigNumber, total: BigNumber): number => {
+export const calcBigNumberPercentInt = (
+  part: BigNumber,
+  total: BigNumber
+): number => {
   if (!part || !total || total.isZero()) return 0;
 
   // (part * 100) / total
@@ -298,4 +302,75 @@ export const calcBigNumberPercentInt = (part: BigNumber, total: BigNumber): numb
 
   return result.toNumber(); // 返回普通数字，比如 25
 };
- 
+
+export const getLangObj = () => {
+  const lang = localStorage.getItem("lang")??'zh';
+  let langInfo = {
+    label: "",
+    value: "",
+  };
+  switch (lang) {
+    case "en":
+      langInfo.label = "English";
+      langInfo.value = "2";
+      return langInfo;
+      break;
+    case "zh":
+      langInfo.label = "简体中文";
+      langInfo.value = "1";
+      return langInfo;
+      break;
+    case "zhHant":
+      langInfo.label = "繁体中文";
+      langInfo.value = "3";
+      break;
+  }
+
+  return langInfo;
+};
+/**
+ * 复制文本到剪贴板
+ * @param text 要复制的内容
+ * @param message 复制成功提示（可选）
+ */
+export function copyToClipboard(text: string, message: string = "复制成功") {
+  if (!text) return;
+
+  // 现代浏览器支持 navigator.clipboard
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        Totast(message, "success");
+      },
+      () => {
+        Totast("复制失败，请手动复制", "error");
+      }
+    );
+  } else {
+    // 兼容旧浏览器
+    const input = document.createElement("textarea");
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        Totast(message, "success");
+      } else {
+        Totast("复制失败，请手动复制", "error");
+      }
+    } catch (err) {
+      Totast("复制失败，请手动复制", "error");
+    }
+
+    document.body.removeChild(input);
+  }
+}
+
+export function timestampToFull(ts: number, isMs = false) {
+  const date = new Date(isMs ? ts : ts * 1000);
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+

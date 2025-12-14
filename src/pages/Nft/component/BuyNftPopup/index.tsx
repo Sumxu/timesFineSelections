@@ -71,7 +71,6 @@ function BuyNftPopup(Props: buyNftPopupClass) {
     //开始授权 进行购买
     let applyAmount: BigNumber = BigNumber.from(0);
     let isApply = false;
-
     await ContractRequest({
       tokenName: "USDTToken",
       methodsName: "allowance",
@@ -93,7 +92,6 @@ function BuyNftPopup(Props: buyNftPopupClass) {
         if (res.value) {
           isApply = true;
         } else {
-          Totast(t("授权失败,请检查网络连接"), "error"); // 授权失败，请检查网络连接
           return;
         }
       });
@@ -101,7 +99,6 @@ function BuyNftPopup(Props: buyNftPopupClass) {
       isApply = true;
     }
     if (!isApply) {
-      Totast(t("检查授权或者授权时发生了错误，请检查网络后重新尝试"), "error"); // 检查授权或者授权时发生了错误，请检查网络后重新尝试
       return;
     }
     try {

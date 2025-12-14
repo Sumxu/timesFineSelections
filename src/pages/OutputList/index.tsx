@@ -28,10 +28,10 @@ const OutputList: React.FC = () => {
   const [current, setCurrent] = useState<number>(1);
   // 获取更多团队列表
   const loadMoreAction = async () => {
-    console.log("更多团队列表下拉刷新进来了");
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({
+      Method:"post",
       Url: "nft/claimRecord",
       Data: {
         current: nexPage,
@@ -54,6 +54,7 @@ const OutputList: React.FC = () => {
     setListLoding(true);
     const result = await NetworkRequest({
       Url: "nft/claimRecord",
+      Method:"post",
       Data: {
         current: 1,
         size: 20,

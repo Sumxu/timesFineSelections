@@ -2,7 +2,7 @@
 import { message } from "antd";
 import EnvManager from "@/config/EnvManager";
 const RequestUrl = EnvManager.apiBase;
-
+import { storage } from "@/Hooks/useLocalStorage";
 interface NetWorkProps {
   Url: string;
   Method?: "get" | "post" | "put" | "delete";
@@ -25,14 +25,14 @@ async function NetworkRequest(params: NetWorkProps): Promise<any> {
       method: method.toUpperCase(),
       headers: {
         "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token") || "",
+        Authorization: "Bearer" + " " + storage.get("token", ""),
       },
       body: method === "get" ? null : JSON.stringify(Data),
     });
 
     const result = await response.json();
     if (result.code === 401) {
-      localStorage.removeItem("token");
+      storage.remove("token");
       window.location.reload();
     } else if (!response.ok || result.code !== 200) {
       throw new Error(result.msg || "Request Error");

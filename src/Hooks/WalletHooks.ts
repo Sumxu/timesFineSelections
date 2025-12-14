@@ -50,6 +50,7 @@ export async function ensureWalletConnected(): Promise<boolean> {
 
   if (accounts.length > 0) {
     setAddress(accounts[0]);
+    console.log("获取地址了",accounts[0])
     try {
       const normalizedChainId = String(currentChainId).toLowerCase();
       if (normalizedChainId === BNB_PARAMS.chainId) {
