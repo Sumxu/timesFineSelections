@@ -101,9 +101,6 @@ const AssetDetails: React.FC = () => {
   useEffect(() => {
     getDataPage();
   }, [tabIndex]);
-  useEffect(() => {
-    getDataPage();
-  }, []);
   return (
     <>
       <div className="asset-details-page">
