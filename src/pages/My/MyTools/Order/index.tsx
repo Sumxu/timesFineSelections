@@ -58,7 +58,7 @@ const Order: React.FC = () => {
         current: nexPage,
         size: dataParam.size,
         orderSn,
-        status: tabIndex == 0 ? "" : tabIndex,
+        status: tabIndex == 0 ? null : tabIndex,
       },
     }).then((res) => {
       if (res.success) {
@@ -82,7 +82,7 @@ const Order: React.FC = () => {
         current: 1,
         size: dataParam.size,
         orderSn,
-        status: tabIndex == 0 ? "" : tabIndex,
+        status: tabIndex == 0 ? null : tabIndex,
       },
     });
     setPageLoading(false);

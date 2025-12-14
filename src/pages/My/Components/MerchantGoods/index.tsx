@@ -49,7 +49,7 @@ const MerchantGoods: React.FC = () => {
         current: 1,
         size: 10,
         name: inputValue,
-        classify: tabIndex == 0 ? "" : tabIndex,
+        classify: tabIndex == 0 ? null : tabIndex,
       },
     });
     if (result.success) {
@@ -71,7 +71,7 @@ const MerchantGoods: React.FC = () => {
         current: nexPage,
         size: 10,
         name: inputValue,
-        classify: tabIndex == 0 ? "" : tabIndex,
+        classify: tabIndex == 0 ? null : tabIndex,
       },
     }).then((res) => {
       if (res.success) {

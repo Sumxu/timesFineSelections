@@ -41,7 +41,7 @@ const Classify: React.FC = () => {
       Data: {
         size: 10,
         current: 1,
-        classify: classifyId == 0 ? "" : classifyId,
+        classify: classifyId == 0 ? null : classifyId,
       },
     });
     if (result.success) {
@@ -72,11 +72,11 @@ const Classify: React.FC = () => {
     const nexPage = current + 1;
     setCurrent(nexPage);
     await NetworkRequest({
-      Url: "userRecord/ticketRecord",
+      Url: "product/list",
       Data: {
         size: 10,
         current: nexPage,
-        classify: classifyId == 0 ? "" : classifyId,
+        classify: classifyId == 0 ? null : classifyId,
       },
     }).then((res) => {
       if (res.success) {
