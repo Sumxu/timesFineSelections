@@ -34,7 +34,7 @@ const Home: React.FC = () => {
   const { fetch } = useNFTMulticall();
   const { callMethod, sendTransaction } = useNFTQuery();
   //总数量
-  const totalNumer: number = 990.0;
+  const totalNumer: number = 660.0;
 
   //发售USDT价格
   const [price, setPrice] = useState<BigNumber>(BigNumber.from(0));
@@ -221,15 +221,15 @@ const Home: React.FC = () => {
               <div className="progress-bar">
                 <div
                   className="progress-bar-check"
-                  style={{ width: `${percentage.toFixed(2)}%` }}
+                  style={{ width: `100%` }}
                 ></div>
               </div>
               <div className="progress-bar-number">
                 <div className="number-item">
-                  {t("已售")}：{soldOutNumbers.toString()}
+                  {t("已售")}：330
                 </div>
                 <div className="number-item">
-                  {t("剩余")}: <span className="spn-1">{surplus}</span>
+                  {t("剩余")}: <span className="spn-1">0</span>
                 </div>
               </div>
             </div>
