@@ -37,29 +37,13 @@ const ConversionPopup: React.FC<Props> = ({
     if (goodsNum == 0) {
       return Totast(t("请选择购买数量"), "info");
     }
-
     const totalPrice = Calc.toFixed(
       Calc.mul(goodsData?.items?.[tabIndex]?.price, goodsNum),
       4
     );
-    console.log("totalPrice===", totalPrice);
-
     // 转成 BigNumber（根据 token 精度修改 18）
     const totalPriceBN = toWei(totalPrice);
-    console.log("goodsData===",goodsData)
-    if (goodsData.classify === 4) {
-      // 判断 USD 余额
-      if (usdBalance.lt(totalPriceBN)) {
-        return Totast(t("余额不足"), "info");
-      }
-      onSubmit(tabIndex, goodsNum);
-    } else {
-      // 判断 USDT 余额
-      if (usdtBalance.lt(totalPriceBN)) {
-        return Totast(t("余额不足"), "info");
-      }
-      onSubmit(tabIndex, goodsNum);
-    }
+    onSubmit(tabIndex, goodsNum);
   };
   //获取tax余额
   const getUsdtBalance = async () => {

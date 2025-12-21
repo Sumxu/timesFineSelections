@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import LeftBackHeader from "@/components/LeftBackHeader";
 import MerchantDataInfo from "@/pages/My/Components/MerchantDataInfo";
 import MerchantGoods from "@/pages/My/Components/MerchantGoods";
-import OrderCenter from "@/pages/My/Components/OrderCenter";
 import { Picker } from "antd-mobile";
 import shopPng from "@/assets/Component/shopPng.png";
 import { t } from "i18next";
@@ -152,11 +151,11 @@ const MerchantCenter: React.FC = () => {
         />
         <MerchantDataInfo data={merchantInfo}></MerchantDataInfo>
         <div className="tabBox">
-          <div className={`${pageType==0?"tabCheck":"tabNoCheck"} tabOption`} onClick={()=>setPageType(0)}>{t('订单列表')}</div>
-          <div className={`${pageType==1?"tabCheck":"tabNoCheck"} tabOption tabTwo`} onClick={()=>setPageType(1)}>{t('店铺商品')}</div>
+          <div className={`${pageType==0?"tabCheck":"tabNoCheck"} tabOption`} onClick={()=>setPageType(0)}>订单列表</div>
+          <div className={`${pageType==1?"tabCheck":"tabNoCheck"} tabOption tabTwo`} onClick={()=>setPageType(1)}>店铺商品</div>
         </div>
         {
-          pageType==0?<OrderCenter></OrderCenter>:<MerchantGoods></MerchantGoods>
+          pageType==1?<MerchantGoods></MerchantGoods>:<MerchantGoods></MerchantGoods>
         }
       </div>
     </div>

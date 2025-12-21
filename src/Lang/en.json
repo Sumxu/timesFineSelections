@@ -232,5 +232,15 @@
   "间推": "Indirect Referral",
   "派送": "Delivery",
  "输入格式不正确": "Invalid input format",
-"输入超出精度范围": "Input exceeds precision limit"
+"输入超出精度范围": "Input exceeds precision limit",
+ "复制成功": "Copied successfully",
+  "物流公司不能为空": "Logistics company cannot be empty",
+  "物流单号不能为空": "Tracking number cannot be empty",
+  "订单发货": "Ship Order",
+  "去发货": "Go to Ship",
+  "物流公司": "Logistics Company",
+  "输入物流公司": "Enter logistics company",
+  "物流单号": "Tracking Number",
+  "输入物流单号": "Enter tracking number",
+  "订单列表": "Order List"
 }

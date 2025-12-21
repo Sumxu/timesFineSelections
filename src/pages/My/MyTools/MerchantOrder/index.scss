@@ -1,12 +1,37 @@
 .order-detail-page {
   background: #191919;
   height: 100vh;
+  padding: 16px;
+  .addressInfoItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0px;
+    .leftLabel {
+      flex: none;
+      width: 80px;
+      font-weight: 400;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .rightContent {
+      flex: auto;
+      display: flex;
+      align-items: center;
+      .distpickerWrapper {
+        color: rgba(255, 255, 255, 0.75);
+      }
+    }
+  }
+  .addressInfoBottomBorder {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
   .content-box {
     padding-bottom: 24px;
-    margin: 16px;
-    height: calc(100vh - 170px);
+    height: calc(100vh - 40px);
     overflow-y: scroll;
   }
+
   .wuLiuBox {
     background: #272727;
     border-radius: 8px;
@@ -50,7 +75,7 @@
     .rightOption {
       flex: none;
       .copyIcon {
-      margin-top: 4px;
+        margin-top: 4px;
         width: 16px;
         height: 16px;
       }
@@ -79,6 +104,7 @@
         }
       }
       .right-option {
+        flex: auto;
         margin-left: 16px;
         font-weight: 500;
         font-size: 16px;
@@ -89,6 +115,11 @@
           color: #ffffff;
           margin-left: 12px;
         }
+      }
+      .copyOption{
+        margin-left: 4px;
+        width: 16px;
+        height: 16px;
       }
     }
 
@@ -154,7 +185,6 @@
       }
     }
     .goodsItemOption {
-      margin-top: 16px;
       display: flex;
       align-items: center;
       padding-bottom: 16px;
@@ -230,5 +260,23 @@
         }
       }
     }
+  }
+  .addressBtnBox {
+    margin-top: 32px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    background: #0be72f;
+    border-radius: 25px;
+    font-weight: 500;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  .order-send-box {
+    margin-top: 24px;
+    background: #272727;
+    border-radius: 8px;
+    padding: 0px 16px 0px 16px;
+    box-sizing: border-box;
   }
 }

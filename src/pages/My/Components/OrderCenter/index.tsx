@@ -6,7 +6,9 @@ import usdtIcon from "@/assets/home/USDT.png";
 import { t } from "i18next";
 import NetworkRequest from "@/Hooks/NetworkRequest.ts";
 import NoData from "@/components/NoData";
+import { useNavigate } from "react-router-dom";
 import { InfiniteScroll } from "antd-mobile";
+import MerchantGoodsOrder from "@/pages/My/Components/MerchantGoodsOrder";
 interface listItem {
   id: number;
   name: string;
@@ -17,39 +19,43 @@ interface listItem {
   publishTime: string;
 }
 const MerchantGoods: React.FC = () => {
+  const navigate = useNavigate();
+
+  const [current, setCurrent] = useState<number>(1);
+  const [tabIndex, setTabIndex] = useState<string>("0");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [list, setList] = useState<listItem[]>([]);
+  const [isMore, setIsMore] = useState<boolean>(false);
+
   const tabArray = [
     {
       label: t("全部"),
       value: "0",
     },
     {
-      label: t("安品区"),
+      label: t("已购买"),
       value: "1",
     },
     {
-      label: t("优品区"),
+      label: t("已发货"),
       value: "2",
     },
     {
-      label: t("臻品区"),
+      label: t("已完成"),
       value: "3",
     },
   ];
-  const [current, setCurrent] = useState<number>(1);
-  const [tabIndex, setTabIndex] = useState<string>("0");
-  const [inputValue, setInputValue] = useState<string>("");
-  const [list, setList] = useState<listItem[]>([]);
-  const [isMore, setIsMore] = useState<boolean>(false);
+
   const getGoodsList = async () => {
     setList([]);
     const result = await NetworkRequest({
-      Url: "merchant/products",
+      Url: "merchant/order/list",
       Method: "post",
       Data: {
         current: 1,
         size: 10,
-        name: inputValue,
-        classify: tabIndex == 0 ? null : tabIndex,
+        orderSn: inputValue,
+        status: tabIndex == 0 ? null : tabIndex,
       },
     });
     if (result.success) {
@@ -70,8 +76,8 @@ const MerchantGoods: React.FC = () => {
       Data: {
         current: nexPage,
         size: 10,
-        name: inputValue,
-        classify: tabIndex == 0 ? null : tabIndex,
+        orderSn: inputValue,
+        status: tabIndex == 0 ? null : tabIndex,
       },
     }).then((res) => {
       if (res.success) {
@@ -84,7 +90,9 @@ const MerchantGoods: React.FC = () => {
       }
     });
   };
-
+  const orderItemClick = (id) => {
+    navigate(`/merchantOrder?id=${id}`);
+  };
   useEffect(() => {
     getGoodsList();
   }, []);
@@ -99,7 +107,7 @@ const MerchantGoods: React.FC = () => {
           <SearchOutline fontSize={14} color="rgba(255,255,255,0.35)" />
         </div>
         <Input
-          placeholder={t("输入商品名称/编号搜索")}
+          placeholder={t("搜索订单")}
           className="inputClass"
           value={inputValue}
           onChange={(value) => setInputValue(value)}
@@ -111,6 +119,7 @@ const MerchantGoods: React.FC = () => {
         ></Input>
       </div>
       <div className="tab-box">
+     
         {tabArray.map((item, index) => {
           return (
             <div
@@ -124,6 +133,7 @@ const MerchantGoods: React.FC = () => {
             </div>
           );
         })}
+ 
       </div>
       <div className="goodsListBox">
         {list.length == 0 ? (
@@ -132,27 +142,7 @@ const MerchantGoods: React.FC = () => {
           <div className="record-body">
             {list.map((item, index) => {
               return (
-                <div className="goodsItem" key={index}>
-                  <div className="topOption">
-                    <img src={item.pic} className="goodsImgLeft"></img>
-                    <div className="goodsRight">
-                      <div className="goodsName">{item.name}</div>
-                      <div className="goodsTypeTxt">{item.classify}</div>
-                      <div className="goodsPriceOption">
-                        <img src={usdtIcon} className="usdtIcon"></img>
-                        <span className="price">{item.price}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="endOption">
-                    <span className="spn">
-                      {t("上架日期")}：{item.publishTime}
-                    </span>
-                    <span className="spn">
-                      {t("销量")}：{item.sellCount}
-                    </span>
-                  </div>
-                </div>
+                <MerchantGoodsOrder data={item} onClickDetail={(id)=>orderItemClick(id)}></MerchantGoodsOrder>
               );
             })}
 

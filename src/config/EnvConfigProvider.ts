@@ -18,7 +18,8 @@ export default class EnvConfigProvider {
   /** 开发环境配置（测试网） */
   static getDevConfig(): EnvConfig {
     return {
-      apiBase: "https://v1.clkapp.cc/",
+      // apiBase: "https://v1.clkapp.cc/",
+      apiBase: "http://192.168.31.231:6001/",
       contractSpaceNFT: "0x263D57668c2fFE0848171533DC510EAc70140e5a",
       contractUsdt: "0x2Cba653C50e9A2e97411104d1460EBFAECE50E9C",
       contractTAXToken: "0xA731812CF8bAb136ACEa9835A2e54493a3A1f2e2",
