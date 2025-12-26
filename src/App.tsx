@@ -65,7 +65,6 @@ function App() {
       <div className="body">
         <AppRouter />
       </div>
-
       <div className="bottom">
         {walletAddress && showTab && <TaBbarBottom />}
       </div>

@@ -44,12 +44,6 @@ function OrderItem({ onClickDetail, data }) {
           </div>
         </div>
       </div>
-      <div className="logistics-information">
-        <span className="spn-label">{t("实付款")}:</span>
-        <span className="spn-value">
-          {Calc.toFixed(Calc.mul(data.price, data.count), 4)}
-        </span>
-      </div>
       <div className="tools-btn-option">
         <div className="btn" onClick={() => itemClick()}>
           {t("订单详情")}
